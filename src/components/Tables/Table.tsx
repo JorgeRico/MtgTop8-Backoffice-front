@@ -2,10 +2,11 @@ import TrashIcon from '../Icons/Trash';
 import { v4 as uuidv4 } from "uuid";
 import EditIcon from '../Icons/Edit';
 import React from 'react';
+import { routing } from '../../types/routing';
 
 const Table: React.FC<{ header: string[]; name: string; data: Record<string, any>[], endpoint: string }> = ({ header, name, data, endpoint }) => {
     const editSubmit = () => {
-        alert(endpoint)
+        window.location.href = endpoint + "/edit"
     }
 
     const deleteSubmit = () => {

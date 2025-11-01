@@ -1,9 +1,9 @@
-import Table from '../components/Tables/Table';
-import DefaultLayout from '../layout/DefaultLayout';
+import Table from '../../components/Tables/Table';
+import DefaultLayout from '../../layout/DefaultLayout';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import Loader from '../common/Loader';
-import { endpoints } from '../types/endpoints';
+import Loader from '../../common/Loader';
+import { endpoints } from '../../types/endpoints';
 
 const Decks = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);

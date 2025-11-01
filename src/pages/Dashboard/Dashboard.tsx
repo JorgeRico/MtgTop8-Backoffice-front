@@ -55,6 +55,8 @@ const Dashboard: React.FC = () => {
                             </svg>
                         </CardDataStats>
                     </NavLink>
+                </div>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 mt-10">
                     <NavLink to={routing.players}>
                         <CardDataStats total="" levelUp rate="" title="Players">
                             <svg
