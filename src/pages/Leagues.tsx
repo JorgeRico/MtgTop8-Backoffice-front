@@ -7,29 +7,32 @@ import { endpoints } from '../types/endpoints';
 
 const Tournaments = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);
-    const [ tournaments, setTournaments ] = useState<any[] | null>(null);
-    const headerItem = [ 'id', 'name', 'date', 'players' ];
+    const [ leagues, setLeagues ]         = useState<any[] | null>(null);
+    const headerItem                      = [ 'id', 'name', 'isLegacy', 'year', 'current', 'active' ];
 
     const apiCall = async () => {
         const authToken = Cookies.get('authToken');
-        await fetch('http://127.0.0.1:5000/tournaments', {
+        await fetch('http://127.0.0.1:5000/leagues', {
             headers: { 'Authorization': authToken || '' }
         })
         .then(response => response.json())
         .then(data => {
-            let dataTournament: any[] = [];
+            let dataLeague: any[] = [];
 
             data.forEach((item: any) => {
                 const values = {
-                    id      : item.id,
-                    name    : item.name,
-                    date    : item.date,
-                    players : item.players
+                    id       : item.id,
+                    name     : item.name,
+                    format   : item.isLegacy == 1 ? 'Legacy' : '-',
+                    year     : item.year,
+                    current  : (parseInt(item.current) == 1) ? 'current' : '-',
+                    active   : (parseInt(item.active) == 1) ? 'active' : '-'
                 };
-                dataTournament.push(values);
+                dataLeague.push(values);
+                console.log(values)
             });
 
-            setTournaments(dataTournament);
+            setLeagues(dataLeague);
         })
         .catch(err => {
             console.error(err)
@@ -48,13 +51,13 @@ const Tournaments = () => {
         <>
             <DefaultLayout>
                 <div className="flex flex-col gap-10">
-                    {tournaments ? (
+                    {leagues ? (
                         <>
                             <Table
                                 header   = {headerItem} 
-                                data     = {tournaments}
-                                name     = "Tournaments"
-                                endpoint = {endpoints.tournaments}
+                                data     = {leagues}
+                                name     = "Leagues"
+                                endpoint = {endpoints.leagues}
                             />
                         </>
                     ) : (

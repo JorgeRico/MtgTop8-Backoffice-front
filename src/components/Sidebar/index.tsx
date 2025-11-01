@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import Logo from '../../images/logo/logo.svg';
-import DashboardImage from '../Sidebar/Images/Dashboard';
-import TournamentImage from '../Sidebar/Images/Tournament';
-
+import DashboardImage from '../Icons/Dashboard';
+import TournamentImage from '../Icons/Tournament';
+import { routing } from '../../types/routing';
 interface SidebarProps {
     sidebarOpen: boolean;
     setSidebarOpen: (arg: boolean) => void;
@@ -68,7 +68,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         >
             {/* <!-- SIDEBAR HEADER --> */}
             <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-                <NavLink to="/">
+                <NavLink to={routing.home}>
                     <img src={Logo} alt="Logo" />
                 </NavLink>
 
@@ -107,7 +107,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             {/* <!-- Menu Item Dashboard --> */}
                             <li>
                                 <NavLink
-                                    to="/dashboard"
+                                    to={routing.dashboard}
                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                                         pathname.includes('dashboard') &&
                                         'bg-graydark dark:bg-meta-4'
@@ -231,13 +231,46 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             {/* <!-- Menu Item Tables --> */}
                             <li>
                                 <NavLink
-                                    to="/tournaments"
+                                    to={routing.leagues}
+                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                                        pathname.includes('leagues') && 'bg-graydark dark:bg-meta-4'
+                                    }`}
+                                >
+                                    <TournamentImage></TournamentImage>
+                                    Leagues
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to={routing.tournaments}
                                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                                         pathname.includes('tournaments') && 'bg-graydark dark:bg-meta-4'
                                     }`}
                                 >
                                     <TournamentImage></TournamentImage>
                                     Tournaments
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to={routing.players}
+                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                                        pathname.includes('players') && 'bg-graydark dark:bg-meta-4'
+                                    }`}
+                                >
+                                    <TournamentImage></TournamentImage>
+                                    Players
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to={routing.decks}
+                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                                        pathname.includes('decks') && 'bg-graydark dark:bg-meta-4'
+                                    }`}
+                                >
+                                    <TournamentImage></TournamentImage>
+                                    Decks
                                 </NavLink>
                             </li>
                             {/* <!-- Menu Item Tables --> */}

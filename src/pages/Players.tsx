@@ -5,31 +5,32 @@ import Cookies from 'js-cookie';
 import Loader from '../common/Loader';
 import { endpoints } from '../types/endpoints';
 
-const Tournaments = () => {
+const Players = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);
-    const [ tournaments, setTournaments ] = useState<any[] | null>(null);
-    const headerItem = [ 'id', 'name', 'date', 'players' ];
+    const [ players, setPlayers ]         = useState<any[] | null>(null);
+    const headerItem = [ 'id', 'name', 'position', 'idTournament', 'idDeck' ];
 
     const apiCall = async () => {
         const authToken = Cookies.get('authToken');
-        await fetch('http://127.0.0.1:5000/tournaments', {
+        await fetch('http://127.0.0.1:5000/players', {
             headers: { 'Authorization': authToken || '' }
         })
         .then(response => response.json())
         .then(data => {
-            let dataTournament: any[] = [];
+            let dataPlayer: any[] = [];
 
             data.forEach((item: any) => {
                 const values = {
-                    id      : item.id,
-                    name    : item.name,
-                    date    : item.date,
-                    players : item.players
+                    id           : item.id,
+                    name         : item.name,
+                    position     : item.position,
+                    idTournament : item.idTournament,
+                    idDeck       : item.idDeck
                 };
-                dataTournament.push(values);
+                dataPlayer.push(values);
             });
 
-            setTournaments(dataTournament);
+            setPlayers(dataPlayer);
         })
         .catch(err => {
             console.error(err)
@@ -48,13 +49,13 @@ const Tournaments = () => {
         <>
             <DefaultLayout>
                 <div className="flex flex-col gap-10">
-                    {tournaments ? (
+                    {players ? (
                         <>
                             <Table
                                 header   = {headerItem} 
-                                data     = {tournaments}
-                                name     = "Tournaments"
-                                endpoint = {endpoints.tournaments}
+                                data     = {players}
+                                name     = "Players"
+                                endpoint = {endpoints.players}
                             />
                         </>
                     ) : (
@@ -66,4 +67,4 @@ const Tournaments = () => {
     );
 };
 
-export default Tournaments;
+export default Players;

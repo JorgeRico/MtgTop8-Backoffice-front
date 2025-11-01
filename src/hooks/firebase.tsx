@@ -1,8 +1,10 @@
+/// <reference types="vite/client" />
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 // import { useToast } from 'vue-toastification';
 import Cookies from 'js-cookie';
+import { routing } from '../types/routing';
 
 const firebaseConfig = {
     apiKey            : import.meta.env.VITE_FIREBASE_API_KEY,
@@ -25,6 +27,9 @@ const FirebaseHook = {
         unwatchAuthState = onAuthStateChanged(auth, user => {
             if (!user) {
                 console.log('User is not authenticated');
+                Cookies.remove('authToken');
+
+                window.location.href = routing.home;
             } else {
                 console.log('-----------------')
                 console.log('User is authenticated');
@@ -83,7 +88,7 @@ const FirebaseHook = {
             // Sign-out successful.
             Cookies.remove('authToken');
 
-            window.location.href = '/';
+            window.location.href = routing.home;
         }).catch((error) => {
             console.log(error)
         });

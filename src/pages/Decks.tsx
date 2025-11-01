@@ -5,31 +5,30 @@ import Cookies from 'js-cookie';
 import Loader from '../common/Loader';
 import { endpoints } from '../types/endpoints';
 
-const Tournaments = () => {
+const Decks = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);
-    const [ tournaments, setTournaments ] = useState<any[] | null>(null);
-    const headerItem = [ 'id', 'name', 'date', 'players' ];
+    const [ decks, setDecks ]             = useState<any[] | null>(null);
+    const headerItem                      = [ 'id', 'name', 'idPlayer' ];
 
     const apiCall = async () => {
         const authToken = Cookies.get('authToken');
-        await fetch('http://127.0.0.1:5000/tournaments', {
+        await fetch('http://127.0.0.1:5000/decks', {
             headers: { 'Authorization': authToken || '' }
         })
         .then(response => response.json())
         .then(data => {
-            let dataTournament: any[] = [];
+            let dataDeck: any[] = [];
 
             data.forEach((item: any) => {
                 const values = {
-                    id      : item.id,
-                    name    : item.name,
-                    date    : item.date,
-                    players : item.players
+                    id       : item.id,
+                    name     : item.name,
+                    idPlayer : item.idplayer
                 };
-                dataTournament.push(values);
+                dataDeck.push(values);
             });
 
-            setTournaments(dataTournament);
+            setDecks(dataDeck);
         })
         .catch(err => {
             console.error(err)
@@ -48,13 +47,13 @@ const Tournaments = () => {
         <>
             <DefaultLayout>
                 <div className="flex flex-col gap-10">
-                    {tournaments ? (
+                    {decks ? (
                         <>
                             <Table
                                 header   = {headerItem} 
-                                data     = {tournaments}
-                                name     = "Tournaments"
-                                endpoint = {endpoints.tournaments}
+                                data     = {decks}
+                                name     = "Decks"
+                                endpoint = {endpoints.decks}
                             />
                         </>
                     ) : (
@@ -66,4 +65,4 @@ const Tournaments = () => {
     );
 };
 
-export default Tournaments;
+export default Decks;

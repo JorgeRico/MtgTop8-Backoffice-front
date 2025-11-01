@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import LockImage from '../../Images/Lock';
-import MailImage from '../../Images/Mail';
+import LockImage from '../../../Icons/Lock.tsx';
+import MailImage from '../../../Icons/Mail.tsx';
 import firebase from '../../../../hooks/firebase.tsx';
 
 const onSubmitForm = () => {

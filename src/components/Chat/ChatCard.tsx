@@ -5,6 +5,7 @@ import UserTwo from '../../images/user/user-02.png';
 import UserThree from '../../images/user/user-03.png';
 import UserFour from '../../images/user/user-04.png';
 import UserFive from '../../images/user/user-05.png';
+import { routing } from '../../types/routing';
 
 const chatData: Chat[] = [
   {
@@ -67,7 +68,7 @@ const ChatCard = () => {
       <div>
         {chatData.map((chat, key) => (
           <Link
-            to="/"
+            to={routing.home}
             className="flex items-center gap-5 py-3 px-7.5 hover:bg-gray-3 dark:hover:bg-meta-4"
             key={key}
           >
