@@ -2,7 +2,6 @@ import TrashIcon from '../Icons/Trash';
 import { v4 as uuidv4 } from "uuid";
 import EditIcon from '../Icons/Edit';
 import React from 'react';
-import { routing } from '../../types/routing';
 
 const Table: React.FC<{ header: string[]; name: string; data: Record<string, any>[], endpoint: string }> = ({ header, name, data, endpoint }) => {
     const editSubmit = () => {
@@ -24,17 +23,15 @@ const Table: React.FC<{ header: string[]; name: string; data: Record<string, any
                     <thead>
                         <tr className="bg-gray-2 text-left dark:bg-meta-4" key={uuidv4()}>
                             {header.map((item) => (
-                                <>
-                                {(item == 'id') ? (
-                                        <th key={uuidv4()} className="py-4 px-4 font-medium text-black dark:text-white">
-                                            {item}
-                                        </th>
-                                    ) : (
-                                        <th key={uuidv4()} className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white">
-                                            {item}
-                                        </th>
-                                    )}
-                                </>
+                                (item == 'id') ? (
+                                    <th key={uuidv4()} className="py-4 px-4 font-medium text-black dark:text-white">
+                                        {item}
+                                    </th>
+                                ) : (
+                                    <th key={uuidv4()} className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white">
+                                        {item}
+                                    </th>
+                                )
                             ))}
                             <th className="py-4 px-4 font-medium text-black dark:text-white">
                                 Actions

@@ -5,6 +5,8 @@ import Loader from '../../common/Loader';
 import { endpoints } from '../../types/endpoints';
 import { fetchInstance } from '../../hooks/apiCalls';
 import { routing } from '../../types/routing';
+import CreateButton from '../../components/MtgComponent/CreateButton';
+import TablePagination from '../../components/Pagination';
 
 const Tournaments = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);
@@ -13,7 +15,7 @@ const Tournaments = () => {
 
     const apiCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.API_URL}:${import.meta.env.API_PORT}${routing.leagues}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}`)
             .then(data => {
                  const dataLeague = (data || []).map((item: any) => ({
                     id      : item.id,
@@ -43,6 +45,10 @@ const Tournaments = () => {
         <>
             <DefaultLayout>
                 <div className="flex flex-col gap-10">
+                    <CreateButton
+                        endpoint={endpoints.leagues}
+                        text="Add new League">
+                    </CreateButton>
                     {leagues ? (
                         <>
                             <Table
@@ -51,6 +57,7 @@ const Tournaments = () => {
                                 name     = "Leagues"
                                 endpoint = {endpoints.leagues}
                             />
+                            <TablePagination></TablePagination>
                         </>
                     ) : (
                         <Loader />  

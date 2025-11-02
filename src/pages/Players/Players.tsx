@@ -5,6 +5,8 @@ import Loader from '../../common/Loader';
 import { endpoints } from '../../types/endpoints';
 import { fetchInstance } from '../../hooks/apiCalls';
 import { routing } from '../../types/routing';
+import CreateButton from '../../components/MtgComponent/CreateButton';
+import TablePagination from '../../components/Pagination';
 
 const Players = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);
@@ -13,7 +15,7 @@ const Players = () => {
 
     const apiCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.API_URL}:${import.meta.env.API_PORT}${routing.players}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}`)
             .then(data => {
                 const dataPlayer = (data || []).map((item: any) => ({
                     id           : item.id,
@@ -42,6 +44,10 @@ const Players = () => {
         <>
             <DefaultLayout>
                 <div className="flex flex-col gap-10">
+                    <CreateButton
+                        endpoint={endpoints.players}
+                        text="Add new Player">
+                    </CreateButton>
                     {players ? (
                         <>
                             <Table
@@ -50,6 +56,7 @@ const Players = () => {
                                 name     = "Players"
                                 endpoint = {endpoints.players}
                             />
+                            <TablePagination></TablePagination>
                         </>
                     ) : (
                         <Loader />  

@@ -12,12 +12,16 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Tournaments from './pages/Tournaments/Tournaments.tsx';
 import TournamentsEdit from './pages/Tournaments/Edit/index.tsx';
+import TournamentsCreate from './pages/Tournaments/Create/index.tsx';
 import Leagues from './pages/Leagues/Leagues.tsx';
 import LeaguesEdit from './pages/Leagues/Edit/index.tsx';
+import LeaguesCreate from './pages/Leagues/Create/index.tsx';
 import Decks from './pages/Decks/Decks.tsx';
 import DecksEdit from './pages/Decks/Edit/index.tsx';
+import DecksCreate from './pages/Decks/Create/index.tsx';
 import Players from './pages/Players/Players.tsx';
 import PlayersEdit from './pages/Players/Edit/index.tsx';
+import PlayersCreate from './pages/Players/Create/index.tsx';
 import { routing } from './types/routing.ts';
 
 function App() {
@@ -33,8 +37,7 @@ function App() {
         <>
             <BrowserRouter>
                 <Routes>
-                    <Route
-                        path={routing.home}
+                    <Route path={routing.home}
                         element={
                             <>
                                 <PageTitle title="Signin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -42,8 +45,7 @@ function App() {
                             </>
                         }
                     />
-                    <Route
-                        path={routing.signup}
+                    <Route path={routing.signup}
                         element={
                             <>
                                 <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -51,17 +53,15 @@ function App() {
                             </>
                         }
                     />
-                    <Route
-                        path={routing.dashboard}
+                    <Route path={routing.dashboard}
                         element={
                             <>
-                                <PageTitle title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                                <PageTitle title="Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                                 <Dashboard />
                             </>
                         }
                     />
-                    <Route
-                        path={routing.tournaments}
+                    <Route path={routing.tournaments}
                         element={
                             <>
                                 <PageTitle title="Tournaments | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -69,8 +69,7 @@ function App() {
                             </>
                         }
                     />
-                    <Route
-                        path={routing.tournaments + '/edit'}
+                    <Route path={routing.tournaments + '/edit'}
                         element={
                             <>
                                 <PageTitle title="Tournaments | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -78,8 +77,15 @@ function App() {
                             </>
                         }
                     />
-                    <Route
-                        path={routing.leagues}
+                    <Route path={routing.tournaments + '/create'}
+                        element={
+                            <>
+                                <PageTitle title="Tournaments | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                                <TournamentsCreate />
+                            </>
+                        }
+                    />
+                    <Route path={routing.leagues}
                         element={
                             <>
                                 <PageTitle title="Leagues | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -87,8 +93,7 @@ function App() {
                             </>
                         }
                     />
-                    <Route
-                        path={routing.leagues + "/edit"}
+                    <Route path={routing.leagues + "/edit"}
                         element={
                             <>
                                 <PageTitle title="Leagues | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -96,8 +101,15 @@ function App() {
                             </>
                         }
                     />
-                    <Route
-                        path={routing.players}
+                    <Route path={routing.leagues + "/create"}
+                        element={
+                            <>
+                                <PageTitle title="Leagues | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                                <LeaguesCreate />
+                            </>
+                        }
+                    />
+                    <Route path={routing.players}
                         element={
                             <>
                                 <PageTitle title="Players | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -105,8 +117,7 @@ function App() {
                             </>
                         }
                     />
-                    <Route
-                        path={routing.players + "/edit"}
+                    <Route path={routing.players + "/edit"}
                         element={
                             <>
                                 <PageTitle title="Players | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -114,8 +125,15 @@ function App() {
                             </>
                         }
                     />
-                    <Route
-                        path={routing.decks}
+                    <Route path={routing.players + "/create"}
+                        element={
+                            <>
+                                <PageTitle title="Players | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                                <PlayersCreate />
+                            </>
+                        }
+                    />
+                    <Route path={routing.decks}
                         element={
                             <>
                                 <PageTitle title="Decks | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -123,12 +141,19 @@ function App() {
                             </>
                         }
                     />
-                    <Route
-                        path={routing.decks + "/edit"}
+                    <Route path={routing.decks + "/edit"}
                         element={
                             <>
                                 <PageTitle title="Decks | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                                 <DecksEdit />
+                            </>
+                        }
+                    />
+                    <Route path={routing.decks + "/create"}
+                        element={
+                            <>
+                                <PageTitle title="Decks | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                                <DecksCreate />
                             </>
                         }
                     />
