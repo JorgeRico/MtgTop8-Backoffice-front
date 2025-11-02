@@ -1,9 +1,10 @@
 import Table from '../../components/Tables/Table';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
 import Loader from '../../common/Loader';
 import { endpoints } from '../../types/endpoints';
+import { fetchInstance } from '../../hooks/apiCalls';
+import { routing } from '../../types/routing';
 
 const Tournaments = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);
@@ -11,33 +12,24 @@ const Tournaments = () => {
     const headerItem                      = [ 'id', 'name', 'isLegacy', 'year', 'current', 'active' ];
 
     const apiCall = async () => {
-        const authToken = Cookies.get('authToken');
-        await fetch('http://127.0.0.1:5000/leagues', {
-            headers: { 'Authorization': authToken || '' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            let dataLeague: any[] = [];
+        try {
+            await fetchInstance.get(`${import.meta.env.API_URL}:${import.meta.env.API_PORT}${routing.leagues}`)
+            .then(data => {
+                 const dataLeague = (data || []).map((item: any) => ({
+                    id      : item.id,
+                    name    : item.name,
+                    format  : item.isLegacy === 1 ? 'Legacy' : '-',
+                    year    : item.year,
+                    current : Number(item.current) === 1 ? 'current' : '-',
+                    active  : Number(item.active) === 1 ? 'active' : '-'
+                }));
 
-            data.forEach((item: any) => {
-                const values = {
-                    id       : item.id,
-                    name     : item.name,
-                    format   : item.isLegacy == 1 ? 'Legacy' : '-',
-                    year     : item.year,
-                    current  : (parseInt(item.current) == 1) ? 'current' : '-',
-                    active   : (parseInt(item.active) == 1) ? 'active' : '-'
-                };
-                dataLeague.push(values);
-                console.log(values)
-            });
-
-            setLeagues(dataLeague);
-        })
-        .catch(err => {
-            console.error(err)
-        });
-    }
+                setLeagues(dataLeague);
+            })
+        } catch (error) {
+            console.error('Failed to load leagues', error);
+        }
+    };
 
     useEffect(() => {
         if (isFirstLoad == false) {

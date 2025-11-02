@@ -1,40 +1,33 @@
 import Table from '../../components/Tables/Table';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
 import Loader from '../../common/Loader';
 import { endpoints } from '../../types/endpoints';
+import { fetchInstance } from '../../hooks/apiCalls';
+import { routing } from '../../types/routing';
 
 const Tournaments = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);
     const [ tournaments, setTournaments ] = useState<any[] | null>(null);
-    const headerItem = [ 'id', 'name', 'date', 'players' ];
+    const headerItem                      = [ 'id', 'name', 'date', 'players' ];
 
     const apiCall = async () => {
-        const authToken = Cookies.get('authToken');
-        await fetch('http://127.0.0.1:5000/tournaments', {
-            headers: { 'Authorization': authToken || '' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            let dataTournament: any[] = [];
-
-            data.forEach((item: any) => {
-                const values = {
+        try {
+            await fetchInstance.get(`${import.meta.env.API_URL}:${import.meta.env.API_PORT}${routing.tournaments}`)
+            .then(data => {
+                const dataTournament = (data || []).map((item: any) => ({
                     id      : item.id,
                     name    : item.name,
                     date    : item.date,
                     players : item.players
-                };
-                dataTournament.push(values);
-            });
+                }));
 
-            setTournaments(dataTournament);
-        })
-        .catch(err => {
-            console.error(err)
-        });
-    }
+                setTournaments(dataTournament);
+            })
+        } catch (error) {
+            console.error('Failed to load tournaments', error);
+        }
+    };
 
     useEffect(() => {
         if (isFirstLoad == false) {

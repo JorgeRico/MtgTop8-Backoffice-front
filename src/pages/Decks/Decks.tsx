@@ -1,9 +1,10 @@
 import Table from '../../components/Tables/Table';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
+import { routing } from '../../types/routing';
 import Loader from '../../common/Loader';
 import { endpoints } from '../../types/endpoints';
+import { fetchInstance } from '../../hooks/apiCalls';
 
 const Decks = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);
@@ -11,29 +12,21 @@ const Decks = () => {
     const headerItem                      = [ 'id', 'name', 'idPlayer' ];
 
     const apiCall = async () => {
-        const authToken = Cookies.get('authToken');
-        await fetch('http://127.0.0.1:5000/decks', {
-            headers: { 'Authorization': authToken || '' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            let dataDeck: any[] = [];
-
-            data.forEach((item: any) => {
-                const values = {
+        try {
+            await fetchInstance.get(`${import.meta.env.API_URL}:${import.meta.env.API_PORT}${routing.decks}`)
+            .then(data => {
+                 const dataDeck = (data || []).map((item: any) => ({
                     id       : item.id,
                     name     : item.name,
                     idPlayer : item.idplayer
-                };
-                dataDeck.push(values);
-            });
+                }));
 
-            setDecks(dataDeck);
-        })
-        .catch(err => {
-            console.error(err)
-        });
-    }
+                setDecks(dataDeck);
+            })
+        } catch (error) {
+            console.error('Failed to load decks', error);
+        }
+    };
 
     useEffect(() => {
         if (isFirstLoad == false) {

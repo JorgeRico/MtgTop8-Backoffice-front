@@ -1,41 +1,34 @@
 import Table from '../../components/Tables/Table';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
 import Loader from '../../common/Loader';
 import { endpoints } from '../../types/endpoints';
+import { fetchInstance } from '../../hooks/apiCalls';
+import { routing } from '../../types/routing';
 
 const Players = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);
     const [ players, setPlayers ]         = useState<any[] | null>(null);
-    const headerItem = [ 'id', 'name', 'position', 'idTournament', 'idDeck' ];
+    const headerItem                      = [ 'id', 'name', 'position', 'idTournament', 'idDeck' ];
 
     const apiCall = async () => {
-        const authToken = Cookies.get('authToken');
-        await fetch('http://127.0.0.1:5000/players', {
-            headers: { 'Authorization': authToken || '' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            let dataPlayer: any[] = [];
-
-            data.forEach((item: any) => {
-                const values = {
+        try {
+            await fetchInstance.get(`${import.meta.env.API_URL}:${import.meta.env.API_PORT}${routing.players}`)
+            .then(data => {
+                const dataPlayer = (data || []).map((item: any) => ({
                     id           : item.id,
                     name         : item.name,
                     position     : item.position,
                     idTournament : item.idTournament,
                     idDeck       : item.idDeck
-                };
-                dataPlayer.push(values);
-            });
+                }));
 
-            setPlayers(dataPlayer);
-        })
-        .catch(err => {
-            console.error(err)
-        });
-    }
+                setPlayers(dataPlayer);
+            })
+        } catch (error) {
+            console.error('Failed to load players', error);
+        }
+    };
 
     useEffect(() => {
         if (isFirstLoad == false) {
