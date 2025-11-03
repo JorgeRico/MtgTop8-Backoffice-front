@@ -1,9 +1,33 @@
-import SelectGroupOne from '../../../components/Forms/SelectGroup/SelectGroupOne';
+import { useState } from "react";
 import DefaultLayout from '../../../layout/DefaultLayout';
+import Loader from '../../../common/LoaderSmall';
+import { fetchInstance } from '../../../hooks/apiCalls';
+import { routing } from '../../../types/routing';
+import { toast } from '../../../hooks/toast';
 
-// TODO: form create functions
-// TODO: player hardcoded
 const FormLayout = () => {
+    const [ isLoading, setIsLoading ] = useState<boolean>(false);
+    const [ isCreated, setIsCreated ] = useState<boolean>(false);
+    
+    const onSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsLoading(true);
+
+        const body = {
+            'name' : document.querySelector<HTMLInputElement>('input[name="name"]')?.value,
+        }
+
+        try {
+            await fetchInstance.post(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}`, body)
+            .then(data => {
+                setTimeout(() => setIsCreated(true), 2000);
+                setTimeout(() => toast('success', "Player created correctly, id: "+data.data[0].id), 2000);
+            })
+        } catch (error) {
+            toast('error', "Failed to create Deck and Player");
+        }
+    };
+
     return (
         <>
             <DefaultLayout>
@@ -15,7 +39,7 @@ const FormLayout = () => {
                                     Contact Form
                                 </h3>
                             </div>
-                            <form action="#">
+                            <form onSubmit={onSubmitForm}>
                                 <div className="p-6.5">
                                     <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                                         <div className="w-full">
@@ -31,22 +55,16 @@ const FormLayout = () => {
                                         </div>
                                     </div>
 
-                                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                                        <div className="w-full">
-                                            <SelectGroupOne 
-                                                options={[
-                                                    { value: '1', key: 'idPlayer 1' },
-                                                    { value: '2', key: 'idPlayer 2' }
-                                                ]}
-                                                text="Select player"
-                                                name="Player"
-                                            />
+                                    {!isLoading &&
+                                        <button className="flex w-full justify-center rounded bg-primary p-3 mt-5 font-medium text-gray hover:bg-opacity-90">
+                                            Create Deck
+                                        </button>
+                                    }
+                                    {(isLoading && !isCreated) &&
+                                        <div className="flex w-full justify-center p-3 m-5">
+                                            <Loader></Loader>
                                         </div>
-                                    </div>
-
-                                    <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                                        Create Deck
-                                    </button>
+                                    }
                                 </div>
                             </form>
                         </div>

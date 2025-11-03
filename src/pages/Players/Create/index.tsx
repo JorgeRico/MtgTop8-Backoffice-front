@@ -9,11 +9,9 @@ import { toast } from '../../../hooks/toast';
 const CreatePlayer = () => {
     const [ isLoading, setIsLoading ]                   = useState<boolean>(false);
     const [ isCreated, setIsCreated ]                   = useState<boolean>(false);
-    const [ changeTournament, setChangeTournament ]     = useState<string>('');
     const [ selectedTournament, setSelectedTournament ] = useState<string>('');
     const [ isFirstLoad, setIsFirstLoad ]               = useState(false);
     const [ tournaments, setTournaments ]               = useState<any[] | null>(null);
-    const [ showDecks, setShowDecks ]                   = useState(false);
 
     const onSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -46,22 +44,31 @@ const CreatePlayer = () => {
                     'idDeck'       : parseInt(data.data[0].id)
                 }
 
-                createPlayer(body);
+                createPlayer(parseInt(data.data[0].id), body);
             })
         } catch (error) {
             toast('error', "Failed to create Deck and Player");
         }
     };
 
-    const createPlayer = async (body: object) => {
+    const createPlayer = async (idDeck: number, body: object) => {
         try {
             await fetchInstance.post(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}`, body)
             .then(data => {
+                updateIdPlayerDeck(idDeck, {'idPlayer' : data.data[0].id})
                 setTimeout(() => setIsCreated(true), 2000);
-                setTimeout(() => toast('success', "Player created correctly, id: "+data.data[0].id), 2000);
+                setTimeout(() => toast('success', "Player created correctly, id: " + data.data[0].id), 2000);
             })
         } catch (error) {
             toast('error', "Failed to create player");
+        }
+    }
+
+    const updateIdPlayerDeck = async (idDeck: number, body: object) => {
+        try {
+            await fetchInstance.put(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}/${idDeck}`, body)
+        } catch (error) {
+            toast('error', "Failed to add idPlayer to deck");
         }
     }
     
@@ -80,17 +87,6 @@ const CreatePlayer = () => {
             toast('error', 'Failed to load tournaments');
         }
     };
-
-    function showTournamentDeckOptions(){        
-        if (selectedTournament != null && selectedTournament != '') {
-            if (changeTournament != selectedTournament) {
-                setChangeTournament(selectedTournament);
-                setTimeout(() => setShowDecks(true), 1000);
-            }
-        }  
-    }
-
-    document.addEventListener("change", showTournamentDeckOptions);
 
     useEffect(() => {
         if (isFirstLoad == false) {
@@ -157,20 +153,18 @@ const CreatePlayer = () => {
                                             }
                                         </div>
                                     </div>
-                                    {showDecks && 
-                                        <div className="mb-8.5">
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Deck name
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="deck"
-                                                placeholder="Deck name"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                required
-                                            />
-                                        </div>
-                                    }
+                                    <div className="mb-8.5">
+                                        <label className="mb-2.5 block text-black dark:text-white">
+                                            Deck name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="deck"
+                                            placeholder="Deck name"
+                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                            required
+                                        />  
+                                    </div>
                                     {!isLoading &&
                                         <button className="flex w-full justify-center rounded bg-primary p-3 mt-5 font-medium text-gray hover:bg-opacity-90">
                                             Create Player

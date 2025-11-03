@@ -20,7 +20,7 @@ const Decks = () => {
                  const dataDeck = (data || []).map((item: any) => ({
                     id       : item.id,
                     name     : item.name,
-                    idPlayer : item.idplayer
+                    idPlayer : item.idPlayer
                 }));
 
                 setDecks(dataDeck);
