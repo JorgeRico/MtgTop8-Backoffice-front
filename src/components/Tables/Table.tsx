@@ -1,16 +1,30 @@
 import TrashIcon from '../Icons/Trash';
 import { v4 as uuidv4 } from "uuid";
 import EditIcon from '../Icons/Edit';
-import React from 'react';
+import React, { useState } from 'react';
+import { fetchInstance } from '../../hooks/apiCalls';
+import { toast } from '../../hooks/toast';
+import Loader from '../../common/LoaderSmall';
 
 const Table: React.FC<{ header: string[]; name: string; data: Record<string, any>[], endpoint: string }> = ({ header, name, data, endpoint }) => {
     const editSubmit = () => {
         window.location.href = endpoint + "/edit"
     }
 
-    const deleteSubmit = () => {
-        alert(endpoint)
+    const deleteSubmit = async (event: any, id: string) => {
+        event.currentTarget.classList.toggle('hidden');
+        document.querySelector('#loading-item-'+id)?.classList.toggle('hidden');
+        document.querySelector('#edit-item-'+id)?.classList.toggle('hidden');
         
+        try {
+            await fetchInstance.delete(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}/${endpoint}/${id}`)
+            .then(data => {
+                setTimeout(() => toast('success', "Deleted correctly, id: " + id), 1000);
+                setTimeout(() => window.location.reload(), 1500);
+            })
+        } catch (error) {
+            toast('error', "Failed to delete Deck and Player");
+        }
     }
 
     return (
@@ -51,10 +65,13 @@ const Table: React.FC<{ header: string[]; name: string; data: Record<string, any
                             
                                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                     <div className="flex items-center space-x-3.5">
-                                        <button className="hover:text-primary" onClick={() => editSubmit()}>
+                                        <div className="loading hidden" id={`loading-item-${item.id}`}>
+                                            <Loader></Loader>
+                                        </div>
+                                        <button id={`edit-item-${item.id}`} className="hover:text-primary editItem" onClick={() => editSubmit()}>
                                             <EditIcon></EditIcon>
                                         </button>
-                                        <button className="hover:text-primary" onClick={() => deleteSubmit()}>
+                                        <button id={`delete-item-${item.id}`} className="hover:text-primary deleteItem" onClick={(e) => deleteSubmit(e, item.id)}>
                                             <TrashIcon></TrashIcon>
                                         </button>
                                     </div>
