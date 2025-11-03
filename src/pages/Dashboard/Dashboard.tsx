@@ -8,7 +8,7 @@ const Dashboard: React.FC = () => {
     return (
         <>
             <DefaultLayout>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+                <section className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
                     <NavLink to={routing.leagues}>
                         <CardDataStats total="" levelUp rate="" title="Leagues">
                             <svg
@@ -55,8 +55,8 @@ const Dashboard: React.FC = () => {
                             </svg>
                         </CardDataStats>
                     </NavLink>
-                </div>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 mt-10">
+                </section>
+                <section className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 mt-10">
                     <NavLink to={routing.players}>
                         <CardDataStats total="" levelUp rate="" title="Players">
                             <svg
@@ -103,7 +103,7 @@ const Dashboard: React.FC = () => {
                             </svg>
                         </CardDataStats>
                     </NavLink>
-                </div>
+                </section>
             </DefaultLayout>
         </>
     );

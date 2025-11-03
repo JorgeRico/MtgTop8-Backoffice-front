@@ -9,12 +9,12 @@ const SignIn: React.FC = () => {
         <>
             <AuthLayout>
                 <Breadcrumb pageName="Sign In" />
-                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                <section className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                     <div className="flex flex-wrap items-center">
                         <LeftSideComponent></LeftSideComponent>
                         <SignInComponent></SignInComponent>
                     </div>
-                </div>
+                </section>
             </AuthLayout>
         </>
     );
