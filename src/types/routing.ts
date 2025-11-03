@@ -8,5 +8,6 @@ export const routing = {
     'dashboard'   : '/dashboard',
     'signup'      : '/signup',
     'settings'    : '/settings',
-    'home'        : '/'
+    'home'        : '/',
+    'recover'     : '/recover'
 }

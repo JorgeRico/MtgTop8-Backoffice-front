@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import Cookies from 'js-cookie';
 import { routing } from '../types/routing';
 import { toast } from './toast';
@@ -26,13 +26,11 @@ const FirebaseHook = {
     watchAuthState() {
         unwatchAuthState = onAuthStateChanged(auth, user => {
             if (!user) {
-                console.log('User is not authenticated');
+                // console.log('User is not authenticated');
                 Cookies.remove('authToken');
-
                 window.location.href = routing.home;
             } else {
-                console.log('-----------------')
-                console.log('User is authenticated');
+                // console.log('User is authenticated');
                 console.log(Cookies.get('authToken'))
             }
         })
@@ -40,6 +38,7 @@ const FirebaseHook = {
             console.log("problems watching auth state")
         }
     },
+    
     async login(email: string, password: string) {
         let errorMessage: string;
 
@@ -67,19 +66,15 @@ const FirebaseHook = {
             setTimeout(() => toast('error', errorMessage), 2000);
         })
     },
-    // async recover(email: string) {    
-    //     const toast = useToast();
-          
-    //     return await sendPasswordResetEmail(auth, email).then(() => {
-    //         toast.success("Check your e-mail to proceed to change your password");
 
-    //         return true;
-    //     }).catch(function() {
-    //         toast.error('Wrong email');
-            
-    //         return false;
-    //     })
-    // },
+    async recover(email: string) {              
+        return await sendPasswordResetEmail(auth, email).then(() => {
+            return true;
+        }).catch(function() {
+            setTimeout(() => toast('error', "Wrong email"), 2000);            
+        })
+    },
+
     async logout(){
         await signOut(auth).then(() => {
             // Sign-out successful.
@@ -90,6 +85,7 @@ const FirebaseHook = {
             console.log(error)
         });
     },
+
     // async signup(email: string, password: string){
     //     var errorMessage = null;
     //     const toast      = useToast();

@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
-import SignIn from './pages/Authentication/SignIn';
-import SignUp from './pages/Authentication/SignUp';
+import SignIn from './pages/Authentication/SignIn.tsx';
+// import SignUp from './pages/Authentication/SignUp.tsx';
+import RecoverPassword from './pages/Authentication/RecoverPassword.tsx';
 import Chart from './pages/Chart';
 import Dashboard from './pages/Dashboard/Dashboard';
 import FormElements from './pages/Form/FormElements';
@@ -45,11 +46,19 @@ function App() {
                             </>
                         }
                     />
-                    <Route path={routing.signup}
+                    {/* <Route path={routing.signup}
                         element={
                             <>
                                 <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                                 <SignUp />
+                            </>
+                        }
+                    /> */}
+                    <Route path={routing.recover}
+                        element={
+                            <>
+                                <PageTitle title="Recover password | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                                <RecoverPassword />
                             </>
                         }
                     />
