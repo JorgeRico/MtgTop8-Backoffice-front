@@ -17,7 +17,7 @@ const Tournaments = () => {
         try {
             await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}`)
             .then(data => {
-                 const dataLeague = (data || []).map((item: any) => ({
+                const dataLeague = (data || []).map((item: any) => ({
                     id      : item.id,
                     name    : item.name,
                     format  : item.isLegacy === 1 ? 'Legacy' : '-',

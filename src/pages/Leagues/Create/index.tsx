@@ -1,8 +1,62 @@
+import React, { useState, useEffect } from 'react';
 import SelectGroupOne from '../../../components/Forms/SelectGroup/SelectGroupOne';
 import DefaultLayout from '../../../layout/DefaultLayout';
+import Loader from '../../../common/LoaderSmall';
+import { fetchInstance } from '../../../hooks/apiCalls';
+import { routing } from '../../../types/routing';
+import { toast } from '../../../hooks/toast';
 
-// TODO: create form functions
 const CreateLeague = () => {
+    const [ isLoading, setIsLoading ]            = useState<boolean>(false);
+    const [ isCreated, setIsCreated ]            = useState<boolean>(false);
+    const [ selectedFormat, setSelectedFormat]   = useState<string>('');
+    const [ selectedCurrent, setSelectedCurrent] = useState<string>('');
+    const [ selectedActive, setSelectedActive]   = useState<string>('');
+    const [ selectedYear, setSelectedYear]       = useState<string>('');
+    const [ years, setYears ]                    = useState<Array<{ key: string; value: string }>>([]);
+
+    const getDropdownYears = () => {
+        const tempYears: Array<{ key: string; value: string }> = [];
+        const now = new Date();
+
+        for (let year = 2016; year <= now.getFullYear(); year++) {
+            const item = {
+                key   : String(year),
+                value : String(year)
+            };
+            tempYears.push(item);
+        }
+
+        setYears(tempYears)
+    }
+    
+    const onSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsLoading(true);
+
+        const body = {
+            'name'     : document.querySelector<HTMLInputElement>('input[name="name"]')?.value,
+            'isLegacy' : parseInt(selectedFormat),
+            'year'     : parseInt(selectedYear),
+            'current'  : parseInt(selectedCurrent),
+            'active'   : parseInt(selectedActive)
+        }
+        
+        try {
+            await fetchInstance.post(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}`, body)
+            .then(data => {
+                setTimeout(() => setIsCreated(true), 2000);
+                setTimeout(() => toast('success', "League created correctly, id: "+data.data[0].id), 2000);
+            })
+        } catch (error) {
+            console.error('Failed to load leagues', error);
+        }
+    };
+
+    useEffect(() => {
+        getDropdownYears()
+    }, []);
+
     return (
         <>
             <DefaultLayout>
@@ -14,7 +68,7 @@ const CreateLeague = () => {
                                     New League
                                 </h3>
                             </div>
-                            <form action="#">
+                            <form onSubmit={onSubmitForm}>
                                 <div className="p-6.5">
                                     <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                                         <div className="w-full">
@@ -24,6 +78,7 @@ const CreateLeague = () => {
                                             <input
                                                 type="text"
                                                 name="name"
+                                                id="name"
                                                 placeholder="Enter League name"
                                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                 required
@@ -38,6 +93,19 @@ const CreateLeague = () => {
                                                 ]}
                                                 text="Select Format"
                                                 name="Format"
+                                                selectedOpt={selectedFormat}
+                                                selectedOptionFunction={setSelectedFormat}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                                        <div className="w-full">
+                                            <SelectGroupOne 
+                                                options={years}
+                                                text="Select Year"
+                                                name="Year"
+                                                selectedOpt={selectedYear}
+                                                selectedOptionFunction={setSelectedYear}
                                             />
                                         </div>
                                     </div>
@@ -49,25 +117,36 @@ const CreateLeague = () => {
                                                     { value: '0', key: 'Past season' }
                                                 ]}
                                                 text="Select Current Season"
-                                                name="Current Season"
+                                                name="Current"
+                                                selectedOpt={selectedCurrent}
+                                                selectedOptionFunction={setSelectedCurrent}
                                             />
                                         </div>
                                     </div>
                                     <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                                         <div className="w-full">
-                                            <SelectGroupOne 
+                                            <SelectGroupOne
                                                 options={[
                                                     { value: '1', key: 'Active' },
                                                     { value: '0', key: 'Disabled' }
                                                 ]}
                                                 text="Select Active Status"
                                                 name="Active"
+                                                selectedOpt={selectedActive}
+                                                selectedOptionFunction={setSelectedActive}
                                             />
                                         </div>
-                                    </div>                                    
-                                    <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                                        Create League
-                                    </button>
+                                    </div>
+                                    {!isLoading &&
+                                        <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+                                            Create League
+                                        </button>
+                                    }
+                                    {(isLoading && !isCreated) &&
+                                        <div className="flex w-full justify-center p-3 m-5">
+                                            <Loader></Loader>
+                                        </div>
+                                    }
                                 </div>
                             </form>
                         </div>

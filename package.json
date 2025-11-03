@@ -30,6 +30,7 @@
     "react-router-dom": "^7.9.4",
     "react-toastify": "^11.0.5",
     "sort-by": "^1.2.0",
+    "typescript-toastify": "^1.0.4",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

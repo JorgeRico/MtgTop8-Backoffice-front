@@ -30,8 +30,7 @@ export const fetchInstance = {
             return await fetch(url, { method: 'POST', body: JSON.stringify(body), headers: { ...fetchInstance.defaultHeaders, ...options.headers }, ...options })
                 .then(async response => {
                     if (!response.ok) {
-                        const text = await response.text();
-                        throw new Error(text);
+                        throw new Error(response.status.toString());
                     }
                     return response.json();
                 });
@@ -45,7 +44,7 @@ export const fetchInstance = {
             return await fetch(url, { method: 'PUT', body: JSON.stringify(body), headers: { ...fetchInstance.defaultHeaders, ...options.headers }, ...options })
                 .then(async response => {
                     if (!response.ok) {
-                        return response.text().then(text => { throw new Error(text); });
+                        throw new Error(response.status.toString());
                     }
                     return response.json();
                 });
@@ -59,7 +58,7 @@ export const fetchInstance = {
             return await fetch(url, { method: 'DELETE', headers: { ...fetchInstance.defaultHeaders, ...options.headers }, ...options })
                 .then(async response => {
                     if (!response.ok) {
-                        return response.text().then(text => { throw new Error(text); });
+                        throw new Error(response.status.toString());
                     }
                     return response.json();
                 });

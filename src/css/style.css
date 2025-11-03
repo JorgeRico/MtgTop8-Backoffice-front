@@ -213,3 +213,8 @@ span.flatpickr-weekday,
 [x-cloak] {
   display: none !important;
 }
+
+.toast-container {
+    z-index: 10000;
+    right: 20px;
+}

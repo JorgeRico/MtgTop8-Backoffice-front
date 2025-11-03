@@ -3,12 +3,13 @@ import DropdownArrow from '../../Icons/DropdownArrow';
 
 type OptionType = { key: string; value: string };
 
-const SelectGroupOne: React.FC<{ options: OptionType[]; text: string, name: string }> = ({ options, text, name }) => {
-    const [selectedOption, setSelectedOption]     = useState<string>('');
+const SelectGroupOne: React.FC<{ options: OptionType[]; text: string, name: string, selectedOpt: string, selectedOptionFunction: Function }> = ({ options, text, name, selectedOpt, selectedOptionFunction }) => {
+    // const [selectedOption, setSelectedOption]     = useState<string>('');
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
-    const changeTextColor = () => {
+    const onChangeSubmit = (event: any) => {
         setIsOptionSelected(true);
+        selectedOptionFunction(event)
     };
 
     return (
@@ -19,11 +20,10 @@ const SelectGroupOne: React.FC<{ options: OptionType[]; text: string, name: stri
 
             <div className="relative z-20 bg-transparent dark:bg-form-input">
                 <select
-                    value={selectedOption}
-                    onChange={(e) => {
-                        setSelectedOption(e.target.value);
-                        changeTextColor();
-                    }}
+                    required
+                    value={selectedOpt}
+                        onChange={(e) => onChangeSubmit(e.target.value)
+                    }
                     className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary ${
                         isOptionSelected ? 'text-black dark:text-white' : {text}
                     }`}
