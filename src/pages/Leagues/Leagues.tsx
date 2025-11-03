@@ -7,6 +7,7 @@ import { fetchInstance } from '../../hooks/apiCalls';
 import { routing } from '../../types/routing';
 import CreateButton from '../../components/MtgComponent/CreateButton';
 import TablePagination from '../../components/Pagination';
+import { toast } from '../../hooks/toast';
 
 const Tournaments = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);
@@ -29,7 +30,7 @@ const Tournaments = () => {
                 setLeagues(dataLeague);
             })
         } catch (error) {
-            console.error('Failed to load leagues', error);
+            toast('error', 'Failed to load leagues');
         }
     };
 

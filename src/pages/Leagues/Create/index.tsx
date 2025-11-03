@@ -49,7 +49,7 @@ const CreateLeague = () => {
                 setTimeout(() => toast('success', "League created correctly, id: "+data.data[0].id), 2000);
             })
         } catch (error) {
-            console.error('Failed to load leagues', error);
+            toast('error', 'Failed to load leagues');
         }
     };
 
