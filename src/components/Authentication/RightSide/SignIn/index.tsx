@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import LockImage from '../../../Icons/Lock.tsx';
 import MailImage from '../../../Icons/Mail.tsx';
 import firebase from '../../../../hooks/firebase.tsx';
-
-const onSubmitForm = () => {
-    var email    = document.querySelector<HTMLInputElement>('input[name="email"]')?.value;
-    var password = document.querySelector<HTMLInputElement>('input[name="password"]')?.value;
-
-    if (email && password) {
-        firebase.login(email, password);   
-    }
-}
+import Loader from '../../../../common/LoaderSmall';
 
 const SignIn: React.FC = () => {
+    const [ isLoading, setIsLoading ] = useState(false);
+
+    const onSubmitForm = () => {
+        setIsLoading(true);
+        
+        var email    = document.querySelector<HTMLInputElement>('input[name="email"]')?.value;
+        var password = document.querySelector<HTMLInputElement>('input[name="password"]')?.value;
+
+        if (email && password) {
+            firebase.login(email, password);   
+        }
+    }
     return (
         <>
             <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
@@ -62,11 +66,15 @@ const SignIn: React.FC = () => {
                         </div>
 
                         <div className="mb-5">
-                            <input
-                                type="submit"
-                                value="Sign In"
-                                className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
-                            />
+                            {!isLoading ? (
+                                <input
+                                    type="submit"
+                                    value="Sign In"
+                                    className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
+                                />
+                            ) : (
+                                <Loader></Loader>
+                            )}
                         </div>
 
                         <div className="mt-6 text-center">

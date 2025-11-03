@@ -2,9 +2,9 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
-// import { useToast } from 'vue-toastification';
 import Cookies from 'js-cookie';
 import { routing } from '../types/routing';
+import { toast } from './toast';
 
 const firebaseConfig = {
     apiKey            : import.meta.env.VITE_FIREBASE_API_KEY,
@@ -41,13 +41,12 @@ const FirebaseHook = {
         }
     },
     async login(email: string, password: string) {
-        var errorMessage = null;
-        // const toast      = useToast();
+        let errorMessage: string;
 
         await signInWithEmailAndPassword(auth, email, password).then((res) => {
             res.user.getIdToken(true).then((token) => {
                 Cookies.set('authToken', token);
-                window.location.href = '/dashboard';
+                window.location.href = routing.dashboard;
             })
         }).catch(function(error) {
             switch (error.code) {
@@ -65,9 +64,7 @@ const FirebaseHook = {
                     break;
             }
 
-            console.log(errorMessage)
-
-            // toast.error(errorMessage);
+            setTimeout(() => toast('error', errorMessage), 2000);
         })
     },
     // async recover(email: string) {    
