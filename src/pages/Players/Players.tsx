@@ -7,6 +7,7 @@ import { fetchInstance } from '../../hooks/apiCalls';
 import { routing } from '../../types/routing';
 import CreateButton from '../../components/MtgComponent/CreateButton';
 import TablePagination from '../../components/Pagination';
+import { toast } from '../../hooks/toast';
 
 const Players = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState(false);
@@ -28,7 +29,7 @@ const Players = () => {
                 setPlayers(dataPlayer);
             })
         } catch (error) {
-            console.error('Failed to load players', error);
+            toast('error', 'Failed to load players');
         }
     };
 
