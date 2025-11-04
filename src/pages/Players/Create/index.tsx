@@ -10,7 +10,7 @@ const CreatePlayer = () => {
     const [ isLoading, setIsLoading ]                   = useState<boolean>(false);
     const [ isCreated, setIsCreated ]                   = useState<boolean>(false);
     const [ selectedTournament, setSelectedTournament ] = useState<string>('');
-    const [ isFirstLoad, setIsFirstLoad ]               = useState(false);
+    const [ isFirstLoad, setIsFirstLoad ]               = useState<boolean>(false);
     const [ tournaments, setTournaments ]               = useState<any[] | null>(null);
 
     const onSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {

@@ -10,13 +10,19 @@ import TablePagination from '../../components/Pagination';
 import { toast } from '../../hooks/toast';
 
 const Tournaments = () => {
-    const [ isFirstLoad, setIsFirstLoad ] = useState(false);
+    const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);
     const [ leagues, setLeagues ]         = useState<any[] | null>(null);
-    const headerItem                      = [ 'id', 'name', 'isLegacy', 'year', 'current', 'active' ];
+    const [ headerItem ]                  = useState<string[]>([ 'id', 'name', 'isLegacy', 'year', 'current', 'active' ]);
+    const [ page, setPage]                = useState<number>(1);
+    const [ limit ]                       = useState<number>(10);
+    const [ totalItems, setTotalItems]    = useState<number>(0);
+    const [ isLoading, setIsLoading ]     = useState<boolean>(false);
 
-    const apiCall = async () => {
+    const apiCall = async (page: number) => {
+        setIsLoading(true);
+
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}?page=${page}&limit=${limit}`)
             .then(data => {
                 const dataLeague = (data || []).map((item: any) => ({
                     id      : item.id,
@@ -28,16 +34,23 @@ const Tournaments = () => {
                 }));
 
                 setLeagues(dataLeague);
+                setIsLoading(false);
             })
         } catch (error) {
             toast('error', 'Failed to load leagues');
         }
     };
 
+    const getNumITems = async() => {
+        const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}/num`);
+        setTotalItems(result.count)
+    }
+
     useEffect(() => {
         if (isFirstLoad == false) {
-            apiCall()
-            
+            getNumITems();
+            setPage(1)
+            apiCall(page);
             setIsFirstLoad(true);
         }
     }, [isFirstLoad]);
@@ -52,14 +65,28 @@ const Tournaments = () => {
                     </CreateButton>
                     {leagues ? (
                         <>
-                            <Table
-                                header   = {headerItem} 
-                                data     = {leagues}
-                                name     = "Leagues"
-                                endpoint = {endpoints.leagues}
-                                apiCall  = {apiCall}
+                            <TablePagination
+                                totalItems={totalItems}
+                                limit={limit}
+                                apiCall={apiCall}
                             />
-                            <TablePagination></TablePagination>
+                            {!isLoading ? (
+                                <Table
+                                    header   = {headerItem} 
+                                    data     = {leagues}
+                                    name     = "Leagues"
+                                    endpoint = {endpoints.leagues}
+                                    apiCall  = {apiCall}
+                                />
+                                ) : (
+                                    <Loader></Loader>
+                                )
+                            }
+                            <TablePagination
+                                totalItems={totalItems}
+                                limit={limit}
+                                apiCall={apiCall}
+                            />                       
                         </>
                     ) : (
                         <Loader />  

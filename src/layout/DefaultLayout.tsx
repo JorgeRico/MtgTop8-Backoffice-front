@@ -4,9 +4,9 @@ import Sidebar from '../components/Sidebar/index';
 import Cookies from 'js-cookie';
 
 const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [ sidebarOpen, setSidebarOpen ] = useState(false);
-    const [ isLogued, setIsLogued ]       = useState(false);
-    const [ isFirstLoad, setIsFirstLoad ] = useState(false);
+    const [ sidebarOpen, setSidebarOpen ] = useState<boolean>(false);
+    const [ isLogued, setIsLogued ]       = useState<boolean>(false);
+    const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);
 
     const logout = () => {
         window.location.href = '/';

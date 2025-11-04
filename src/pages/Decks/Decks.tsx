@@ -9,13 +9,19 @@ import CreateButton from '../../components/MtgComponent/CreateButton';
 import TablePagination from '../../components/Pagination';
 
 const Decks = () => {
-    const [ isFirstLoad, setIsFirstLoad ] = useState(false);
+    const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);
     const [ decks, setDecks ]             = useState<any[] | null>(null);
-    const headerItem                      = [ 'id', 'name', 'idPlayer' ];
+    const [ headerItem ]                  = useState<string[]>([ 'id', 'name', 'idPlayer' ]);
+    const [ page, setPage]                = useState<number>(1);
+    const [ limit ]                       = useState<number>(250);
+    const [ totalItems, setTotalItems]    = useState<number>(0);
+    const [ isLoading, setIsLoading ]     = useState<boolean>(false);
 
-    const apiCall = async () => {
+    const apiCall = async (page: number) => {
+        setIsLoading(true);
+
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}?page=${page}&limit=${limit}`)
             .then(data => {
                  const dataDeck = (data || []).map((item: any) => ({
                     id       : item.id,
@@ -24,16 +30,23 @@ const Decks = () => {
                 }));
 
                 setDecks(dataDeck);
+                setIsLoading(false);
             })
         } catch (error) {
             console.error('Failed to load decks', error);
         }
     };
 
+    const getNumITems = async() => {
+        const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}/num`);
+        setTotalItems(result.count)
+    }
+
     useEffect(() => {
         if (isFirstLoad == false) {
-            apiCall()
-            
+            getNumITems();
+            setPage(1)
+            apiCall(page);
             setIsFirstLoad(true);
         }
     }, [isFirstLoad]);
@@ -48,14 +61,28 @@ const Decks = () => {
                     </CreateButton>
                     {decks ? (
                         <>
-                            <Table
-                                header   = {headerItem} 
-                                data     = {decks}
-                                name     = "Decks"
-                                endpoint = {endpoints.decks}
-                                apiCall  = {apiCall}
+                            <TablePagination
+                                totalItems={totalItems}
+                                limit={limit}
+                                apiCall={apiCall}
                             />
-                            <TablePagination></TablePagination>
+                            {!isLoading ? (
+                                <Table
+                                    header   = {headerItem} 
+                                    data     = {decks}
+                                    name     = "Decks"
+                                    endpoint = {endpoints.decks}
+                                    apiCall  = {apiCall}
+                                />
+                                ) : (
+                                    <Loader></Loader>
+                                )
+                            }
+                            <TablePagination
+                                totalItems={totalItems}
+                                limit={limit}
+                                apiCall={apiCall}
+                            />
                         </>
                     ) : (
                         <Loader />  
