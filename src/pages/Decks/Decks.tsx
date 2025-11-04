@@ -53,6 +53,7 @@ const Decks = () => {
                                 data     = {decks}
                                 name     = "Decks"
                                 endpoint = {endpoints.decks}
+                                apiCall  = {apiCall}
                             />
                             <TablePagination></TablePagination>
                         </>

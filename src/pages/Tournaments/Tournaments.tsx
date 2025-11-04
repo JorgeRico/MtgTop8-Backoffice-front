@@ -55,6 +55,7 @@ const Tournaments = () => {
                                 data     = {tournaments}
                                 name     = "Tournaments"
                                 endpoint = {endpoints.tournaments}
+                                apiCall  = {apiCall}
                             />
                             <TablePagination></TablePagination>
                         </>

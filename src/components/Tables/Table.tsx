@@ -1,12 +1,12 @@
 import TrashIcon from '../Icons/Trash';
 import { v4 as uuidv4 } from "uuid";
 import EditIcon from '../Icons/Edit';
-import React, { useState } from 'react';
+import React from 'react';
 import { fetchInstance } from '../../hooks/apiCalls';
 import { toast } from '../../hooks/toast';
 import Loader from '../../common/LoaderSmall';
 
-const Table: React.FC<{ header: string[]; name: string; data: Record<string, any>[], endpoint: string }> = ({ header, name, data, endpoint }) => {
+const Table: React.FC<{ header: string[]; name: string; data: Record<string, any>[], endpoint: string, apiCall: Function }> = ({ header, name, data, endpoint, apiCall }) => {
     const editSubmit = () => {
         window.location.href = endpoint + "/edit"
     }
@@ -20,7 +20,7 @@ const Table: React.FC<{ header: string[]; name: string; data: Record<string, any
             await fetchInstance.delete(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}/${endpoint}/${id}`)
             .then(data => {
                 setTimeout(() => toast('success', "Deleted correctly, id: " + id), 1000);
-                setTimeout(() => window.location.reload(), 1500);
+                setTimeout(() => apiCall(), 1500);
             })
         } catch (error) {
             toast('error', "Failed to delete Deck and Player");
