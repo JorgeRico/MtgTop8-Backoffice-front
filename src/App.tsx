@@ -76,7 +76,7 @@ function App() {
                             </>
                         }
                     />
-                    <Route path={routing.tournaments + '/edit'}
+                    <Route path={routing.tournaments + '/edit/:id'}
                         element={
                             <>
                                 <PageTitle title="Tournaments | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -100,7 +100,7 @@ function App() {
                             </>
                         }
                     />
-                    <Route path={routing.leagues + "/edit"}
+                    <Route path={routing.leagues + "/edit/:id"}
                         element={
                             <>
                                 <PageTitle title="Leagues | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -124,7 +124,7 @@ function App() {
                             </>
                         }
                     />
-                    <Route path={routing.players + "/edit"}
+                    <Route path={routing.players + "/edit/:id"}
                         element={
                             <>
                                 <PageTitle title="Players | TailAdmin - Tailwind CSS Admin Dashboard Template" />
@@ -148,7 +148,7 @@ function App() {
                             </>
                         }
                     />
-                    <Route path={routing.decks + "/edit"}
+                    <Route path={routing.decks + "/edit/:id"}
                         element={
                             <>
                                 <PageTitle title="Decks | TailAdmin - Tailwind CSS Admin Dashboard Template" />

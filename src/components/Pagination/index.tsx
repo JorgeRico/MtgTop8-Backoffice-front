@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from "uuid";
 import Loader from '../../common/LoaderSmall';
 
-const TablePagination: React.FC<{totalItems: number, limit: number, apiCall: Function}> = ({totalItems, limit, apiCall}) => {
+interface PaginationProps {
+    totalItems : number;
+    limit      : number;
+    apiCall    : Function;
+}
+
+const TablePagination = ({totalItems, limit, apiCall}: PaginationProps) => {
     const [ firstItem, setFirstItem ]                  = useState<number>(1);
     const [ lastItem, setLastItem ]                    = useState<number>(0);
     const [ totalPages ]                               = useState<number>(Math.round(totalItems/limit));
@@ -15,7 +21,7 @@ const TablePagination: React.FC<{totalItems: number, limit: number, apiCall: Fun
     const currentCss = "bg-blue-500/[0.5] dark:text-white";
     const otherCss   = "dark:text-gray-400 hover:text-brand-500 ";
     // pagination items
-    const [ pageArray ] = useState<number[]>([...Array(totalPages).keys()].map(x => ++x));    
+    const [ pageArray ] = useState<number[]>([...Array(totalPages).keys()].map(x => ++x)); 
 
     const onClickPrevious = () => {
         let page = currentPage - 1;
@@ -97,7 +103,7 @@ const TablePagination: React.FC<{totalItems: number, limit: number, apiCall: Fun
                     <button id="prev" onClick={onClickPrevious} className="mr-2.5 flex items-center h-10 justify-center rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-700 shadow-theme-xs hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] text-sm">
                         Previous
                     </button>
-                    {(paginationIsLoaded && pageArray.length > 0) ? (
+                    {paginationIsLoaded ? (
                             <div className="flex items-center gap-2">
                                 {pageArray.map((number) => (
                                     (currentPage == number) ? (

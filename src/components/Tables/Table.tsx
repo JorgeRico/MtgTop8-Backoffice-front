@@ -1,17 +1,26 @@
 import TrashIcon from '../Icons/Trash';
 import { v4 as uuidv4 } from "uuid";
 import EditIcon from '../Icons/Edit';
-import React from 'react';
 import { fetchInstance } from '../../hooks/apiCalls';
 import { toast } from '../../hooks/toast';
 import Loader from '../../common/LoaderSmall';
 
-const Table: React.FC<{ header: string[]; name: string; data: Record<string, any>[], endpoint: string, apiCall: Function }> = ({ header, name, data, endpoint, apiCall }) => {
-    const editSubmit = () => {
-        window.location.href = endpoint + "/edit"
+interface TableProps {
+    header   : string[]; 
+    name     : string;
+    data     : Record<string, any>[]; 
+    endpoint : string;
+    apiCall  : Function;
+}
+
+const Table = ({ header, name, data, endpoint, apiCall }: TableProps) => {
+    const editSubmit = (event: any, id: string) => {
+        event.preventDefault();
+        window.location.href = endpoint + "/edit/" + id;
     }
 
     const deleteSubmit = async (event: any, id: string) => {
+        event.preventDefault();
         event.currentTarget.classList.toggle('hidden');
         document.querySelector('#loading-item-'+id)?.classList.toggle('hidden');
         document.querySelector('#edit-item-'+id)?.classList.toggle('hidden');
@@ -68,7 +77,7 @@ const Table: React.FC<{ header: string[]; name: string; data: Record<string, any
                                         <div className="loading hidden" id={`loading-item-${item.id}`}>
                                             <Loader></Loader>
                                         </div>
-                                        <button id={`edit-item-${item.id}`} className="hover:text-primary editItem" onClick={() => editSubmit()}>
+                                        <button id={`edit-item-${item.id}`} className="hover:text-primary editItem" onClick={(e) => editSubmit(e, item.id)}>
                                             <EditIcon></EditIcon>
                                         </button>
                                         <button id={`delete-item-${item.id}`} className="hover:text-primary deleteItem" onClick={(e) => deleteSubmit(e, item.id)}>

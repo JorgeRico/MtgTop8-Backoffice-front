@@ -1,87 +1,135 @@
-import SelectGroupOne from '../../../components/Forms/SelectGroup/SelectGroupOne';
+import { useState, useEffect } from 'react'
 import DefaultLayout from '../../../layout/DefaultLayout';
+import InputForm from '../../../components/Forms/InputForm';
+import TopTitle from '../../../components/Forms/Top';
+import Dropdown from '../../../components/Forms/Dropdown';
+import DropdownYear from '../../../components/Forms/DropdownYear';
+import Loader from '../../../common/LoaderSmall';
+import { fetchInstance } from '../../../hooks/apiCalls';
+import { routing } from '../../../types/routing';
+import { toast } from '../../../hooks/toast';
+import { useParams } from 'react-router-dom';
 
 const FormLayout = () => {
+    const [ showData, setShowData ]               = useState<boolean>(false);
+    const [ isLoading, setIsLoading ]             = useState<boolean>(false);
+    const [ selectedFormat, setSelectedFormat ]   = useState<number>(0);
+    const [ selectedCurrent, setSelectedCurrent ] = useState<number>(0);
+    const [ selectedActive, setSelectedActive ]   = useState<number>(0);
+    const [ selectedYear, setSelectedYear ]       = useState<number>(2016);
+    const id                                      = useParams();
+    const [ isFirstLoad, setIsFirstLoad ]         = useState<boolean>(false);
+    const [ selectedName, setSelectedName ]       = useState<string>('');
+
+    const onSubmitForm = async (event: any) => {
+        event.preventDefault();
+        setIsLoading(true);
+
+        const body = {
+            'name'     : document.querySelector<HTMLInputElement>('input[name="name"]')?.value,
+            'isLegacy' : selectedFormat,
+            'year'     : selectedYear,
+            'current'  : selectedCurrent,
+            'active'   : selectedActive
+        }
+        
+        try {
+            await fetchInstance.put(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}/${id.id}`, body)
+            .then(data => {
+                setTimeout(() => setIsLoading(false), 2000);
+                setTimeout(() => toast('success', "League updated correctly"), 2000);
+            })
+        } catch (error) {
+            toast('error', 'Failed to load leagues');
+        }
+    };
+
+    const getData = async () => {
+        try {
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}/${id.id}`)
+            .then(data => {
+                setSelectedName(data[0].name)
+                setSelectedFormat(data[0].isLegacy);
+                setSelectedCurrent(data[0].current);
+                setSelectedActive(data[0].active);
+                setSelectedYear(data[0].year);
+                setShowData(true);
+            })
+        } catch (error) {
+            toast('error', 'Failed to load leagues');
+        }
+    }
+
+    useEffect(() => {
+        if (!isFirstLoad) {
+            getData();
+            setIsFirstLoad(true);
+        }
+    }, []);
+    
     return (
         <>
             <DefaultLayout>
-                <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
+                <section className="grid grid-cols-1 gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-                                <h3 className="font-medium text-black dark:text-white">
-                                    Contact Form
-                                </h3>
-                            </div>
-                            <form action="#">
-                                <div className="p-6.5">
-                                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                                        <div className="w-full xl:w-1/2">
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                            First name
-                                            </label>
-                                            <input
-                                            type="text"
-                                            placeholder="Enter your first name"
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            />
-                                        </div>
-
-                                        <div className="w-full xl:w-1/2">
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                            Last name
-                                            </label>
-                                            <input
-                                            type="text"
-                                            placeholder="Enter your last name"
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="mb-4.5">
-                                        <label className="mb-2.5 block text-black dark:text-white">
-                                            Email <span className="text-meta-1">*</span>
-                                        </label>
-                                        <input
-                                            type="email"
-                                            placeholder="Enter your email address"
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                            <TopTitle title="Edit League"></TopTitle>
+                            <form onSubmit={onSubmitForm} className="p-6.5">
+                                {showData && 
+                                    <>
+                                        <InputForm
+                                            id="name"
+                                            name="name"
+                                            label="League name" 
+                                            placeholder="Enter League name"
+                                            selectedOption={selectedName}
                                         />
-                                    </div>
-
-                                    <div className="mb-4.5">
-                                        <label className="mb-2.5 block text-black dark:text-white">
-                                            Subject
-                                        </label>
-                                        <input
-                                            type="text"
-                                            placeholder="Select subject"
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                        />
-                                    </div>
-
-                                    <SelectGroupOne />
-
-                                    <div className="mb-6">
-                                        <label className="mb-2.5 block text-black dark:text-white">
-                                            Message
-                                        </label>
-                                        <textarea
-                                            rows={6}
-                                            placeholder="Type your message"
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                        ></textarea>
-                                    </div>
-
+                                        <Dropdown 
+                                            options={[{ value: 1, key: 'Legacy' }]}
+                                            text="Select Format"
+                                            name="Format"
+                                            setSelected={setSelectedFormat}
+                                            selectedOption={selectedFormat}>
+                                        </Dropdown>
+                                        <DropdownYear 
+                                            setSelected={setSelectedYear}
+                                            selectedOption={selectedYear}>
+                                        </DropdownYear>
+                                        <Dropdown 
+                                            options={[
+                                                { value: 0, key: 'Past season' },
+                                                { value: 1, key: 'Current season' }
+                                            ]}
+                                            text="Select Current Season"
+                                            name="Current"
+                                            setSelected={setSelectedCurrent}
+                                            selectedOption={selectedCurrent}>
+                                        </Dropdown>    
+                                        <Dropdown 
+                                            options={[
+                                                { value: 0, key: 'Disabled' },
+                                                { value: 1, key: 'Active' }
+                                            ]}
+                                            text="Select Active Status"
+                                            name="Active"
+                                            setSelected={setSelectedActive}
+                                            selectedOption={selectedActive}>
+                                        </Dropdown>
+                                    </>
+                                }
+                                {!isLoading ? (
                                     <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                                        Send Message
+                                        Save changes
                                     </button>
-                                </div>
+                                ) : (
+                                    <div className="flex w-full justify-center p-3 m-5">
+                                        <Loader></Loader>
+                                    </div>
+                                )}
                             </form>
                         </div>
                     </div>
-                </div>
+                </section>
             </DefaultLayout>
         </>
     );

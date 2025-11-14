@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import DropdownArrow from '../../Icons/DropdownArrow';
 
-type OptionType = { key: string; value: string };
+type OptionType = { key: string; value: number };
 
-const SelectGroupOne: React.FC<{ options: OptionType[]; text: string, name: string, selectedOpt: string, selectedOptionFunction: Function }> = ({ options, text, name, selectedOpt, selectedOptionFunction }) => {
-    // const [selectedOption, setSelectedOption]     = useState<string>('');
+interface InputProps {
+    options                : OptionType[]; 
+    text                   : string, 
+    name                   : string, 
+    selectedOpt            : number, 
+    selectedOptionFunction : Function;
+    selectedFunction       : Function;
+}
+
+const SelectGroupOne = ( { options, text, name, selectedOpt, selectedOptionFunction, selectedFunction }: InputProps)  => {
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
     const onChangeSubmit = (event: any) => {
         setIsOptionSelected(true);
-        selectedOptionFunction(event)
+        selectedOptionFunction(parseInt(event))
+        selectedFunction(parseInt(event));
     };
 
     return (
