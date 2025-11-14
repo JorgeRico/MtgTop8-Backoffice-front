@@ -1,7 +1,8 @@
-import React, { ReactNode } from 'react';
+interface InputProps {
+    children: any;
+}
 
-const AuthLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
-
+const AuthLayout = ({ children }: InputProps) => {
     return (
         <div className="dark:bg-boxdark-2 dark:text-bodydark">
             <div className="flex h-screen overflow-hidden">

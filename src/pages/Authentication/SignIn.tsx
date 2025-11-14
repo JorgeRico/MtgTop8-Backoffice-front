@@ -1,10 +1,9 @@
-import React from 'react';
 import AuthLayout from '../../layout/AuthLayout';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import LeftSideComponent from '../../components/Authentication/LeftSide';
 import SignInComponent from '../../components/Authentication/RightSide/SignIn';
 
-const SignIn: React.FC = () => {
+const SignIn = () => {
     return (
         <>
             <AuthLayout>

@@ -1,9 +1,13 @@
-import React, { useState, ReactNode, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../components/Header/index';
 import Sidebar from '../components/Sidebar/index';
 import Cookies from 'js-cookie';
 
-const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
+interface InputProps {
+    children: any;
+}
+
+const DefaultLayout = ({ children }: InputProps) => {
     const [ sidebarOpen, setSidebarOpen ] = useState<boolean>(false);
     const [ isLogued, setIsLogued ]       = useState<boolean>(false);
     const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);
@@ -33,7 +37,7 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
                             <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
                             <main>
                                 <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-                                {children}
+                                    {children}
                                 </div>
                             </main>
                         </div>

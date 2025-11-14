@@ -1,11 +1,10 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import LogoDark from './../../../images/logo/logo-dark.svg';
 import Logo from './../../../images/logo/logo.svg';
 import MobileImage from '../../Icons/Mobile';
 import { routing } from '../../../types/routing';
 
-const LeftSideSignInComponent: React.FC = () => {
+const LeftSideSignInComponent = () => {
     return (
         <>
             <div className="hidden w-full xl:block xl:w-1/2">

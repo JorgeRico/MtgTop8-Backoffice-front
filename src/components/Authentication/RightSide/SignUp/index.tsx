@@ -1,10 +1,9 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import LockImage from '../../../Icons/Lock';
 import MailImage from '../../../Icons/Mail';
 import { routing } from '../../../../types/routing';
 
-const SignUp: React.FC = () => {
+const SignUp = () => {
     return (
         <>
             <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">

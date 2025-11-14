@@ -7,7 +7,6 @@ import SignIn from './pages/Authentication/SignIn.tsx';
 import RecoverPassword from './pages/Authentication/RecoverPassword.tsx';
 import Chart from './pages/Chart';
 import Dashboard from './pages/Dashboard/Dashboard';
-import FormElements from './pages/Form/FormElements';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Tournaments from './pages/Tournaments/Tournaments.tsx';
@@ -194,15 +193,6 @@ function App() {
                             <>
                             <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                             <Chart />
-                            </>
-                        }
-                    />
-                    <Route
-                        path="/forms/form-elements"
-                        element={
-                            <>
-                            <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                            <FormElements />
                             </>
                         }
                     />

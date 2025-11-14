@@ -1,10 +1,9 @@
-import React from 'react';
 import CardDataStats from '../../components/CardDataStats';
 import { NavLink } from 'react-router-dom';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { routing } from '../../types/routing';
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
     return (
         <>
             <DefaultLayout>

@@ -1,10 +1,9 @@
-import React from 'react';
 import AuthLayout from '../../layout/AuthLayout';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import LeftSideComponent from '../../components/Authentication/LeftSide';
 import RecoverPasswordComponent from '../../components/Authentication/RightSide/RecoverPassword';
 
-const RecoverPassword: React.FC = () => {
+const RecoverPassword = () => {
     return (
         <>
             <AuthLayout>
