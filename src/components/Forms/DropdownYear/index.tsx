@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import SelectGroupOne from '../SelectGroup/SelectGroupOne';
 
 interface DropdownProps {
-    selectedOption : number;
+    selectedOption : number | null;
     setSelected    : Function;
 }
 
 const DropdownYear = ({ selectedOption, setSelected }: DropdownProps) => {
-    const [ selectedYear, setSelectedYear ] = useState<number>(selectedOption);
+    const [ selectedYear, setSelectedYear ] = useState<number | null>(selectedOption);
     const [ years, setYears ]               = useState<Array<{ key: string; value: number }>>([]);
 
     const getDropdownYears = () => {

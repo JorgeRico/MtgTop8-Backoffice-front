@@ -1,48 +1,62 @@
 import { useState, useEffect } from "react";
-import SelectGroupOne from '../../../components/Forms/SelectGroup/SelectGroupOne';
 import DefaultLayout from '../../../layout/DefaultLayout';
 import DatePicker from '../../../components/Forms/DatePicker/DatePicker';
 import Loader from '../../../common/LoaderSmall';
 import { fetchInstance } from '../../../hooks/apiCalls';
 import { routing } from '../../../types/routing';
 import { toast } from '../../../hooks/toast';
+import InputForm from '../../../components/Forms/InputForm';
+import InputNumberForm from '../../../components/Forms/InputNumberForm';
+import Dropdown from '../../../components/Forms/Dropdown';
+import TopTitle from '../../../components/Forms/Top';
+import BreadcrumbBack from '../../../components/BreadcrumsBackoffice';
 
 const CreateTournament = () => {
-    const [ isLoading, setIsLoading ]          = useState<boolean>(false);
-    const [ isCreated, setIsCreated ]          = useState<boolean>(false);
-    const [ selectedLeague, setSelectedLeague] = useState<string>('');
-    const [ isFirstLoad, setIsFirstLoad ]      = useState<boolean>(false);
-    const [ leagues, setLeagues ]              = useState<any[] | null>(null);
+    const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
+    const [ isCreated, setIsCreated ]                       = useState<boolean>(false);
+    const [ selectedLeague, setSelectedLeague]              = useState<number | null>(null);
+    const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
+    const [ leagues, setLeagues ]                           = useState<any[] | null>(null);
+    const [ selectedNumber, setSelectedNumber ]             = useState<number | null>(null);
+    const [ selectedDate, setSelectedDate ]                 = useState<string | null>(null);
+    const [ selectedIdTournament, setSelectedIdTournament ] = useState<string | null>(null);
+    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
 
-    const onSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+    const onSubmitForm = async (event: any) => {
         event.preventDefault();
         setIsLoading(true);
 
-        // date conversion is done on api
-        const dateString   = document.querySelector<HTMLInputElement>('input[name="datepicker"]')?.value;
-        const players      = document.querySelector<HTMLInputElement>('input[name="players"]')?.value;
-        const idTournament = document.querySelector<HTMLInputElement>('input[name="idTournament"]')?.value;
+        // extra double check
+        if (selectedName == null) {
+            toast('error', "Name is not added");
+            setIsLoading(false);
+            return ''
+        }
 
-        if (dateString == null) {
+        if (selectedDate == null) {
             toast('error', "Date is not selected");
+            setIsLoading(false);
             return ''
         }
         
-        if (players == null) {
+        if (selectedNumber == null) {
             toast('error', "Players is not selected");
+            setIsLoading(false);
             return ''
         }
-        if (idTournament == null) {
+
+        if (selectedIdTournament == null) {
             toast('error', "idTournament is not selected");
+            setIsLoading(false);
             return ''
         }
 
         const body = {
-            'name'         : document.querySelector<HTMLInputElement>('input[name="name"]')?.value,
-            'date'         : dateString,
-            'idLeague'     : parseInt(selectedLeague),
-            'players'      : parseInt(players),
-            'idTournament' : parseInt(idTournament)
+            'name'         : selectedName,
+            'date'         : selectedDate,
+            'idLeague'     : selectedLeague,
+            'players'      : selectedNumber,
+            'idTournament' : selectedIdTournament
         }
         console.log(body)
         
@@ -67,18 +81,21 @@ const CreateTournament = () => {
                 }));
 
                 setLeagues(dataLeague);
-                
             })
         } catch (error) {
             toast('error', 'Failed to load leagues');
         }
     };
 
+    const onClickBack = (event: any) => {
+        event.preventDefault();
+        window.location.href = routing.tournaments
+    }
+
     useEffect(() => {
         if (isFirstLoad == false) {
             apiCall()
             setIsFirstLoad(true);
-            console.log(leagues)
         }
     }, [isFirstLoad]);
     
@@ -87,88 +104,66 @@ const CreateTournament = () => {
             <DefaultLayout>
                 <section className="grid grid-cols-1 gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
+                        <BreadcrumbBack pageName="Tournaments" />
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-                                <h3 className="font-medium text-black dark:text-white">
-                                    New Tournament
-                                </h3>
-                            </div>
-                            <form onSubmit={onSubmitForm}>
-                                <div className="p-6.5">
-                                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                                        <div className="w-full">
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Tournament name
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                placeholder="Enter tournament name"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                required
-                                            />
-                                        </div>
+                            <TopTitle title="New Tournament"></TopTitle>
+                            <form onSubmit={onSubmitForm} className="p-6.5">
+                                <InputForm
+                                    id="name"
+                                    name="name"
+                                    label="Tournament name" 
+                                    placeholder="Enter Tournament name"
+                                    selectedOption={selectedName}
+                                    setSelectedOption={setSelectedName}
+                                />
+                                <InputForm
+                                    id="idTournament"
+                                    name="idTournament"
+                                    label="Id mtgTop8 Tournament" 
+                                    placeholder="Enter id tournament from mtgtop8 website"
+                                    selectedOption={selectedIdTournament}
+                                    setSelectedOption={setSelectedIdTournament}
+                                />
+                                <InputNumberForm
+                                    id="players"
+                                    name="players"
+                                    label="Number of players" 
+                                    placeholder="Enter number of players"
+                                    selectedOption={selectedNumber}
+                                    setSelectedOption={setSelectedNumber}
+                                />
+                                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                                    <div className="w-full">
+                                        <DatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
                                     </div>
-                                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                                        <div className="w-full">
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Id mtgTop8 Tournament
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="idTournament"
-                                                placeholder="Enter id tournament from mtgtop8 website"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                                        <div className="w-full">
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Number of players
-                                            </label>
-                                            <input
-                                                type="number"
-                                                name="players"
-                                                placeholder="Enter number of players"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                                        <div className="w-full">
-                                            <DatePicker />
-                                        </div>
-                                    </div>
-                                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                                        <div className="w-full">
-                                            {leagues ? (
-                                                <SelectGroupOne 
-                                                    options={leagues}
-                                                    text="Select League"
-                                                    name="League"
-                                                    selectedOpt={selectedLeague}
-                                                    selectedOptionFunction={setSelectedLeague}
-                                                />
-                                                ) : (
-                                                    <Loader></Loader>
-                                                )
-                                            }
-                                        </div>
-                                    </div>
-                                    {!isLoading &&
-                                        <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                                            Create Tournament
-                                        </button>
-                                    }
-                                    {(isLoading && !isCreated) &&
-                                        <div className="flex w-full justify-center p-3 m-5">
-                                            <Loader></Loader>
-                                        </div>
-                                    }
                                 </div>
+                                {leagues ? (
+                                        <Dropdown 
+                                            options={leagues}
+                                            text="Select League"
+                                            name="League"
+                                            setSelected={setSelectedLeague}
+                                            selectedOption={selectedLeague}>
+                                        </Dropdown>
+                                    ) : (
+                                        <Loader></Loader>
+                                    )
+                                }
+                                {(!isLoading && !isCreated) &&
+                                    <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+                                        Create Tournament
+                                    </button>
+                                }
+                                {(isLoading && !isCreated) &&
+                                    <div className="flex w-full justify-center p-3 m-5">
+                                        <Loader></Loader>
+                                    </div>
+                                }
+                                {isCreated &&
+                                    <button onClick={(event) => onClickBack(event)}className="flex w-full justify-center rounded bg-secondary p-3 font-medium text-white hover:bg-opacity-90">
+                                        Back to tournaments
+                                    </button>
+                                }
                             </form>
                         </div>
                     </div>

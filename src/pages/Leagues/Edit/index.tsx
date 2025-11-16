@@ -9,24 +9,56 @@ import { fetchInstance } from '../../../hooks/apiCalls';
 import { routing } from '../../../types/routing';
 import { toast } from '../../../hooks/toast';
 import { useParams } from 'react-router-dom';
+import BreadcrumbBack from '../../../components/BreadcrumsBackoffice';
 
 const FormLayout = () => {
     const [ showData, setShowData ]               = useState<boolean>(false);
     const [ isLoading, setIsLoading ]             = useState<boolean>(false);
-    const [ selectedFormat, setSelectedFormat ]   = useState<number>(0);
-    const [ selectedCurrent, setSelectedCurrent ] = useState<number>(0);
-    const [ selectedActive, setSelectedActive ]   = useState<number>(0);
-    const [ selectedYear, setSelectedYear ]       = useState<number>(2016);
+    const [ selectedFormat, setSelectedFormat ]   = useState<number | null>(null);
+    const [ selectedCurrent, setSelectedCurrent ] = useState<number | null>(null);
+    const [ selectedActive, setSelectedActive ]   = useState<number | null>(null);
+    const [ selectedYear, setSelectedYear ]       = useState<number | null>(null);
     const id                                      = useParams();
     const [ isFirstLoad, setIsFirstLoad ]         = useState<boolean>(false);
-    const [ selectedName, setSelectedName ]       = useState<string>('');
+    const [ selectedName, setSelectedName ]       = useState<string | null>(null);
 
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
         setIsLoading(true);
 
+        // extra double check
+        if (selectedName == null) {
+            toast('error', "Name is not added");
+            setIsLoading(false);
+            return ''
+        }
+
+        if (selectedFormat == null) {
+            toast('error', "Date is not selected");
+            setIsLoading(false);
+            return ''
+        }
+        
+        if (selectedYear == null) {
+            toast('error', "Players is not selected");
+            setIsLoading(false);
+            return ''
+        }
+
+        if (selectedCurrent == null) {
+            toast('error', "idTournament is not selected");
+            setIsLoading(false);
+            return ''
+        }
+
+        if (selectedActive == null) {
+            toast('error', "idTournament is not selected");
+            setIsLoading(false);
+            return ''
+        }
+
         const body = {
-            'name'     : document.querySelector<HTMLInputElement>('input[name="name"]')?.value,
+            'name'     : selectedName,
             'isLegacy' : selectedFormat,
             'year'     : selectedYear,
             'current'  : selectedCurrent,
@@ -72,6 +104,7 @@ const FormLayout = () => {
             <DefaultLayout>
                 <section className="grid grid-cols-1 gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
+                        <BreadcrumbBack pageName="Leagues" />
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <TopTitle title="Edit League"></TopTitle>
                             <form onSubmit={onSubmitForm} className="p-6.5">
@@ -83,6 +116,7 @@ const FormLayout = () => {
                                             label="League name" 
                                             placeholder="Enter League name"
                                             selectedOption={selectedName}
+                                            setSelectedOption={setSelectedName}
                                         />
                                         <Dropdown 
                                             options={[{ value: 1, key: 'Legacy' }]}

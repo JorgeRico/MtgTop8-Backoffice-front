@@ -7,7 +7,7 @@ interface InputProps {
     options                : OptionType[]; 
     text                   : string, 
     name                   : string, 
-    selectedOpt            : number, 
+    selectedOpt            : number | null, 
     selectedOptionFunction : Function;
     selectedFunction       : Function;
 }
@@ -30,14 +30,14 @@ const SelectGroupOne = ( { options, text, name, selectedOpt, selectedOptionFunct
             <div className="relative z-20 bg-transparent dark:bg-form-input">
                 <select
                     required
-                    value={selectedOpt}
+                    value={selectedOpt ?? ''}
                         onChange={(e) => onChangeSubmit(e.target.value)
                     }
                     className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary ${
                         isOptionSelected ? 'text-black dark:text-white' : {text}
                     }`}
                 >
-                    <option value="" disabled className="text-body dark:text-bodydark" hidden>
+                    <option value="" className="text-body dark:text-bodydark" hidden>
                         {text}
                     </option>
                     {options.map((item) => (

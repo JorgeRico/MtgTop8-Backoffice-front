@@ -6,11 +6,11 @@ interface DropdownProps {
     text           : string;
     name           : string;
     setSelected    : Function;
-    selectedOption : number;
+    selectedOption : number | null;
 }
 
 const Dropdown = ({ options, text, name, setSelected, selectedOption }: DropdownProps) => {
-    const [ selectedOpt, setSelectedOpt ] = useState<number>(selectedOption);
+    const [ selectedOpt, setSelectedOpt ] = useState<number | null>(selectedOption);
 
     return (
         <>

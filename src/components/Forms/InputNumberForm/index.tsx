@@ -5,12 +5,12 @@ interface InputProps {
     name              : string;
     label             : string;
     placeholder       : string;
-    selectedOption    : string | null;
+    selectedOption    : number | null;
     setSelectedOption : Function;
 }
 
 const InputForm = ({ id, name, label, placeholder, selectedOption, setSelectedOption }: InputProps) => {
-    const [ option ] = useState<string | null>(selectedOption);
+    const [ option ] = useState<number | null>(selectedOption);
 
     const onChange = (event: any) => {
         event.preventDefault();
@@ -25,7 +25,7 @@ const InputForm = ({ id, name, label, placeholder, selectedOption, setSelectedOp
                         {label}
                     </label>
                     <input
-                        type="text"
+                        type="number"
                         id={id}
                         name={name}
                         defaultValue={option ?? ''}
