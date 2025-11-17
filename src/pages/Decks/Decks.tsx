@@ -7,6 +7,7 @@ import { endpoints } from '@/types/endpoints';
 import { fetchInstance } from '@/hooks/apiCalls';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 import TablePagination from '@/components/Pagination';
+import { paginationHelpers } from '@/hooks/pagination';
 
 const Decks = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);
@@ -63,6 +64,8 @@ const Decks = () => {
                         <>
                             <TablePagination
                                 totalItems={totalItems}
+                                totalPages={paginationHelpers.getTotalPages(totalItems, limit)}
+                                pageArray={paginationHelpers.getPageNumbersArray(totalItems, limit)}
                                 limit={limit}
                                 apiCall={apiCall}
                             />
@@ -80,6 +83,8 @@ const Decks = () => {
                             }
                             <TablePagination
                                 totalItems={totalItems}
+                                totalPages={paginationHelpers.getTotalPages(totalItems, limit)}
+                                pageArray={paginationHelpers.getPageNumbersArray(totalItems, limit)}
                                 limit={limit}
                                 apiCall={apiCall}
                             />

@@ -5,13 +5,14 @@ import Loader from '../../common/LoaderSmall';
 interface PaginationProps {
     totalItems : number;
     limit      : number;
+    totalPages : number;
+    pageArray  : any[];
     apiCall    : Function;
 }
 
-const TablePagination = ({totalItems, limit, apiCall}: PaginationProps) => {
+const TablePagination = ({totalItems, totalPages, pageArray, limit, apiCall}: PaginationProps) => {
     const [ firstItem, setFirstItem ]                  = useState<number>(1);
     const [ lastItem, setLastItem ]                    = useState<number>(0);
-    const [ totalPages ]                               = useState<number>(Math.round(totalItems/limit));
     const [ currentPage, setCurrentPage ]              = useState<number>(0);
     const [ isFirstLoad, setIsFirstLoad ]              = useState<boolean>(false);
     const [ paginationIsLoaded, sePaginationIsLoaded ] = useState<boolean>(false);
@@ -20,9 +21,7 @@ const TablePagination = ({totalItems, limit, apiCall}: PaginationProps) => {
     const common     = 'px-4 py-2 rounded text-gray-700 flex w-10 items-center justify-center h-10 text-sm font-medium hover:bg-blue-500/[0.08] dark:hover:text-brand-500';
     const currentCss = "bg-blue-500/[0.5] dark:text-white";
     const otherCss   = "dark:text-gray-400 hover:text-brand-500 ";
-    // pagination items
-    const [ pageArray ] = useState<number[]>([...Array(totalPages).keys()].map(x => ++x)); 
-
+    
     const onClickPrevious = () => {
         let page = currentPage - 1;
         setCurrentPage(page);
@@ -104,8 +103,8 @@ const TablePagination = ({totalItems, limit, apiCall}: PaginationProps) => {
                         Previous
                     </button>
                     {paginationIsLoaded ? (
-                            <div className="flex items-center gap-2">
-                                {pageArray.map((number) => (
+                            <div className="flex items-center gap-2">ddd
+                                {(pageArray?.map((number) => (
                                     (currentPage == number) ? (
                                         <article key={uuidv4()}>
                                             <button onClick={() => onClickPage(number)} className={`${common} ${currentCss}`}>{number}</button>
@@ -115,7 +114,7 @@ const TablePagination = ({totalItems, limit, apiCall}: PaginationProps) => {
                                             <button onClick={() => onClickPage(number)} className={`${common} ${otherCss}`}>{number}</button>
                                         </article>
                                     )
-                                ))}
+                                )))}
                             </div>
                         ) : (
                             <Loader></Loader>

@@ -6,13 +6,14 @@ import Loader from '@/common/Loader';
 import { endpoints } from '@/types/endpoints';
 import { fetchInstance } from '@/hooks/apiCalls';
 import TablePagination from '@/components/Pagination';
+import { paginationHelpers } from '@/hooks/pagination';
 
 const Decks = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);
     const [ cards, setCards ]             = useState<any[] | null>(null);
     const [ headerItem ]                  = useState<string[]>([ 'id', 'name', 'idDeck' ]);
     const [ page, setPage]                = useState<number>(1);
-    const [ limit ]                       = useState<number>(250);
+    const [ limit ]                       = useState<number>(2500);
     const [ totalItems, setTotalItems]    = useState<number>(0);
     const [ isLoading, setIsLoading ]     = useState<boolean>(false);
 
@@ -58,6 +59,8 @@ const Decks = () => {
                         <>
                             <TablePagination
                                 totalItems={totalItems}
+                                totalPages={paginationHelpers.getTotalPages(totalItems, limit)}
+                                pageArray={paginationHelpers.getPageNumbersArray(totalItems, limit)}
                                 limit={limit}
                                 apiCall={apiCall}
                             />
@@ -75,6 +78,8 @@ const Decks = () => {
                             }
                             <TablePagination
                                 totalItems={totalItems}
+                                totalPages={paginationHelpers.getTotalPages(totalItems, limit)}
+                                pageArray={paginationHelpers.getPageNumbersArray(totalItems, limit)}
                                 limit={limit}
                                 apiCall={apiCall}
                             />

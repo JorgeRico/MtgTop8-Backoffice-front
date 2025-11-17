@@ -8,6 +8,7 @@ import { routing } from '@/types/routing';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 import TablePagination from '@/components/Pagination';
 import { toast } from '@/hooks/toast';
+import { paginationHelpers } from '@/hooks/pagination';
 
 const Tournaments = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);
@@ -67,6 +68,8 @@ const Tournaments = () => {
                         <>
                             <TablePagination
                                 totalItems={totalItems}
+                                totalPages={paginationHelpers.getTotalPages(totalItems, limit)}
+                                pageArray={paginationHelpers.getPageNumbersArray(totalItems, limit)}
                                 limit={limit}
                                 apiCall={apiCall}
                             />
@@ -84,6 +87,8 @@ const Tournaments = () => {
                             }
                             <TablePagination
                                 totalItems={totalItems}
+                                totalPages={paginationHelpers.getTotalPages(totalItems, limit)}
+                                pageArray={paginationHelpers.getPageNumbersArray(totalItems, limit)}
                                 limit={limit}
                                 apiCall={apiCall}
                             />                       
