@@ -1,12 +1,12 @@
 import { useState } from "react";
-import DefaultLayout from '../../../layout/DefaultLayout';
-import Loader from '../../../common/LoaderSmall';
-import { fetchInstance } from '../../../hooks/apiCalls';
-import { routing } from '../../../types/routing';
-import { toast } from '../../../hooks/toast';
-import BreadcrumbBack from '../../../components/BreadcrumsBackoffice';
-import InputForm from '../../../components/Forms/InputForm';
-import TopTitle from "../../../components/Forms/Top";
+import DefaultLayout from '@/layout/DefaultLayout';
+import Loader from '@/common/LoaderSmall';
+import { fetchInstance } from '@/hooks/apiCalls';
+import { routing } from '@/types/routing';
+import { toast } from '@/hooks/toast';
+import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
+import InputForm from '@/components/Forms/InputForm';
+import TopTitle from "@/components/Forms/Top";
 
 const FormLayout = () => {
     const [ isLoading, setIsLoading ]       = useState<boolean>(false);

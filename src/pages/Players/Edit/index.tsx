@@ -1,5 +1,5 @@
-import SelectGroupOne from '../../../components/Forms/SelectGroup/SelectGroupOne';
-import DefaultLayout from '../../../layout/DefaultLayout';
+import SelectGroupOne from '@/components/Forms/SelectGroup/SelectGroupOne';
+import DefaultLayout from '@/layout/DefaultLayout';
 
 const FormLayout = () => {
     return (
@@ -61,7 +61,7 @@ const FormLayout = () => {
                                         />
                                     </div>
 
-                                    <SelectGroupOne />
+                                    {/* <SelectGroupOne /> */}
 
                                     <div className="mb-6">
                                         <label className="mb-2.5 block text-black dark:text-white">

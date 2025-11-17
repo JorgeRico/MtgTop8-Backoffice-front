@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
-import SelectGroupOne from '../../../components/Forms/SelectGroup/SelectGroupOne';
-import DefaultLayout from '../../../layout/DefaultLayout';
-import Loader from '../../../common/LoaderSmall';
-import { fetchInstance } from '../../../hooks/apiCalls';
-import { routing } from '../../../types/routing';
-import { toast } from '../../../hooks/toast';
+import DefaultLayout from '@/layout/DefaultLayout';
+import Loader from '@/common/LoaderSmall';
+import { fetchInstance } from '@/hooks/apiCalls';
+import { routing } from '@/types/routing';
+import { toast } from '@/hooks/toast';
+import Dropdown from '@/components/Forms/Dropdown';
 
 const CreatePlayer = () => {
     const [ isLoading, setIsLoading ]                   = useState<boolean>(false);
     const [ isCreated, setIsCreated ]                   = useState<boolean>(false);
-    const [ selectedTournament, setSelectedTournament ] = useState<string>('');
+    const [ selectedTournament, setSelectedTournament ] = useState<number | null>(null);
     const [ isFirstLoad, setIsFirstLoad ]               = useState<boolean>(false);
     const [ tournaments, setTournaments ]               = useState<any[] | null>(null);
 
-    const onSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+    const onSubmitForm = async (event: any) => {
         event.preventDefault();
         setIsLoading(true);
 
@@ -39,8 +39,8 @@ const CreatePlayer = () => {
             .then(data => {
                 const body = {
                     'name'         : document.querySelector<HTMLInputElement>('input[name="name"]')?.value,
-                    'position'     : parseInt(tournamentPosition),
-                    'idTournament' : parseInt(selectedTournament),
+                    'position'     : tournamentPosition,
+                    'idTournament' : selectedTournament,
                     'idDeck'       : parseInt(data.data[0].id)
                 }
 
@@ -141,13 +141,13 @@ const CreatePlayer = () => {
                                     <div className="flex flex-col gap-6 xl:flex-row">
                                         <div className="w-full">
                                             {tournaments ? (
-                                                    <SelectGroupOne 
+                                                    <Dropdown 
                                                         options={tournaments}
                                                         text="Select Tournament"
                                                         name="Tournament"
-                                                        selectedOpt={selectedTournament}
-                                                        selectedOptionFunction={setSelectedTournament}
-                                                    />
+                                                        setSelected={setSelectedTournament}
+                                                        selectedOption={selectedTournament}>
+                                                    </Dropdown>
                                                 ) : (
                                                     <Loader></Loader>
                                                 )

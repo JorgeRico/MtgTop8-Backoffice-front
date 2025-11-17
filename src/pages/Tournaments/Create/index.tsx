@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import DefaultLayout from '../../../layout/DefaultLayout';
-import DatePicker from '../../../components/Forms/DatePicker/DatePicker';
-import Loader from '../../../common/LoaderSmall';
-import { fetchInstance } from '../../../hooks/apiCalls';
-import { routing } from '../../../types/routing';
-import { toast } from '../../../hooks/toast';
-import InputForm from '../../../components/Forms/InputForm';
-import InputNumberForm from '../../../components/Forms/InputNumberForm';
-import Dropdown from '../../../components/Forms/Dropdown';
-import TopTitle from '../../../components/Forms/Top';
-import BreadcrumbBack from '../../../components/BreadcrumsBackoffice';
+import DefaultLayout from '@/layout/DefaultLayout';
+import DatePicker from '@/components/Forms/DatePicker/DatePicker';
+import Loader from '@/common/LoaderSmall';
+import { fetchInstance } from '@/hooks/apiCalls';
+import { routing } from '@/types/routing';
+import { toast } from '@/hooks/toast';
+import InputForm from '@/components/Forms/InputForm';
+import InputNumberForm from '@/components/Forms/InputNumberForm';
+import Dropdown from '@/components/Forms/Dropdown';
+import TopTitle from '@/components/Forms/Top';
+import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 
 const CreateTournament = () => {
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);

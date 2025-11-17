@@ -1,12 +1,12 @@
-import Table from '../../components/Tables/Table';
-import DefaultLayout from '../../layout/DefaultLayout';
+import Table from '@/components/Tables/Table';
+import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useEffect } from 'react';
-import { routing } from '../../types/routing';
-import Loader from '../../common/Loader';
-import { endpoints } from '../../types/endpoints';
-import { fetchInstance } from '../../hooks/apiCalls';
-import CreateButton from '../../components/MtgComponent/CreateButton';
-import TablePagination from '../../components/Pagination';
+import { routing } from '@/types/routing';
+import Loader from '@/common/Loader';
+import { endpoints } from '@/types/endpoints';
+import { fetchInstance } from '@/hooks/apiCalls';
+import CreateButton from '@/components/MtgComponent/CreateButton';
+import TablePagination from '@/components/Pagination';
 
 const Decks = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);

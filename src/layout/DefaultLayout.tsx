@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import Header from '../components/Header/index';
-import Sidebar from '../components/Sidebar/index';
+import Header from '@/components/Header/index';
+import Sidebar from '@/components/Sidebar/index';
 import Cookies from 'js-cookie';
 
 interface InputProps {

@@ -1,7 +1,7 @@
-import CardDataStats from '../../components/CardDataStats';
+import CardDataStats from '@/components/CardDataStats';
 import { NavLink } from 'react-router-dom';
-import DefaultLayout from '../../layout/DefaultLayout';
-import { routing } from '../../types/routing';
+import DefaultLayout from '@/layout/DefaultLayout';
+import { routing } from '@/types/routing';
 
 const Dashboard = () => {
     return (

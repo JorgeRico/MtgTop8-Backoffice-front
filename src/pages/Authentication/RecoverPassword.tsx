@@ -1,7 +1,7 @@
-import AuthLayout from '../../layout/AuthLayout';
-import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import LeftSideComponent from '../../components/Authentication/LeftSide';
-import RecoverPasswordComponent from '../../components/Authentication/RightSide/RecoverPassword';
+import AuthLayout from '@/layout/AuthLayout';
+import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
+import LeftSideComponent from '@/components/Authentication/LeftSide';
+import RecoverPasswordComponent from '@/components/Authentication/RightSide/RecoverPassword';
 
 const RecoverPassword = () => {
     return (

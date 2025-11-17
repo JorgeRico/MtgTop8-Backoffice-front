@@ -1,13 +1,13 @@
-import DefaultLayout from '../../../layout/DefaultLayout';
+import DefaultLayout from '@/layout/DefaultLayout';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import Loader from '../../../common/LoaderSmall';
-import { fetchInstance } from '../../../hooks/apiCalls';
-import { routing } from '../../../types/routing';
-import { toast } from '../../../hooks/toast';
-import BreadcrumbBack from '../../../components/BreadcrumsBackoffice';
-import InputForm from '../../../components/Forms/InputForm';
-import TopTitle from '../../../components/Forms/Top';
+import Loader from '@/common/LoaderSmall';
+import { fetchInstance } from '@/hooks/apiCalls';
+import { routing } from '@/types/routing';
+import { toast } from '@/hooks/toast';
+import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
+import InputForm from '@/components/Forms/InputForm';
+import TopTitle from '@/components/Forms/Top';
 
 const FormLayout = () => {
     const [ showData, setShowData ]         = useState<boolean>(false);
