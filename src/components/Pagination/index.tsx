@@ -103,7 +103,7 @@ const TablePagination = ({totalItems, totalPages, pageArray, limit, apiCall}: Pa
                         Previous
                     </button>
                     {paginationIsLoaded ? (
-                            <div className="flex items-center gap-2">ddd
+                            <div className="flex items-center gap-2">
                                 {(pageArray?.map((number) => (
                                     (currentPage == number) ? (
                                         <article key={uuidv4()}>
