@@ -4,7 +4,7 @@ import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
 import { routing } from '@/types/routing';
 import { toast } from '@/hooks/toast';
-import Dropdown from '@/components/Forms/Dropdown';
+import Dropdown from '@/components/Dropdowns/Dropdown';
 
 const CreatePlayer = () => {
     const [ isLoading, setIsLoading ]                   = useState<boolean>(false);

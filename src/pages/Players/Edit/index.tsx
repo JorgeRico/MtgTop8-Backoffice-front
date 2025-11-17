@@ -1,4 +1,4 @@
-import SelectGroupOne from '@/components/Forms/SelectGroup/SelectGroupOne';
+import SelectGroupOne from '@/components/Dropdowns/SelectGroup/SelectGroupOne';
 import DefaultLayout from '@/layout/DefaultLayout';
 
 const FormLayout = () => {

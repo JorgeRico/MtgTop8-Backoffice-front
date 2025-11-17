@@ -4,10 +4,10 @@ import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
 import { routing } from '@/types/routing';
 import { toast } from '@/hooks/toast';
-import DropdownYear from '@/components/Forms/DropdownYear';
+import DropdownYear from '@/components/Dropdowns/DropdownYear';
 import InputForm from '@/components/Forms/InputForm';
 import TopTitle from '@/components/Forms/Top';
-import Dropdown from '@/components/Forms/Dropdown';
+import Dropdown from '@/components/Dropdowns/Dropdown';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 
 const CreateLeague = () => {

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import DefaultLayout from '@/layout/DefaultLayout';
 import InputForm from '@/components/Forms/InputForm';
 import TopTitle from '@/components/Forms/Top';
-import Dropdown from '@/components/Forms/Dropdown';
-import DropdownYear from '@/components/Forms/DropdownYear';
+import Dropdown from '@/components/Dropdowns/Dropdown';
+import DropdownYear from '@/components/Dropdowns/DropdownYear';
 import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
 import { routing } from '@/types/routing';

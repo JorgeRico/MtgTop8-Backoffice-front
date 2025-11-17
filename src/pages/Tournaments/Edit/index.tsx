@@ -7,7 +7,7 @@ import { routing } from '@/types/routing';
 import { toast } from '@/hooks/toast';
 import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
-import Dropdown from '@/components/Forms/Dropdown';
+import Dropdown from '@/components/Dropdowns/Dropdown';
 import TopTitle from '@/components/Forms/Top';
 import { useParams } from 'react-router-dom';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
