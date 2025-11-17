@@ -21,6 +21,8 @@ import DecksCreate from '@/pages/Decks/Create/index.tsx';
 import Players from '@/pages/Players/Players.tsx';
 import PlayersEdit from '@/pages/Players/Edit/index.tsx';
 import PlayersCreate from '@/pages/Players/Create/index.tsx';
+import Cards from '@/pages/Cards/Cards.tsx';
+import CardsEdit from '@/pages/Cards/Edit/index.tsx';
 import { routing } from '@/types/routing.ts';
 
 function App() {
@@ -164,9 +166,22 @@ function App() {
                             </>
                         }
                     />
-                
-
-
+                    <Route path={routing.cards}
+                        element={
+                            <>
+                                <PageTitle title="Cards | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                                <Cards />
+                            </>
+                        }
+                    />
+                    <Route path={routing.cards + "/edit/:id"}
+                        element={
+                            <>
+                                <PageTitle title="Cards | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                                <CardsEdit />
+                            </>
+                        }
+                    />
 
 
                     <Route
