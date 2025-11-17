@@ -4,17 +4,21 @@ import Loader from '../../../common/LoaderSmall';
 import { fetchInstance } from '../../../hooks/apiCalls';
 import { routing } from '../../../types/routing';
 import { toast } from '../../../hooks/toast';
+import BreadcrumbBack from '../../../components/BreadcrumsBackoffice';
+import InputForm from '../../../components/Forms/InputForm';
+import TopTitle from "../../../components/Forms/Top";
 
 const FormLayout = () => {
-    const [ isLoading, setIsLoading ] = useState<boolean>(false);
-    const [ isCreated, setIsCreated ] = useState<boolean>(false);
+    const [ isLoading, setIsLoading ]       = useState<boolean>(false);
+    const [ isCreated, setIsCreated ]       = useState<boolean>(false);
+    const [ selectedName, setSelectedName ] = useState<string | null>(null);
     
-    const onSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+    const onSubmitForm = async (event: any) => {
         event.preventDefault();
         setIsLoading(true);
 
         const body = {
-            'name' : document.querySelector<HTMLInputElement>('input[name="name"]')?.value,
+            'name' : selectedName,
         }
 
         try {
@@ -28,44 +32,44 @@ const FormLayout = () => {
         }
     };
 
+    const onClickBack = (event: any) => {
+        event.preventDefault();
+        window.location.href = routing.decks
+    }
+
     return (
         <>
             <DefaultLayout>
                 <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
+                    <BreadcrumbBack pageName="Decks" />
                     <div className="flex flex-col gap-9">
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-                                <h3 className="font-medium text-black dark:text-white">
-                                    Contact Form
-                                </h3>
-                            </div>
-                            <form onSubmit={onSubmitForm}>
-                                <div className="p-6.5">
-                                    <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                                        <div className="w-full">
-                                            <label className="mb-2.5 block text-black dark:text-white">
-                                                Deck name
-                                            </label>
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                placeholder="Enter deck name"
-                                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                            />
-                                        </div>
+                            <TopTitle title="Create decks"></TopTitle>
+                            <form onSubmit={onSubmitForm} className="p-6.5">
+                                <InputForm
+                                    id="name"
+                                    name="name"
+                                    label="League name" 
+                                    placeholder="Enter League name"
+                                    selectedOption={selectedName}
+                                    setSelectedOption={setSelectedName}
+                                />
+                                    
+                                {(!isLoading && !isCreated) &&
+                                    <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+                                        Create Deck
+                                    </button>
+                                }
+                                {(isLoading && !isCreated) &&
+                                    <div className="flex w-full justify-center p-3 m-5">
+                                        <Loader></Loader>
                                     </div>
-
-                                    {!isLoading &&
-                                        <button className="flex w-full justify-center rounded bg-primary p-3 mt-5 font-medium text-gray hover:bg-opacity-90">
-                                            Create Deck
-                                        </button>
-                                    }
-                                    {(isLoading && !isCreated) &&
-                                        <div className="flex w-full justify-center p-3 m-5">
-                                            <Loader></Loader>
-                                        </div>
-                                    }
-                                </div>
+                                }
+                                {isCreated &&
+                                    <button onClick={(event) => onClickBack(event)}className="flex w-full justify-center rounded bg-secondary p-3 font-medium text-white hover:bg-opacity-90">
+                                        Back to leagues
+                                    </button>
+                                }
                             </form>
                         </div>
                     </div>
