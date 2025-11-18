@@ -1,26 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import SidebarLinkGroup from './SidebarLinkGroup';
-import Logo from '../../images/logo/logo.svg';
-import DashboardImage from '../Icons/Dashboard';
-import TournamentImage from '../Icons/Tournament';
-import { routing } from '../../types/routing';
+// import SidebarLinkGroup from '@/components/Sidebar/SidebarLinkGroup';
+import Logo from '@/images/logo/logo.svg';
+import DashboardImage from '@/components/Icons/Dashboard';
+import TournamentImage from '@/components/Icons/Tournament';
+import { routing } from '@/types/routing';
+import NavBlock from '@/components/Sidebar/NavBlock';
 interface SidebarProps {
     sidebarOpen: boolean;
     setSidebarOpen: (arg: boolean) => void;
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
-    const location = useLocation();
-    const { pathname } = location;
-
     const trigger = useRef<any>(null);
     const sidebar = useRef<any>(null);
 
-    const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
-    const [sidebarExpanded, setSidebarExpanded] = useState(
-        storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
-    );
+    // const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
+    // const [sidebarExpanded, setSidebarExpanded] = useState(
+    //     storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
+    // );
 
     // close on click outside
     useEffect(() => {
@@ -50,14 +48,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         }
     );
 
-    useEffect(() => {
-        localStorage.setItem('sidebar-expanded', sidebarExpanded.toString());
-        if (sidebarExpanded) {
-            document.querySelector('body')?.classList.add('sidebar-expanded');
-        } else {
-            document.querySelector('body')?.classList.remove('sidebar-expanded');
-        }
-    }, [sidebarExpanded]);
+    // useEffect(() => {
+    //     localStorage.setItem('sidebar-expanded', sidebarExpanded.toString());
+    //     if (sidebarExpanded) {
+    //         document.querySelector('body')?.classList.add('sidebar-expanded');
+    //     } else {
+    //         document.querySelector('body')?.classList.remove('sidebar-expanded');
+    //     }
+    // }, [sidebarExpanded]);
 
     return (
         <aside
@@ -104,23 +102,44 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">MENU</h3>
 
                         <ul className="mb-6 flex flex-col gap-1.5">
-                            {/* <!-- Menu Item Dashboard --> */}
-                            <li>
-                                <NavLink
-                                    to={routing.dashboard}
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('dashboard') &&
-                                        'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <DashboardImage></DashboardImage>
-                                    Dashboard
-                                </NavLink>
-                            </li>
-                            {/* <!-- Menu Item Dashboard --> */}
+                            <NavBlock
+                                endpoint={routing.dashboard}
+                                title="Dashboard"
+                                pathValue="dashboard" 
+                                image={<DashboardImage></DashboardImage>}
+                            />
+                            <NavBlock
+                                endpoint={routing.leagues}
+                                title="Leagues"
+                                pathValue="leagues" 
+                                image={<TournamentImage></TournamentImage>}
+                            />
+                            <NavBlock
+                                endpoint={routing.tournaments}
+                                title="Tournaments"
+                                pathValue="tournaments" 
+                                image={<TournamentImage></TournamentImage>}
+                            />
+                            <NavBlock
+                                endpoint={routing.players}
+                                title="Players"
+                                pathValue="players" 
+                                image={<TournamentImage></TournamentImage>}
+                            />
+                            <NavBlock
+                                endpoint={routing.decks}
+                                title="Decks"
+                                pathValue="decks" 
+                                image={<TournamentImage></TournamentImage>}
+                            />
+                            <NavBlock
+                                endpoint={routing.cards}
+                                title="Cards"
+                                pathValue="cards" 
+                                image={<TournamentImage></TournamentImage>}
+                            />
 
-                            {/* <!-- Menu Item Forms --> */}
-                            <SidebarLinkGroup
+                            {/* <SidebarLinkGroup
                                 activeCondition={
                                 pathname === '/forms' || pathname.includes('forms')
                                 }
@@ -190,7 +209,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                                     />
                                                 </svg>
                                             </NavLink>
-                                            {/* <!-- Dropdown Menu Start --> */}
                                             <div
                                                 className={`translate transform overflow-hidden ${
                                                 !open && 'hidden'
@@ -221,70 +239,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                                     </li>
                                                 </ul>
                                             </div>
-                                            {/* <!-- Dropdown Menu End --> */}
                                         </>
                                     );
                                 }}
-                            </SidebarLinkGroup>
-                            {/* <!-- Menu Item Forms --> */}
-
-                            {/* <!-- Menu Item Tables --> */}
-                            <li>
-                                <NavLink
-                                    to={routing.leagues}
-                                    className={`mt-5 group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('leagues') && 'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <TournamentImage></TournamentImage>
-                                    Leagues
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink
-                                    to={routing.tournaments}
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('tournaments') && 'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <TournamentImage></TournamentImage>
-                                    Tournaments
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink
-                                    to={routing.players}
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('players') && 'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <TournamentImage></TournamentImage>
-                                    Players
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink
-                                    to={routing.decks}
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('decks') && 'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <TournamentImage></TournamentImage>
-                                    Decks
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink
-                                    to={routing.cards}
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('cards') && 'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <TournamentImage></TournamentImage>
-                                    Cards
-                                </NavLink>
-                            </li>
-                            {/* <!-- Menu Item Tables --> */}
+                            </SidebarLinkGroup> */}
                         </ul>
                     </div>
                 </nav>
