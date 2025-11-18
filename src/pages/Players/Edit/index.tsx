@@ -7,12 +7,10 @@ import { toast } from '@/hooks/toast';
 import Dropdown from '@/components/Dropdowns/Dropdown';
 import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
-import InputFormSimple from '@/components/Forms/InputForm/DeckCard';
-import InputNumberFormSimple from '@/components/Forms/InputNumberForm/DeckCard';
 import TopTitle from "@/components/Forms/Top";
 import BreadcrumbBack from "@/components/BreadcrumsBackoffice";
 import { useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from "uuid";
+import EditDeckComponent from '@/components/MtgComponent/EditDeckComponent.tsx';
 
 const FormLayout = () => {
     const [ showData, setShowData ]                     = useState<boolean>(false);
@@ -26,7 +24,6 @@ const FormLayout = () => {
     const [ selectedIdDeck, setSelectedIdDeck ]         = useState<number | null>(null);
     const id                                            = useParams();
     const [ cards, setCards ]                           = useState<any[]>([]);
-
     
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -123,36 +120,6 @@ const FormLayout = () => {
             toast('error', 'Failed to load leagues');
         }
     }
-
-    const showCards = (title: string, cards: any, option: string) => {
-        return (
-            <div className="flex flex-col gap-9 mb-5">
-                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                    <TopTitle title={title}></TopTitle>
-                    <div className="flex flex-col flex-grow gap-3 flex-wrap p-6.5">
-                        {cards.map((item: any) => {
-                            {if (item.board === option) 
-                                return (
-                                    <div className="w-full" key={uuidv4()}>
-                                        <InputNumberFormSimple
-                                            id={`num-${item.id}`}
-                                            name={`num-${item.id}`}
-                                            selectedOption={item.num}
-                                        />
-                                        <InputFormSimple
-                                            id={`name-${item.id}`}
-                                            name={`name-${item.id}`}
-                                            selectedOption={item.name}
-                                        />
-                                    </div>
-                                )
-                            }
-                        })}
-                    </div>
-                </div>
-            </div>
-        )
-    }
     
     useEffect(() => {
         if (isFirstLoad == false) {
@@ -228,8 +195,8 @@ const FormLayout = () => {
                         </div>
                     </div>
                     <div className="flex flex-col">
-                        {showCards("Maindeck cards", cards, "md")}
-                        {showCards("Sideboard cards", cards, "sb")}
+                        <EditDeckComponent title="Maindeck cards" cards={cards} option="md"></EditDeckComponent>
+                        <EditDeckComponent title="Sideboard cards" cards={cards} option="sb"></EditDeckComponent>
                     </div>
                 </div>
             </DefaultLayout>

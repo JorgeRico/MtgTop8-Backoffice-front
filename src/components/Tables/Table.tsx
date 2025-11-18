@@ -3,17 +3,20 @@ import { v4 as uuidv4 } from "uuid";
 import EditIcon from '@/components/Icons/Edit';
 import { fetchInstance } from '@/hooks/apiCalls';
 import { toast } from '@/hooks/toast';
-import Loader from '@/common/LoaderSmall';
+import LoaderSmall from '@/common/LoaderSmall';
+import Loader from '@/common/Loader';
 
 interface TableProps {
-    header   : string[]; 
-    name     : string;
-    data     : Record<string, any>[]; 
-    endpoint : string;
-    apiCall  : Function;
+    header          : string[]; 
+    name            : string;
+    data            : Record<string, any>[]; 
+    endpoint        : string;
+    apiCall         : Function;
+    apiNumItemsCall : Function;
+    isLoading       : boolean;
 }
 
-const Table = ({ header, name, data, endpoint, apiCall }: TableProps) => {
+const Table = ({ header, name, data, endpoint, apiCall, apiNumItemsCall, isLoading }: TableProps) => {
     const editSubmit = (event: any, id: string) => {
         event.preventDefault();
         window.location.href = endpoint + "/edit/" + id;
@@ -29,6 +32,7 @@ const Table = ({ header, name, data, endpoint, apiCall }: TableProps) => {
             await fetchInstance.delete(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}/${endpoint}/${id}`)
             .then(data => {
                 setTimeout(() => toast('success', "Deleted correctly, id: " + id), 1000);
+                setTimeout(() => apiNumItemsCall(), 100);
                 setTimeout(() => apiCall(), 1500);
             })
         } catch (error) {
@@ -37,60 +41,66 @@ const Table = ({ header, name, data, endpoint, apiCall }: TableProps) => {
     }
 
     return (
-        <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-            <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
-                {name}
-            </h4>
-            <div className="max-w-full overflow-x-auto">
-                <table className="w-full table-auto">
-                    <thead>
-                        <tr className="bg-gray-2 text-left dark:bg-meta-4" key={uuidv4()}>
-                            {header.map((item) => (
-                                (item == 'id') ? (
-                                    <th key={uuidv4()} className="py-4 px-4 font-medium text-black dark:text-white">
-                                        {item}
+        <>
+            {!isLoading ? (
+                <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+                    <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
+                        {name}
+                    </h4>
+                    <div className="max-w-full overflow-x-auto">
+                        <table className="w-full table-auto">
+                            <thead>
+                                <tr className="bg-gray-2 text-left dark:bg-meta-4" key={uuidv4()}>
+                                    {header.map((item) => (
+                                        (item == 'id') ? (
+                                            <th key={uuidv4()} className="py-4 px-4 font-medium text-black dark:text-white">
+                                                {item}
+                                            </th>
+                                        ) : (
+                                            <th key={uuidv4()} className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white">
+                                                {item}
+                                            </th>
+                                        )
+                                    ))}
+                                    <th className="py-4 px-4 font-medium text-black dark:text-white">
+                                        Actions
                                     </th>
-                                ) : (
-                                    <th key={uuidv4()} className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white">
-                                        {item}
-                                    </th>
-                                )
-                            ))}
-                            <th className="py-4 px-4 font-medium text-black dark:text-white">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map((item) => (
-                            <tr key={uuidv4()}>
-                                {Object.entries(item).map(([key, value]) => (
-                                    <td key={uuidv4()} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                        <p className={`text-black dark:text-white ${key}`}>
-                                            {value}
-                                        </p>
-                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.map((item) => (
+                                    <tr key={uuidv4()}>
+                                        {Object.entries(item).map(([key, value]) => (
+                                            <td key={uuidv4()} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                                                <p className={`text-black dark:text-white ${key}`}>
+                                                    {value}
+                                                </p>
+                                            </td>
+                                        ))}
+                                    
+                                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                                            <div className="flex items-center space-x-3.5">
+                                                <div className="loading hidden" id={`loading-item-${item.id}`}>
+                                                    <LoaderSmall></LoaderSmall>
+                                                </div>
+                                                <button id={`edit-item-${item.id}`} className="hover:text-primary editItem" onClick={(e) => editSubmit(e, item.id)}>
+                                                    <EditIcon></EditIcon>
+                                                </button>
+                                                <button id={`delete-item-${item.id}`} className="hover:text-primary deleteItem" onClick={(e) => deleteSubmit(e, item.id)}>
+                                                    <TrashIcon></TrashIcon>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 ))}
-                            
-                                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                    <div className="flex items-center space-x-3.5">
-                                        <div className="loading hidden" id={`loading-item-${item.id}`}>
-                                            <Loader></Loader>
-                                        </div>
-                                        <button id={`edit-item-${item.id}`} className="hover:text-primary editItem" onClick={(e) => editSubmit(e, item.id)}>
-                                            <EditIcon></EditIcon>
-                                        </button>
-                                        <button id={`delete-item-${item.id}`} className="hover:text-primary deleteItem" onClick={(e) => deleteSubmit(e, item.id)}>
-                                            <TrashIcon></TrashIcon>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            ) : (
+                <Loader></Loader>
+            )}
+        </>
     );
 };
 

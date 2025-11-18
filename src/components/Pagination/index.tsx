@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from "uuid";
 import Loader from '@/common/LoaderSmall';
+import { paginationHelpers } from '@/hooks/pagination';
 
 interface PaginationProps {
     totalItems : number;
     limit      : number;
-    totalPages : number;
-    pageArray  : any[];
     apiCall    : Function;
 }
 
-const TablePagination = ({totalItems, totalPages, pageArray, limit, apiCall}: PaginationProps) => {
+const TablePagination = ({totalItems, limit, apiCall}: PaginationProps) => {
     const [ currentPage, setCurrentPage ]              = useState<number>(1);
     const [ isFirstLoad, setIsFirstLoad ]              = useState<boolean>(false);
     const [ paginationIsLoaded, sePaginationIsLoaded ] = useState<boolean>(false);
@@ -19,7 +18,9 @@ const TablePagination = ({totalItems, totalPages, pageArray, limit, apiCall}: Pa
     const common     = 'px-4 py-2 rounded text-gray-700 flex w-10 items-center justify-center h-10 text-sm font-medium hover:bg-blue-500/[0.08] dark:hover:text-brand-500';
     const currentCss = "bg-blue-500/[0.5] dark:text-white";
     const otherCss   = "dark:text-gray-400 hover:text-brand-500 ";
-
+    // pagination options
+    const totalPages = paginationHelpers.getTotalPages(totalItems, limit)
+    const pageArray  = paginationHelpers.getPageNumbersArray(totalItems, limit)
     // pagination button status
     const isFirstPage = currentPage === 1;
     const isLastPage  = currentPage === totalPages;

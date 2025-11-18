@@ -7,18 +7,16 @@ import { routing } from '@/types/routing';
 import { toast } from '@/hooks/toast';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import InputForm from '@/components/Forms/InputForm';
-import InputFormSimple from '@/components/Forms/InputForm/DeckCard';
-import InputNumberFormSimple from '@/components/Forms/InputNumberForm/DeckCard';
 import TopTitle from '@/components/Forms/Top';
-import { v4 as uuidv4 } from "uuid";
+import EditDeckComponent from '@/components/MtgComponent/EditDeckComponent.tsx';
 
 const FormLayout = () => {
-    const [ showData, setShowData ]             = useState<boolean>(false);
-    const id                                    = useParams();
-    const [ isFirstLoad, setIsFirstLoad ]       = useState<boolean>(false);
-    const [ selectedName, setSelectedName ]     = useState<string | null>(null);
-    const [ isLoading, setIsLoading ]           = useState<boolean>(false);
-    const [ cards, setCards ]                   = useState<any[]>([]);
+    const [ showData, setShowData ]         = useState<boolean>(false);
+    const id                                = useParams();
+    const [ isFirstLoad, setIsFirstLoad ]   = useState<boolean>(false);
+    const [ selectedName, setSelectedName ] = useState<string | null>(null);
+    const [ isLoading, setIsLoading ]       = useState<boolean>(false);
+    const [ cards, setCards ]               = useState<any[]>([]);
 
      const onSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -55,8 +53,6 @@ const FormLayout = () => {
         try {
             await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}/${id.id}/cards`)
             .then(data => {
-                
-
                 const card = (data || []).map((item: any) => ({
                     id    : item.id,
                     name  : item.name,
@@ -79,36 +75,6 @@ const FormLayout = () => {
             setIsFirstLoad(true);
         }
     }, []);
-
-    const showCards = (title: string, cards: any, option: string) => {
-        return (
-            <div className="flex flex-col gap-9 mb-5">
-                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                    <TopTitle title={title}></TopTitle>
-                    <div className="flex flex-col flex-grow gap-3 flex-wrap p-6.5">
-                        {cards.map((item: any) => {
-                            {if (item.board === option) 
-                                return (
-                                    <div className="w-full" key={uuidv4()}>
-                                        <InputNumberFormSimple
-                                            id={`num-${item.id}`}
-                                            name={`num-${item.id}`}
-                                            selectedOption={item.num}
-                                        />
-                                        <InputFormSimple
-                                            id={`name-${item.id}`}
-                                            name={`name-${item.id}`}
-                                            selectedOption={item.name}
-                                        />
-                                    </div>
-                                )
-                            }
-                        })}
-                    </div>
-                </div>
-            </div>
-        )
-    }
 
     return (
         <>
@@ -146,8 +112,8 @@ const FormLayout = () => {
                         </div>
                     </div>
                     <div className="flex flex-col">
-                        {showCards("Maindeck cards", cards, "md")}
-                        {showCards("Sideboard cards", cards, "sb")}
+                        <EditDeckComponent title="Maindeck cards" cards={cards} option="md"></EditDeckComponent>
+                        <EditDeckComponent title="Sideboard cards" cards={cards} option="sb"></EditDeckComponent>
                     </div>
                 </div>
             </DefaultLayout>

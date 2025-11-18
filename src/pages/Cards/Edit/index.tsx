@@ -24,7 +24,7 @@ const FormLayout = () => {
     const [ selectedIdDeck, setSelectedIdDeck ]     = useState<number | null>(null);
     const [ selectedImgUrl, setSelectedImgUrl ]     = useState<string | null>(null);
 
-     const onSubmitForm = async (event: any) => {
+    const onSubmitForm = async (event: any) => {
         event.preventDefault();
         setIsLoading(true);
 
