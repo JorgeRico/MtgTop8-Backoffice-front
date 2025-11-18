@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import LockImage from '../../../Icons/Lock.tsx';
-import MailImage from '../../../Icons/Mail.tsx';
-import firebase from '../../../../hooks/firebase.tsx';
-import Loader from '../../../../common/LoaderSmall';
+import LockImage from '@/components/Icons/Lock.tsx';
+import MailImage from '@/components/Icons/Mail.tsx';
+import firebase from '@/hooks/firebase.tsx';
+import Loader from '@/common/LoaderSmall';
 
 const SignIn = () => {
     const [ isLoading, setIsLoading ] = useState(false);

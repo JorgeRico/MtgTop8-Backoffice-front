@@ -10,6 +10,7 @@ import InputForm from '@/components/Forms/InputForm';
 import InputFormSimple from '@/components/Forms/InputForm/DeckCard';
 import InputNumberFormSimple from '@/components/Forms/InputNumberForm/DeckCard';
 import TopTitle from '@/components/Forms/Top';
+import { v4 as uuidv4 } from "uuid";
 
 const FormLayout = () => {
     const [ showData, setShowData ]             = useState<boolean>(false);
@@ -88,20 +89,18 @@ const FormLayout = () => {
                         {cards.map((item: any) => {
                             {if (item.board === option) 
                                 return (
-                                    <>
-                                        <div className="w-full">
-                                            <InputNumberFormSimple
-                                                id={`num-${item.id}`}
-                                                name={`num-${item.id}`}
-                                                selectedOption={item.num}
-                                            />
-                                            <InputFormSimple
-                                                id={`name-${item.id}`}
-                                                name={`name-${item.id}`}
-                                                selectedOption={item.name}
-                                            />
-                                        </div>
-                                    </>
+                                    <div className="w-full" key={uuidv4()}>
+                                        <InputNumberFormSimple
+                                            id={`num-${item.id}`}
+                                            name={`num-${item.id}`}
+                                            selectedOption={item.num}
+                                        />
+                                        <InputFormSimple
+                                            id={`name-${item.id}`}
+                                            name={`name-${item.id}`}
+                                            selectedOption={item.name}
+                                        />
+                                    </div>
                                 )
                             }
                         })}

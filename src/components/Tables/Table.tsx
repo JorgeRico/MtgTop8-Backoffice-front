@@ -1,9 +1,9 @@
-import TrashIcon from '../Icons/Trash';
+import TrashIcon from '@/components/Icons/Trash';
 import { v4 as uuidv4 } from "uuid";
-import EditIcon from '../Icons/Edit';
-import { fetchInstance } from '../../hooks/apiCalls';
-import { toast } from '../../hooks/toast';
-import Loader from '../../common/LoaderSmall';
+import EditIcon from '@/components/Icons/Edit';
+import { fetchInstance } from '@/hooks/apiCalls';
+import { toast } from '@/hooks/toast';
+import Loader from '@/common/LoaderSmall';
 
 interface TableProps {
     header   : string[]; 
