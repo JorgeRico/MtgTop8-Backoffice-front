@@ -29,7 +29,7 @@ const CheckboxThree = () => {
               }`}
             >
               <svg
-                className="h-3.5 w-3.5 stroke-current"
+                className="h-3.5 w-3.5 strokeCurrent"
                 fill="none"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
