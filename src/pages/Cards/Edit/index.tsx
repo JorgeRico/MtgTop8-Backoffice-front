@@ -95,7 +95,6 @@ const FormLayout = () => {
                                             selectedOption={selectedName}
                                             setSelectedOption={setSelectedName}
                                         />
-
                                         <InputNumberForm
                                             id="num"
                                             name="num"
@@ -104,7 +103,6 @@ const FormLayout = () => {
                                             selectedOption={selectedNum}
                                             setSelectedOption={setSelectedNum}
                                         />
-
                                         <InputNumberForm
                                             id="idDeck"
                                             name="idDeck"
@@ -113,7 +111,6 @@ const FormLayout = () => {
                                             selectedOption={selectedIdDeck}
                                             setSelectedOption={setSelectedIdDeck}
                                         />
-
                                         <InputForm
                                             id="imgUrl"
                                             name="imgUrl"
@@ -122,7 +119,6 @@ const FormLayout = () => {
                                             selectedOption={selectedImgUrl}
                                             setSelectedOption={setSelectedImgUrl}
                                         />
-
                                         <DropdownText 
                                             options={[
                                                 { value: cardTypes.MD, key: cardTypes.MD },
@@ -132,8 +128,7 @@ const FormLayout = () => {
                                             name="board"
                                             setSelected={setSelectedBoard}
                                             selectedOption={selectedBoard}>
-                                        </DropdownText> 
-                                            
+                                        </DropdownText>  
                                         <DropdownText 
                                             options={[
                                                 { value: cardTypes.CREATURE,     key: cardTypes.CREATURE },
