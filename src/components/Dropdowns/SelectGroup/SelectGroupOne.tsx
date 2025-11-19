@@ -1,26 +1,18 @@
-import { useState } from 'react';
 import DropdownArrow from '../../Icons/DropdownArrow';
 
 type OptionType = { key: string; value: number };
 
 interface InputProps {
-    options                : OptionType[]; 
-    text                   : string, 
-    name                   : string, 
-    selectedOpt            : number | null, 
-    selectedOptionFunction : Function;
-    selectedFunction       : Function;
+    options          : OptionType[]; 
+    text             : string, 
+    name             : string, 
+    selectedOpt      : number | null, 
+    isOptionSelected : boolean;
+    onChangeSubmit   : Function;
+    disabled         : boolean;
 }
 
-const SelectGroupOne = ( { options, text, name, selectedOpt, selectedOptionFunction, selectedFunction }: InputProps)  => {
-    const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
-
-    const onChangeSubmit = (event: any) => {
-        setIsOptionSelected(true);
-        selectedOptionFunction(parseInt(event))
-        selectedFunction(parseInt(event));
-    };
-
+const SelectGroupOne = ( { options, text, name, selectedOpt, isOptionSelected, onChangeSubmit, disabled }: InputProps)  => {
     return (
         <div className="mb-4.5">
             <label className="mb-2.5 block text-black dark:text-white">
@@ -29,6 +21,7 @@ const SelectGroupOne = ( { options, text, name, selectedOpt, selectedOptionFunct
 
             <div className="relative z-20 bg-transparent dark:bg-form-input">
                 <select
+                    disabled={disabled}
                     required
                     value={selectedOpt ?? ''}
                         onChange={(e) => onChangeSubmit(e.target.value)

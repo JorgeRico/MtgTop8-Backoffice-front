@@ -13,17 +13,23 @@ import { useParams } from 'react-router-dom';
 import EditDeckComponent from '@/components/MtgComponent/EditDeckComponent.tsx';
 
 const FormLayout = () => {
-    const [ showData, setShowData ]                     = useState<boolean>(false);
-    const [ isLoading, setIsLoading ]                   = useState<boolean>(false);
-    const [ selectedTournament, setSelectedTournament ] = useState<number | null>(null);
-    const [ isFirstLoad, setIsFirstLoad ]               = useState<boolean>(false);
-    const [ tournaments, setTournaments ]               = useState<any[] | null>(null);
-    const [ selectedName, setSelectedName ]             = useState<string | null>(null);
-    const [ selectedDeckName, setSelectedDeckName ]     = useState<string | null>(null);
-    const [ selectedPosition, setSelectedPosition ]     = useState<number | null>(null);
-    const [ selectedIdDeck, setSelectedIdDeck ]         = useState<number | null>(null);
-    const id                                            = useParams();
-    const [ cards, setCards ]                           = useState<any[]>([]);
+    const [ showData, setShowData ]                         = useState<boolean>(false);
+    const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
+    const [ selectedTournament, setSelectedTournament ]     = useState<number | null>(null);
+    const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
+    const [ tournaments, setTournaments ]                   = useState<any[] | null>(null);
+    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
+    const [ selectedDeckName, setSelectedDeckName ]         = useState<string | null>(null);
+    const [ selectedPosition, setSelectedPosition ]         = useState<number | null>(null);
+    const [ selectedIdDeck, setSelectedIdDeck ]             = useState<number | null>(null);
+    const id                                                = useParams();
+    const [ cards, setCards ]                               = useState<any[]>([]);
+    const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
+
+    const onChangeTournamentSubmit = (event: any) => {
+        setIsTournamentSelected(true);
+        setSelectedTournament(parseInt(event));
+    };
     
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -95,8 +101,6 @@ const FormLayout = () => {
         try {
             await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}/${idDeck}/cards`)
             .then(data => {
-                
-
                 const card = (data || []).map((item: any) => ({
                     id    : item.id,
                     name  : item.name,
@@ -154,11 +158,13 @@ const FormLayout = () => {
                                         />
                                         {tournaments ? (
                                                 <Dropdown 
+                                                    disabled={true}
                                                     options={tournaments}
                                                     text="Select Tournament"
                                                     name="Tournament"
-                                                    setSelected={setSelectedTournament}
-                                                    selectedOption={selectedTournament}>
+                                                    selectedOption={selectedTournament}
+                                                    isOptionSelected={isTournamentSelected}
+                                                    onChangeSubmit={onChangeTournamentSubmit}>
                                                 </Dropdown>
                                             ) : (
                                                 <Loader></Loader>

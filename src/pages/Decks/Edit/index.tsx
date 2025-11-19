@@ -9,22 +9,56 @@ import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import InputForm from '@/components/Forms/InputForm';
 import TopTitle from '@/components/Forms/Top';
 import EditDeckComponent from '@/components/MtgComponent/EditDeckComponent.tsx';
+import Dropdown from '@/components/Dropdowns/Dropdown';
 
 const FormLayout = () => {
-    const [ showData, setShowData ]                     = useState<boolean>(false);
-    const id                                            = useParams();
-    const [ isFirstLoad, setIsFirstLoad ]               = useState<boolean>(false);
-    const [ selectedName, setSelectedName ]             = useState<string | null>(null);
-    const [ isLoading, setIsLoading ]                   = useState<boolean>(false);
-    const [ cards, setCards ]                           = useState<any[]>([]);
-    const [ selectedPlayerName, setSelectedPlayerName ] = useState<string | null>(null);
+    const [ showData, setShowData ]                         = useState<boolean>(false);
+    const id                                                = useParams();
+    const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
+    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
+    const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
+    const [ cards, setCards ]                               = useState<any[]>([]);
+    const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
+    const [ selectedTournament, setSelectedTournament]      = useState<number | null>(null);
+    const [ tournaments, setTournaments ]                   = useState<any[] | null>(null);
+    const [ isPlayerSelected, setIsPlayerSelected ]         = useState<boolean>(false);
+    const [ selectedPlayer, setSelectedPlayer]              = useState<number | null>(null);
+    const [ players, setPlayers ]                           = useState<any[] | null>(null);
 
-     const onSubmitForm = async (event: any) => {
+    const onChangeTournamentSubmit = (event: any) => {
+        setIsTournamentSelected(true);
+        setSelectedTournament(parseInt(event));
+        apiPlayersCall(parseInt(event));
+    };
+
+    const onChangePlayerSubmit = (event: any) => {
+        setIsPlayerSelected(true);
+        setSelectedPlayer(parseInt(event));
+    };
+
+    const apiTournamentsCall = async () => {
+        try {
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}`)
+            .then(data => {
+                const dataTournament = (data || []).map((item: any) => ({
+                    value : item.id,
+                    key   : item.date + ' - ' + item.name,
+                }));
+
+                setTournaments(dataTournament);
+            })
+        } catch (error) {
+            toast('error', 'Failed to load tournaments');
+        }
+    };
+
+    const onSubmitForm = async (event: any) => {
         event.preventDefault();
         setIsLoading(true);
 
         const body = {
-            'name' : selectedName,
+            'name'     : selectedName,
+            'idPlayer' : selectedPlayer
         }
 
         try {
@@ -74,10 +108,30 @@ const FormLayout = () => {
         try {
             await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}/${idPlayer}`)
             .then(data => {
-                setSelectedPlayerName(data[0].name);
+                setSelectedTournament(data[0].idTournament);
+                setIsTournamentSelected(true);
+                apiPlayersCall(data[0].idTournament);
+                setSelectedPlayer(data[0].id);
+                setIsPlayerSelected(true);
             })
         } catch (error) {
             toast('error', 'Failed to load tournaments');
+        }
+    };
+
+    const apiPlayersCall = async (id: number) => {
+        try {
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}/${id}/players`)
+            .then(data => {
+                const dataPlayer = (data || []).map((item: any) => ({
+                    value : item.id,
+                    key   : item.name,
+                }));
+
+                setPlayers(dataPlayer);
+            })
+        } catch (error) {
+            toast('error', 'Failed to load players');
         }
     };
 
@@ -85,6 +139,7 @@ const FormLayout = () => {
         if (!isFirstLoad) {
             getData();
             getCardsDeck();
+            apiTournamentsCall();
             setIsFirstLoad(true);
         }
     }, []);
@@ -109,19 +164,35 @@ const FormLayout = () => {
                                             id="name"
                                             name="name"
                                             label="Deck name" 
-                                            placeholder="Enter deck name"
+                                            placeholder="Enter Deck name"
                                             selectedOption={selectedName}
                                             setSelectedOption={setSelectedName}
                                         />
-                                        <InputForm
-                                            disabled={true}
-                                            id="playerName"
-                                            name="playerName"
-                                            label="Player name" 
-                                            placeholder="Enter player name"
-                                            selectedOption={selectedPlayerName}
-                                            setSelectedOption={setSelectedPlayerName}
-                                        />
+                                        {(tournaments && selectedTournament) ? (
+                                                <Dropdown 
+                                                    disabled={false}
+                                                    options={tournaments}
+                                                    text="Select Tournament"
+                                                    name="Tournament"
+                                                    selectedOption={selectedTournament}
+                                                    isOptionSelected={isTournamentSelected}
+                                                    onChangeSubmit={onChangeTournamentSubmit}>
+                                                </Dropdown>
+                                            ) : (
+                                                <Loader></Loader>
+                                            )
+                                        }
+                                        {players &&
+                                            <Dropdown 
+                                                disabled={false}
+                                                options={players}
+                                                text="Select Player"
+                                                name="Player"
+                                                selectedOption={selectedPlayer}
+                                                isOptionSelected={isPlayerSelected}
+                                                onChangeSubmit={onChangePlayerSubmit}>
+                                            </Dropdown>
+                                        }
                                     </>
                                 }
                                 {!isLoading ? (

@@ -21,6 +21,12 @@ const CreateTournament = () => {
     const [ selectedDate, setSelectedDate ]                 = useState<string | null>(null);
     const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
     const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
+    const [ isLeagueSelected, setIsLeagueSelected ]         = useState<boolean>(false);
+
+    const onChangeLeagueSubmit = (event: any) => {
+        setIsLeagueSelected(true);
+        setSelectedLeague(parseInt(event));
+    };
 
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -114,11 +120,13 @@ const CreateTournament = () => {
                                 </div>
                                 {leagues ? (
                                         <Dropdown 
+                                            disabled={false}
                                             options={leagues}
                                             text="Select League"
                                             name="League"
-                                            setSelected={setSelectedLeague}
-                                            selectedOption={selectedLeague}>
+                                            selectedOption={selectedLeague}
+                                            isOptionSelected={isLeagueSelected}
+                                            onChangeSubmit={onChangeLeagueSubmit}>
                                         </Dropdown>
                                     ) : (
                                         <Loader></Loader>

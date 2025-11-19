@@ -11,18 +11,47 @@ import InputNumberForm from '@/components/Forms/InputNumberForm';
 import DropdownText from '@/components/Dropdowns/DropdownText';
 import TopTitle from '@/components/Forms/Top';
 import { cardTypes } from "@/types/cardTypes";
+import Dropdown from '@/components/Dropdowns/Dropdown';
 
 const FormLayout = () => {
-    const [ showData, setShowData ]                 = useState<boolean>(false);
-    const id                                        = useParams();
-    const [ isFirstLoad, setIsFirstLoad ]           = useState<boolean>(false);
-    const [ selectedName, setSelectedName ]         = useState<string | null>(null);
-    const [ selectedNum, setSelectedNum ]           = useState<number | null>(null);
-    const [ isLoading, setIsLoading ]               = useState<boolean>(false);
-    const [ selectedBoard, setSelectedBoard ]       = useState<string>('');
-    const [ selectedCardType, setSelectedCardType ] = useState<string>('');
-    const [ selectedIdDeck, setSelectedIdDeck ]     = useState<number | null>(null);
-    const [ selectedImgUrl, setSelectedImgUrl ]     = useState<string | null>(null);
+    const [ showData, setShowData ]                         = useState<boolean>(false);
+    const id                                                = useParams();
+    const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
+    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
+    const [ selectedNum, setSelectedNum ]                   = useState<number | null>(null);
+    const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
+    const [ selectedBoard, setSelectedBoard ]               = useState<string>('');
+    const [ selectedCardType, setSelectedCardType ]         = useState<string>('');
+    const [ selectedImgUrl, setSelectedImgUrl ]             = useState<string | null>(null);
+    const [ isCardTypeSelected, setIsCardTypeSelected ]     = useState<boolean>(false);
+    const [ isBoardSelected, setIsBoardSelected ]           = useState<boolean>(false);
+    const [ tournaments, setTournaments ]                   = useState<any[] | null>(null);
+    const [ selectedTournament, setSelectedTournament ]     = useState<number | null>(null);
+    const [ decks, setDecks ]                               = useState<any[] | null>(null);
+    const [ selectedDeck, setSelectedDeck ]                 = useState<number | null>(null);
+    const [ isDeckSelected, setIsDeckSelected ]             = useState<boolean>(false);
+    const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
+    
+    const onChangeDeckSubmit = (event: any) => {
+        setIsDeckSelected(true);
+        setSelectedDeck(parseInt(event));
+    };
+
+    const onChangeTournamentSubmit = (event: any) => {
+        setIsTournamentSelected(true);
+        setSelectedTournament(parseInt(event));
+        apiTournamentDecksCall(parseInt(event));
+    };
+
+    const onChangeBoardSubmit = (event: any) => {
+        setIsBoardSelected(true);
+        setSelectedBoard(event);
+    };
+
+    const onChangeCardTypeSubmit = (event: any) => {
+        setIsCardTypeSelected(true);
+        setSelectedCardType(event);
+    };
 
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -33,7 +62,7 @@ const FormLayout = () => {
             'num'      : selectedNum,
             'board'    : selectedBoard,
             'cardType' : selectedCardType,
-            'idDeck'   : selectedIdDeck,
+            'idDeck'   : selectedDeck,
             'imgUrl'   : selectedImgUrl
         }
 
@@ -48,6 +77,38 @@ const FormLayout = () => {
         }
     };
 
+    const apiTournamentsCall = async () => {
+        try {
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}`)
+            .then(data => {
+                const dataTournament = (data || []).map((item: any) => ({
+                    value : item.id,
+                    key   : item.date + ' - ' + item.name
+                }));
+
+                setTournaments(dataTournament);
+            })
+        } catch (error) {
+            toast('error', 'Failed to load tournaments');
+        }
+    };
+
+    const apiTournamentDecksCall = async (id: number) => {
+        try {
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}/${id}/decks`)
+            .then(data => {
+                const dataDeck = (data || []).map((item: any) => ({
+                    value : item.decks.id,
+                    key   : item.name +" - " + item.decks.name
+                }));
+
+                setDecks(dataDeck);
+            })
+        } catch (error) {
+            toast('error', 'Failed to load tournaments');
+        }
+    };
+
     const getData = async () => {
         try {
             await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.cards}/${id.id}`)
@@ -56,18 +117,44 @@ const FormLayout = () => {
                 setSelectedNum(data[0].num);
                 setSelectedBoard(data[0].board);
                 setSelectedCardType(data[0].cardType);
-                setSelectedIdDeck(data[0].idDeck);
                 setSelectedImgUrl(data[0].imgUrl);
                 setShowData(true);
+                getDeckData(data[0].idDeck);
+                setSelectedDeck(data[0].idDeck);
             })
         } catch (error) {
-            toast('error', 'Failed to load leagues');
+            toast('error', 'Failed to load Card');
+        }
+    }
+
+    const getDeckData = async (id: number) => {
+        try {
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}/${id}`)
+            .then(data => {
+                getPlayerData(data[0].idPlayer);
+            })
+        } catch (error) {
+            toast('error', 'Failed to load deck data');
+        }
+    }
+
+    const getPlayerData = async (id: number) => {
+        try {
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}/${id}`)
+            .then(data => {
+                setSelectedTournament(data[0].idTournament)
+                apiTournamentDecksCall(data[0].idTournament)
+            })
+        } catch (error) {
+            console.log(error)
+            toast('error', 'Failed to load deck data');
         }
     }
 
     useEffect(() => {
         if (!isFirstLoad) {
             getData();
+            apiTournamentsCall();
             setIsFirstLoad(true);
         }
     }, []);
@@ -88,6 +175,7 @@ const FormLayout = () => {
                                 {showData && 
                                     <>
                                         <InputForm
+                                            disabled={false}
                                             id="name"
                                             name="name"
                                             label="Card name" 
@@ -103,15 +191,33 @@ const FormLayout = () => {
                                             selectedOption={selectedNum}
                                             setSelectedOption={setSelectedNum}
                                         />
-                                        <InputNumberForm
-                                            id="idDeck"
-                                            name="idDeck"
-                                            label="ID deck" 
-                                            placeholder="Enter id deck"
-                                            selectedOption={selectedIdDeck}
-                                            setSelectedOption={setSelectedIdDeck}
-                                        />
+                                        {tournaments ? (
+                                                <Dropdown
+                                                    disabled={false}
+                                                    options={tournaments}
+                                                    text="Select Tournament"
+                                                    name="Tournament"
+                                                    selectedOption={selectedTournament}
+                                                    isOptionSelected={isTournamentSelected}
+                                                    onChangeSubmit={onChangeTournamentSubmit}>
+                                                </Dropdown>
+                                            ) : (
+                                                <Loader></Loader>
+                                            )
+                                        }
+                                        {decks &&
+                                            <Dropdown
+                                                disabled={false}
+                                                options={decks}
+                                                text="Select Deck"
+                                                name="Deck"
+                                                selectedOption={selectedDeck}
+                                                isOptionSelected={isDeckSelected}
+                                                onChangeSubmit={onChangeDeckSubmit}>
+                                            </Dropdown>
+                                        }
                                         <InputForm
+                                            disabled={false}
                                             id="imgUrl"
                                             name="imgUrl"
                                             label="ImgUrl" 
@@ -126,8 +232,9 @@ const FormLayout = () => {
                                             ]}
                                             text="Select deck option"
                                             name="board"
-                                            setSelected={setSelectedBoard}
-                                            selectedOption={selectedBoard}>
+                                            selectedOption={selectedBoard}
+                                            isOptionSelected={isBoardSelected}
+                                            onChangeSubmit={onChangeBoardSubmit}>
                                         </DropdownText>  
                                         <DropdownText 
                                             options={[
@@ -141,9 +248,10 @@ const FormLayout = () => {
                                             ]}
                                             text="Select Card Type"
                                             name="cardType"
-                                            setSelected={setSelectedCardType}
-                                            selectedOption={selectedCardType}>
-                                        </DropdownText> 
+                                            selectedOption={selectedCardType}
+                                            isOptionSelected={isCardTypeSelected}
+                                            onChangeSubmit={onChangeCardTypeSubmit}>
+                                        </DropdownText>
                                     </>
                                 }
                                 {!isLoading ? (

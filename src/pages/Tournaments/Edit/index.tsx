@@ -24,6 +24,12 @@ const FormLayout = () => {
     const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
     const id                                                = useParams();
     const [ showData, setShowData ]                         = useState<boolean>(false);
+    const [isLeagueSelected, setIsLeagueSelected]           = useState<boolean>(false);
+
+    const onChangeLeagueSubmit = (event: any) => {
+        setIsLeagueSelected(true);
+        setSelectedLeague(parseInt(event));
+    };
 
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -144,11 +150,13 @@ const FormLayout = () => {
                                             </div>
                                             {leagues ? (
                                                     <Dropdown 
+                                                        disabled={false}
                                                         options={leagues}
                                                         text="Select League"
                                                         name="League"
-                                                        setSelected={setSelectedLeague}
-                                                        selectedOption={selectedLeague}>
+                                                        selectedOption={selectedLeague}
+                                                        isOptionSelected={isLeagueSelected}
+                                                        onChangeSubmit={onChangeLeagueSubmit}>
                                                     </Dropdown>
                                                 ) : (
                                                     <Loader></Loader>

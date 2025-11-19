@@ -4,23 +4,15 @@ import DropdownArrow from '../../Icons/DropdownArrow';
 type OptionType = { key: string; value: string };
 
 interface InputProps {
-    options                : OptionType[]; 
-    text                   : string, 
-    name                   : string, 
-    selectedOpt            : string | null, 
-    selectedOptionFunction : Function;
-    selectedFunction       : Function;
+    options          : OptionType[]; 
+    text             : string, 
+    name             : string, 
+    selectedOpt      : string | null, 
+    isOptionSelected : boolean;
+    onChangeSubmit   : Function;
 }
 
-const SelectGroupOne = ( { options, text, name, selectedOpt, selectedOptionFunction, selectedFunction }: InputProps)  => {
-    const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
-
-    const onChangeSubmit = (event: any) => {
-        setIsOptionSelected(true);
-        selectedOptionFunction(parseInt(event))
-        selectedFunction(parseInt(event));
-    };
-
+const SelectGroupOne = ( { options, text, name, selectedOpt, isOptionSelected, onChangeSubmit }: InputProps)  => {
     return (
         <div className="mb-4.5">
             <label className="mb-2.5 block text-black dark:text-white">

@@ -1,28 +1,28 @@
-import { useState } from 'react';
 import SelectGroupOne from '../SelectGroup/SelectGroupOne';
 
 interface DropdownProps {
-    options        : Array<{ key: string; value: number }>;
-    text           : string;
-    name           : string;
-    setSelected    : Function;
-    selectedOption : number | null;
+    options          : Array<{ key: string; value: number }>;
+    text             : string;
+    name             : string;
+    onChangeSubmit   : Function;
+    selectedOption   : number | null;
+    isOptionSelected : boolean;
+    disabled         : boolean;
 }
 
-const Dropdown = ({ options, text, name, setSelected, selectedOption }: DropdownProps) => {
-    const [ selectedOpt, setSelectedOpt ] = useState<number | null>(selectedOption);
-
+const Dropdown = ({ options, text, name, selectedOption, isOptionSelected, onChangeSubmit, disabled }: DropdownProps) => {
     return (
         <>
             <section className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                 <article className="w-full">
                     <SelectGroupOne 
+                        disabled={disabled}
                         options={options}
                         text={text}
                         name={name}
-                        selectedOpt={selectedOpt}
-                        selectedOptionFunction={setSelectedOpt}
-                        selectedFunction={setSelected}
+                        selectedOpt={selectedOption}
+                        isOptionSelected={isOptionSelected}
+                        onChangeSubmit={onChangeSubmit}
                     />
                 </article>
             </section>

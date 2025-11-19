@@ -11,13 +11,37 @@ import Dropdown from '@/components/Dropdowns/Dropdown';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 
 const CreateLeague = () => {
-    const [ isLoading, setIsLoading ]             = useState<boolean>(false);
-    const [ isCreated, setIsCreated ]             = useState<boolean>(false);
-    const [ selectedFormat, setSelectedFormat ]   = useState<number | null>(null);
-    const [ selectedCurrent, setSelectedCurrent ] = useState<number | null>(null);
-    const [ selectedActive, setSelectedActive ]   = useState<number | null>(null);
-    const [ selectedYear, setSelectedYear ]       = useState<number | null>(null);
-    const [ selectedName, setSelectedName ]       = useState<string | null>(null);
+    const [ isLoading, setIsLoading ]               = useState<boolean>(false);
+    const [ isCreated, setIsCreated ]               = useState<boolean>(false);
+    const [ selectedFormat, setSelectedFormat ]     = useState<number | null>(null);
+    const [ selectedCurrent, setSelectedCurrent ]   = useState<number | null>(null);
+    const [ selectedActive, setSelectedActive ]     = useState<number | null>(null);
+    const [ selectedYear, setSelectedYear ]         = useState<number | null>(null);
+    const [ selectedName, setSelectedName ]         = useState<string | null>(null);
+    const [isYearSelected, setIsYearSelected]       = useState<boolean>(false);
+    const [isCurrentSelected, setIsCurrentSelected] = useState<boolean>(false);
+    const [isFormatSelected, setIsFormatSelected]   = useState<boolean>(false);
+    const [isActiveSelected, setIsActiveSelected]   = useState<boolean>(false);
+
+    const onChangeYearSubmit = (event: any) => {
+        setIsYearSelected(true);
+        setSelectedYear(parseInt(event));
+    };
+
+    const onChangeCurrentSubmit = (event: any) => {
+        setIsCurrentSelected(true);
+        setSelectedCurrent(parseInt(event));
+    };
+
+    const onChangeFormatSubmit = (event: any) => {
+        setIsFormatSelected(true);
+        setSelectedFormat(parseInt(event));
+    };
+
+    const onChangeActiveSubmit = (event: any) => {
+        setIsActiveSelected(true);
+        setSelectedActive(parseInt(event));
+    };
     
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -98,35 +122,42 @@ const CreateLeague = () => {
                                     setSelectedOption={setSelectedName}
                                 />
                                 <Dropdown 
+                                    disabled={false}
                                     options={[{ value: 1, key: 'Legacy' }]}
                                     text="Select Format"
                                     name="Format"
-                                    setSelected={setSelectedFormat}
-                                    selectedOption={selectedFormat}>
+                                    selectedOption={selectedFormat}
+                                    isOptionSelected={isFormatSelected}
+                                    onChangeSubmit={onChangeFormatSubmit}>
                                 </Dropdown>
                                 <DropdownYear 
-                                    setSelected={setSelectedYear}
-                                    selectedOption={selectedYear}>
+                                    selectedOption={selectedYear}
+                                    isOptionSelected={isYearSelected}
+                                    onChangeSubmit={onChangeYearSubmit}>
                                 </DropdownYear>
                                 <Dropdown 
+                                    disabled={false}
                                     options={[
                                         { value: 1, key: 'Current season' },
                                         { value: 0, key: 'Past season' }
                                     ]}
                                     text="Select Current Season"
                                     name="Current"
-                                    setSelected={setSelectedCurrent}
-                                    selectedOption={selectedCurrent}>
+                                    selectedOption={selectedCurrent}
+                                    isOptionSelected={isCurrentSelected}
+                                    onChangeSubmit={onChangeCurrentSubmit}>
                                 </Dropdown>
                                 <Dropdown 
+                                    disabled={false}
                                     options={[
                                         { value: 1, key: 'Active' },
                                         { value: 0, key: 'Disabled' }
                                     ]}
                                     text="Select Active Status"
                                     name="Active"
-                                    setSelected={setSelectedActive}
-                                    selectedOption={selectedActive}>
+                                    selectedOption={selectedActive}
+                                    isOptionSelected={isActiveSelected}
+                                    onChangeSubmit={onChangeActiveSubmit}>
                                 </Dropdown>
                                 {(!isLoading && !isCreated) &&
                                     <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">

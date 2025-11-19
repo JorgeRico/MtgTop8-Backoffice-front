@@ -4,6 +4,7 @@ import { routing } from '@/types/routing';
 import { endpoints } from '@/types/endpoints';
 import { fetchInstance } from '@/hooks/apiCalls';
 import TableComponent from '@/components/Tables/TableComponent';
+import CreateButton from '@/components/MtgComponent/CreateButton';
 
 const Decks = () => {
     const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);
@@ -51,6 +52,10 @@ const Decks = () => {
         <>
             <DefaultLayout>
                 <div className="flex flex-col gap-10">
+                    <CreateButton
+                        endpoint={endpoints.cards}
+                        text="Add new Card">
+                    </CreateButton>
                     <TableComponent
                         header          = {headerItem} 
                         data            = {cards ? cards : []}

@@ -1,17 +1,15 @@
-import { useState } from 'react';
 import SelectGroupText from '@/components/Dropdowns/SelectGroupText/SelectGroupText';
 
 interface DropdownProps {
-    options        : Array<{ key: string; value: string }>;
-    text           : string;
-    name           : string;
-    setSelected    : Function;
-    selectedOption : string | null;
+    options          : Array<{ key: string; value: string }>;
+    text             : string;
+    name             : string;
+    onChangeSubmit   : Function;
+    selectedOption   : string | null;
+    isOptionSelected : boolean;
 }
 
-const DropdownText = ({ options, text, name, setSelected, selectedOption }: DropdownProps) => {
-    const [ selectedOpt, setSelectedOpt ] = useState<string | null>(selectedOption);
-
+const DropdownText = ({ options, text, name, selectedOption, isOptionSelected, onChangeSubmit }: DropdownProps) => {
     return (
         <>
             <section className="mb-4.5 flex flex-col gap-6 xl:flex-row">
@@ -20,9 +18,9 @@ const DropdownText = ({ options, text, name, setSelected, selectedOption }: Drop
                         options={options}
                         text={text}
                         name={name}
-                        selectedOpt={selectedOpt}
-                        selectedOptionFunction={setSelectedOpt}
-                        selectedFunction={setSelected}
+                        selectedOpt={selectedOption}
+                        isOptionSelected={isOptionSelected}
+                        onChangeSubmit={onChangeSubmit}
                     />
                 </article>
             </section>

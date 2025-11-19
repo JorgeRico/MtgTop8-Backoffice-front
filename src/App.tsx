@@ -23,6 +23,7 @@ import PlayersEdit from '@/pages/Players/Edit/index.tsx';
 import PlayersCreate from '@/pages/Players/Create/index.tsx';
 import Cards from '@/pages/Cards/Cards.tsx';
 import CardsEdit from '@/pages/Cards/Edit/index.tsx';
+import CardsCreate from '@/pages/Cards/Create/index.tsx';
 import { routing } from '@/types/routing.ts';
 
 function App() {
@@ -182,8 +183,16 @@ function App() {
                             </>
                         }
                     />
+                    <Route path={routing.cards + "/create"}
+                        element={
+                            <>
+                                <PageTitle title="Cards | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                                <CardsCreate />
+                            </>
+                        }
+                    />
 
-
+                    
                     <Route
                         path={routing.profile}
                         element={

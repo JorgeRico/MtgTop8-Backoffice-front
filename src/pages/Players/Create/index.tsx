@@ -11,14 +11,20 @@ import TopTitle from "@/components/Forms/Top";
 import BreadcrumbBack from "@/components/BreadcrumsBackoffice";
 
 const CreatePlayer = () => {
-    const [ isLoading, setIsLoading ]                   = useState<boolean>(false);
-    const [ isCreated, setIsCreated ]                   = useState<boolean>(false);
-    const [ selectedTournament, setSelectedTournament ] = useState<number | null>(null);
-    const [ isFirstLoad, setIsFirstLoad ]               = useState<boolean>(false);
-    const [ tournaments, setTournaments ]               = useState<any[] | null>(null);
-    const [ selectedName, setSelectedName ]             = useState<string | null>(null);
-    const [ selectedDeckName, setSelectedDeckName ]     = useState<string | null>(null);
-    const [ selectedPosition, setSelectedPosition ]     = useState<number | null>(null);
+    const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
+    const [ isCreated, setIsCreated ]                       = useState<boolean>(false);
+    const [ selectedTournament, setSelectedTournament ]     = useState<number | null>(null);
+    const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
+    const [ tournaments, setTournaments ]                   = useState<any[] | null>(null);
+    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
+    const [ selectedDeckName, setSelectedDeckName ]         = useState<string | null>(null);
+    const [ selectedPosition, setSelectedPosition ]         = useState<number | null>(null);
+    const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
+
+    const onChangeTournamentSubmit = (event: any) => {
+        setIsTournamentSelected(true);
+        setSelectedTournament(parseInt(event));
+    };
 
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -118,6 +124,7 @@ const CreatePlayer = () => {
                             <TopTitle title="Create Player"></TopTitle>
                             <form onSubmit={onSubmitForm} className="p-6.5">
                                 <InputForm
+                                    disabled={false}
                                     id="name"
                                     name="name"
                                     label="Player name" 
@@ -135,17 +142,20 @@ const CreatePlayer = () => {
                                 />
                                 {tournaments ? (
                                         <Dropdown 
+                                            disabled={false}
                                             options={tournaments}
                                             text="Select Tournament"
                                             name="Tournament"
-                                            setSelected={setSelectedTournament}
-                                            selectedOption={selectedTournament}>
+                                            selectedOption={selectedTournament}
+                                            isOptionSelected={isTournamentSelected}
+                                            onChangeSubmit={onChangeTournamentSubmit}>
                                         </Dropdown>
                                     ) : (
                                         <Loader></Loader>
                                     )
                                 }
                                 <InputForm
+                                    disabled={false}
                                     id="deckName"
                                     name="deckName"
                                     label="Deck name" 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DefaultLayout from '@/layout/DefaultLayout';
 import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
@@ -7,18 +7,38 @@ import { toast } from '@/hooks/toast';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import InputForm from '@/components/Forms/InputForm';
 import TopTitle from "@/components/Forms/Top";
+import Dropdown from '@/components/Dropdowns/Dropdown';
 
 const FormLayout = () => {
-    const [ isLoading, setIsLoading ]       = useState<boolean>(false);
-    const [ isCreated, setIsCreated ]       = useState<boolean>(false);
-    const [ selectedName, setSelectedName ] = useState<string | null>(null);
+    const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
+    const [ isCreated, setIsCreated ]                       = useState<boolean>(false);
+    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
+    const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
+    const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
+    const [ selectedTournament, setSelectedTournament]      = useState<number | null>(null);
+    const [ tournaments, setTournaments ]                   = useState<any[] | null>(null);
+    const [ isPlayerSelected, setIsPlayerSelected ]         = useState<boolean>(false);
+    const [ selectedPlayer, setSelectedPlayer]              = useState<number | null>(null);
+    const [ players, setPlayers ]                           = useState<any[] | null>(null);
+
+    const onChangeTournamentSubmit = (event: any) => {
+        setIsTournamentSelected(true);
+        setSelectedTournament(parseInt(event));
+        apiPlayersCall(parseInt(event));
+    };
+    
+    const onChangePlayerSubmit = (event: any) => {
+        setIsPlayerSelected(true);
+        setSelectedPlayer(parseInt(event));
+    };
     
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
         setIsLoading(true);
 
         const body = {
-            'name' : selectedName,
+            'name'     : selectedName,
+            'idPlayer' : selectedPlayer
         }
 
         try {
@@ -32,29 +52,93 @@ const FormLayout = () => {
         }
     };
 
+    const apiTournamentsCall = async () => {
+        try {
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}`)
+            .then(data => {
+                const dataTournament = (data || []).map((item: any) => ({
+                    value : item.id,
+                    key   : item.date + ' - ' + item.name,
+                }));
+
+                setTournaments(dataTournament);
+            })
+        } catch (error) {
+            toast('error', 'Failed to load tournaments');
+        }
+    };
+
+    const apiPlayersCall = async (id: number) => {
+        try {
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}/${id}/players`)
+            .then(data => {
+                const dataPlayer = (data || []).map((item: any) => ({
+                    value : item.id,
+                    key   : item.name,
+                }));
+
+                setPlayers(dataPlayer);
+            })
+        } catch (error) {
+            toast('error', 'Failed to load players');
+        }
+    };
+
     const onClickBack = (event: any) => {
         event.preventDefault();
         window.location.href = routing.decks
     }
 
+    useEffect(() => {
+        if (isFirstLoad == false) {
+            apiTournamentsCall()
+            setIsFirstLoad(true);
+        }
+    }, [isFirstLoad]);
+
     return (
         <>
             <DefaultLayout>
                 <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
-                    <BreadcrumbBack pageName="Decks" />
                     <div className="flex flex-col gap-9">
+                        <BreadcrumbBack pageName="Decks" />
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <TopTitle title="Create decks"></TopTitle>
                             <form onSubmit={onSubmitForm} className="p-6.5">
                                 <InputForm
+                                    disabled={false}
                                     id="name"
                                     name="name"
-                                    label="League name" 
-                                    placeholder="Enter League name"
+                                    label="Deck name" 
+                                    placeholder="Enter Deck name"
                                     selectedOption={selectedName}
                                     setSelectedOption={setSelectedName}
                                 />
-                                    
+                                {tournaments ? (
+                                        <Dropdown 
+                                            disabled={false}
+                                            options={tournaments}
+                                            text="Select Tournament"
+                                            name="Tournament"
+                                            selectedOption={selectedTournament}
+                                            isOptionSelected={isTournamentSelected}
+                                            onChangeSubmit={onChangeTournamentSubmit}>
+                                        </Dropdown>
+                                    ) : (
+                                        <Loader></Loader>
+                                    )
+                                }
+                                {players &&
+                                    <Dropdown 
+                                        disabled={false}
+                                        options={players}
+                                        text="Select Player"
+                                        name="Player"
+                                        selectedOption={selectedPlayer}
+                                        isOptionSelected={isPlayerSelected}
+                                        onChangeSubmit={onChangePlayerSubmit}>
+                                    </Dropdown>
+                                }
                                 {(!isLoading && !isCreated) &&
                                     <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
                                         Create Deck
@@ -67,7 +151,7 @@ const FormLayout = () => {
                                 }
                                 {isCreated &&
                                     <button onClick={(event) => onClickBack(event)}className="flex w-full justify-center rounded bg-secondary p-3 font-medium text-white hover:bg-opacity-90">
-                                        Back to leagues
+                                        Back to tournaments
                                     </button>
                                 }
                             </form>

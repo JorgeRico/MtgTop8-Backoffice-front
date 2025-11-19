@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import SelectGroupOne from '../SelectGroup/SelectGroupOne';
 
 interface DropdownProps {
-    selectedOption : number | null;
-    setSelected    : Function;
+    selectedOption   : number | null;
+    isOptionSelected : boolean;
+    onChangeSubmit   : Function;
 }
 
-const DropdownYear = ({ selectedOption, setSelected }: DropdownProps) => {
-    const [ selectedYear, setSelectedYear ] = useState<number | null>(selectedOption);
-    const [ years, setYears ]               = useState<Array<{ key: string; value: number }>>([]);
+const DropdownYear = ({ selectedOption, isOptionSelected, onChangeSubmit }: DropdownProps) => {
+    const [ years, setYears ] = useState<Array<{ key: string; value: number }>>([]);
 
     const getDropdownYears = () => {
         const tempYears: Array<{ key: string; value: number }> = [];
@@ -37,9 +37,9 @@ const DropdownYear = ({ selectedOption, setSelected }: DropdownProps) => {
                         options={years}
                         text="Select Year"
                         name="Year"
-                        selectedOpt={selectedYear}
-                        selectedOptionFunction={setSelectedYear}
-                        selectedFunction={setSelected}
+                        selectedOpt={selectedOption}
+                        isOptionSelected={isOptionSelected}
+                        onChangeSubmit={onChangeSubmit}
                     />
                 </article>
             </section>
