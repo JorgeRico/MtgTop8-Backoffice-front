@@ -34,6 +34,7 @@ const DropdownYear = ({ selectedOption, isOptionSelected, onChangeSubmit }: Drop
             <section className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                 <article className="w-full">
                     <SelectGroupOne 
+                        disabled={false}
                         options={years}
                         text="Select Year"
                         name="Year"
