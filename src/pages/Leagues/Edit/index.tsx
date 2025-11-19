@@ -111,6 +111,7 @@ const FormLayout = () => {
                                 {showData && 
                                     <>
                                         <InputForm
+                                            disabled={false}
                                             id="name"
                                             name="name"
                                             label="League name" 

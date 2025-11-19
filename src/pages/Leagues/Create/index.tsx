@@ -89,6 +89,7 @@ const CreateLeague = () => {
                             <TopTitle title="Create League"></TopTitle>
                             <form onSubmit={onSubmitForm} className="p-6.5">
                                 <InputForm
+                                    disabled={false}
                                     id="name"
                                     name="name"
                                     label="League name" 

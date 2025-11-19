@@ -27,35 +27,26 @@ const FormLayout = () => {
     
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
-        // setIsLoading(true);
+        setIsLoading(true);
 
         const body = {
             'name'         : selectedName,
             'position'     : selectedPosition,
             'idTournament' : selectedTournament,
-            // 'idDeck'       : parseInt(data.data[0].id)
+            'idDeck'       : selectedIdDeck
         }
                 
         try {
-            await fetchInstance.put(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}`, body)
+            await fetchInstance.put(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}/${id.id}`, body)
             .then(data => {
-                // updateIdPlayerDeck(idDeck, {'idPlayer' : data.data[0].id})
-                // setTimeout(() => setIsCreated(true), 2000);
-                setTimeout(() => toast('success', "Player created correctly, id: " + data.data[0].id), 2000);
+                setTimeout(() => setIsLoading(false), 2000);
+                setTimeout(() => toast('success', "Player updated correctly"), 2000);
             })
         } catch (error) {
             toast('error', "Failed to create player");
         }
     };
-    
-    // const updateIdPlayerDeck = async (idDeck: number, body: object) => {
-    //     try {
-    //         await fetchInstance.put(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}/${idDeck}`, body)
-    //     } catch (error) {
-    //         toast('error', "Failed to add idPlayer to deck");
-    //     }
-    // }
-        
+         
     const apiTournamentsCall = async () => {
         try {
             await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}`)
@@ -145,6 +136,7 @@ const FormLayout = () => {
                                 {showData && 
                                     <>
                                         <InputForm
+                                            disabled={false}
                                             id="name"
                                             name="name"
                                             label="Player name" 
@@ -173,6 +165,7 @@ const FormLayout = () => {
                                             )
                                         }
                                         <InputForm
+                                            disabled={true}
                                             id="deckName"
                                             name="deckName"
                                             label="Deck name" 

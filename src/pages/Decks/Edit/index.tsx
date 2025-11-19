@@ -11,12 +11,13 @@ import TopTitle from '@/components/Forms/Top';
 import EditDeckComponent from '@/components/MtgComponent/EditDeckComponent.tsx';
 
 const FormLayout = () => {
-    const [ showData, setShowData ]         = useState<boolean>(false);
-    const id                                = useParams();
-    const [ isFirstLoad, setIsFirstLoad ]   = useState<boolean>(false);
-    const [ selectedName, setSelectedName ] = useState<string | null>(null);
-    const [ isLoading, setIsLoading ]       = useState<boolean>(false);
-    const [ cards, setCards ]               = useState<any[]>([]);
+    const [ showData, setShowData ]                     = useState<boolean>(false);
+    const id                                            = useParams();
+    const [ isFirstLoad, setIsFirstLoad ]               = useState<boolean>(false);
+    const [ selectedName, setSelectedName ]             = useState<string | null>(null);
+    const [ isLoading, setIsLoading ]                   = useState<boolean>(false);
+    const [ cards, setCards ]                           = useState<any[]>([]);
+    const [ selectedPlayerName, setSelectedPlayerName ] = useState<string | null>(null);
 
      const onSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -42,6 +43,7 @@ const FormLayout = () => {
             await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}/${id.id}`)
             .then(data => {
                 setSelectedName(data[0].name)
+                apiGetPlayerCall(data[0].idPlayer);
                 setShowData(true);
             })
         } catch (error) {
@@ -68,6 +70,17 @@ const FormLayout = () => {
         }
     }
 
+    const apiGetPlayerCall = async (idPlayer: number) => {
+        try {
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}/${idPlayer}`)
+            .then(data => {
+                setSelectedPlayerName(data[0].name);
+            })
+        } catch (error) {
+            toast('error', 'Failed to load tournaments');
+        }
+    };
+
     useEffect(() => {
         if (!isFirstLoad) {
             getData();
@@ -90,14 +103,26 @@ const FormLayout = () => {
                             <TopTitle title="Edit decks"></TopTitle>
                             <form onSubmit={onSubmitForm} className="p-6.5">
                                 {showData && 
-                                    <InputForm
-                                        id="name"
-                                        name="name"
-                                        label="Deck name" 
-                                        placeholder="Enter deck name"
-                                        selectedOption={selectedName}
-                                        setSelectedOption={setSelectedName}
-                                    />
+                                    <>
+                                        <InputForm
+                                            disabled={false}
+                                            id="name"
+                                            name="name"
+                                            label="Deck name" 
+                                            placeholder="Enter deck name"
+                                            selectedOption={selectedName}
+                                            setSelectedOption={setSelectedName}
+                                        />
+                                        <InputForm
+                                            disabled={true}
+                                            id="playerName"
+                                            name="playerName"
+                                            label="Player name" 
+                                            placeholder="Enter player name"
+                                            selectedOption={selectedPlayerName}
+                                            setSelectedOption={setSelectedPlayerName}
+                                        />
+                                    </>
                                 }
                                 {!isLoading ? (
                                     <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">

@@ -19,37 +19,12 @@ const CreateTournament = () => {
     const [ leagues, setLeagues ]                           = useState<any[] | null>(null);
     const [ selectedNumber, setSelectedNumber ]             = useState<number | null>(null);
     const [ selectedDate, setSelectedDate ]                 = useState<string | null>(null);
-    const [ selectedIdTournament, setSelectedIdTournament ] = useState<string | null>(null);
+    const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
     const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
 
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
         setIsLoading(true);
-
-        // extra double check
-        if (selectedName == null) {
-            toast('error', "Name is not added");
-            setIsLoading(false);
-            return ''
-        }
-
-        if (selectedDate == null) {
-            toast('error', "Date is not selected");
-            setIsLoading(false);
-            return ''
-        }
-        
-        if (selectedNumber == null) {
-            toast('error', "Players is not selected");
-            setIsLoading(false);
-            return ''
-        }
-
-        if (selectedIdTournament == null) {
-            toast('error', "idTournament is not selected");
-            setIsLoading(false);
-            return ''
-        }
 
         const body = {
             'name'         : selectedName,
@@ -58,7 +33,6 @@ const CreateTournament = () => {
             'players'      : selectedNumber,
             'idTournament' : selectedIdTournament
         }
-        console.log(body)
         
         try {
             await fetchInstance.post(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}`, body)
@@ -109,6 +83,7 @@ const CreateTournament = () => {
                             <TopTitle title="New Tournament"></TopTitle>
                             <form onSubmit={onSubmitForm} className="p-6.5">
                                 <InputForm
+                                    disabled={false}
                                     id="name"
                                     name="name"
                                     label="Tournament name" 
@@ -116,7 +91,7 @@ const CreateTournament = () => {
                                     selectedOption={selectedName}
                                     setSelectedOption={setSelectedName}
                                 />
-                                <InputForm
+                                <InputNumberForm
                                     id="idTournament"
                                     name="idTournament"
                                     label="Id mtgTop8 Tournament" 
@@ -134,7 +109,7 @@ const CreateTournament = () => {
                                 />
                                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                                     <div className="w-full">
-                                        <DatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+                                        <DatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
                                     </div>
                                 </div>
                                 {leagues ? (

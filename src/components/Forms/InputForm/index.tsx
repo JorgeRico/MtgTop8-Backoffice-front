@@ -7,9 +7,10 @@ interface InputProps {
     placeholder       : string;
     selectedOption    : string | null;
     setSelectedOption : Function;
+    disabled          : boolean;
 }
 
-const InputForm = ({ id, name, label, placeholder, selectedOption, setSelectedOption }: InputProps) => {
+const InputForm = ({ id, name, label, placeholder, selectedOption, setSelectedOption, disabled = false }: InputProps) => {
     const [ option ] = useState<string | null>(selectedOption);
 
     const onChange = (event: any) => {
@@ -25,6 +26,7 @@ const InputForm = ({ id, name, label, placeholder, selectedOption, setSelectedOp
                         {label}
                     </label>
                     <input
+                        disabled={disabled}
                         type="text"
                         id={id}
                         name={name}

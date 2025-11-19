@@ -14,7 +14,7 @@ const InputForm = ({ id, name, label, placeholder, selectedOption, setSelectedOp
 
     const onChange = (event: any) => {
         event.preventDefault();
-        setSelectedOption(event.target.value)
+        setSelectedOption(parseInt(event.target.value))
     }
 
     return (

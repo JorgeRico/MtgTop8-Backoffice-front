@@ -21,38 +21,13 @@ const FormLayout = () => {
     const [ selectedNumber, setSelectedNumber ]             = useState<number | null>(null);
     const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
     const [ selectedDate, setSelectedDate ]                 = useState<string | null>(null);
-    const [ selectedIdTournament, setSelectedIdTournament ] = useState<string | null>(null);
+    const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
     const id                                                = useParams();
     const [ showData, setShowData ]                         = useState<boolean>(false);
 
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
         setIsLoading(true);
-
-        // extra double check
-        if (selectedName == null) {
-            toast('error', "Name is not added");
-            setIsLoading(false);
-            return ''
-        }
-
-        if (selectedDate == null) {
-            toast('error', "Date is not selected");
-            setIsLoading(false);
-            return ''
-        }
-        
-        if (selectedNumber == null) {
-            toast('error', "Players is not selected");
-            setIsLoading(false);
-            return ''
-        }
-
-        if (selectedIdTournament == null) {
-            toast('error', "idTournament is not selected");
-            setIsLoading(false);
-            return ''
-        }
 
         const body = {
             'name'         : selectedName,
@@ -74,6 +49,16 @@ const FormLayout = () => {
         }
     };
 
+    function getDateConverted(dateValue: string) {
+        let splitValues = dateValue.split('/');
+
+        let day         = splitValues[0];
+        let month       = splitValues[1]
+        let year        = splitValues[2].substr(splitValues[2].length - 2)
+
+        return new Date(month + '/' + day + '/' + year).toUTCString();
+    }
+
     const getTournament = async() => {
          try {
             await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}/${id.id}`)
@@ -81,7 +66,7 @@ const FormLayout = () => {
                 setSelectedName(data[0].name)
                 setSelectedLeague(data[0].idLeague);
                 setSelectedIdTournament(data[0].idTournament);
-                setSelectedDate(data[0].date);
+                setSelectedDate(getDateConverted(data[0].date));
                 setSelectedNumber(data[0].players);
                 setShowData(true);
             })
@@ -128,6 +113,7 @@ const FormLayout = () => {
                                     {showData &&
                                         <>
                                             <InputForm
+                                                disabled={false}
                                                 id="name"
                                                 name="name"
                                                 label="Tournament name" 
@@ -135,7 +121,7 @@ const FormLayout = () => {
                                                 selectedOption={selectedName}
                                                 setSelectedOption={setSelectedName}
                                             />
-                                            <InputForm
+                                            <InputNumberForm
                                                 id="idTournament"
                                                 name="idTournament"
                                                 label="Id mtgTop8 Tournament" 
@@ -172,7 +158,7 @@ const FormLayout = () => {
                                     }
                                     {!isLoading &&
                                         <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                                            Create Tournament
+                                            Edit Tournament
                                         </button>
                                     }
                                     {(isLoading && !isCreated) &&
