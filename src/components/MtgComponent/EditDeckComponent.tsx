@@ -3,11 +3,9 @@ import InputNumberFormSimple from '@/components/Forms/InputNumberForm/DeckCard';
 import TopTitle from '@/components/Forms/Top';
 import { v4 as uuidv4 } from "uuid";
 import { useState } from 'react';
-import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
 import { routing } from '@/types/routing';
 import { toast } from '@/hooks/toast';
-
 
 interface EditDeckComponentProps {
     title  : string;
@@ -16,42 +14,41 @@ interface EditDeckComponentProps {
 }
 
 const EditDeckComponent = ({title, cards, option}: EditDeckComponentProps) => {
-    const [ numSelected, setNumSelected ] = useState<number | null>(null);
+    const [ numSelected, setNumSelected ]   = useState<number | null>(null);
+    const [ nameSelected, setNameSelected ] = useState<string | null>(null);
 
     const onHandleEditCard = (event: any) => {
         event.preventDefault();
 
-        document.querySelector('#num-'+ event.target.value)?.toggleAttribute('disabled');
-        document.querySelector('#name-'+ event.target.value)?.toggleAttribute('disabled');
-
-        document.querySelector('#edit-'+ event.target.value)?.toggleAttribute('hidden');
-        document.querySelector('#save-'+ event.target.value)?.toggleAttribute('hidden');
+        setTimeout(() => document.querySelector('#num-'  + event.target.value)?.toggleAttribute('disabled'), 500);
+        setTimeout(() => document.querySelector('#name-' + event.target.value)?.toggleAttribute('disabled'), 500);
+        setTimeout(() => document.querySelector('#edit-' + event.target.value)?.classList.add('hidden'), 100);
+        setTimeout(() => document.querySelector('#save-' + event.target.value)?.classList.remove('hidden'), 500);
     }
 
-    const onHandleSaveCard = (event: any) => {
+    const onHandleSaveCard = async (event: any) => {
         event.preventDefault();
 
-        document.querySelector('#num-'+ event.target.value)?.toggleAttribute('disabled');
-        document.querySelector('#name-'+ event.target.value)?.toggleAttribute('disabled');
+        var name = document.querySelector<HTMLInputElement>('input[name="name-' + event.target.value+'"]')?.value;
+        var num  = document.querySelector<HTMLInputElement>('input[name="num-'  + event.target.value+'"]')?.value;
 
-        document.querySelector('#edit-'+ event.target.value)?.toggleAttribute('hidden');
-        document.querySelector('#save-'+ event.target.value)?.toggleAttribute('hidden');
-
-        var name = document.querySelector<HTMLInputElement>('input[name="name-'+event.target.value+'"]')?.value;
-        var num = document.querySelector<HTMLInputElement>('input[name="num-'+event.target.value+'"]')?.value;
+        document.querySelector('#num-'  + event.target.value)?.toggleAttribute('disabled');
+        document.querySelector('#name-' + event.target.value)?.toggleAttribute('disabled');
+        document.querySelector('#save-' + event.target.value)?.classList.add('hidden');
 
         if (!name) {
             return '';
         }
+        
         if (!num) {
             return '';
         }
-        onSubmitForm(event.target.value, name, parseInt(num));
+
+        onSubmitForm(event, event.target.value, name, parseInt(num));
     }
 
-    const onSubmitForm = async (id: number, name: string, num: number) => {
-            // event.preventDefault();
-            // setIsLoading(true);
+    const onSubmitForm = async (event: any, id: number, name: string, num: number) => {
+            event.preventDefault();
     
             const body = {
                 'name' : name,
@@ -61,8 +58,10 @@ const EditDeckComponent = ({title, cards, option}: EditDeckComponentProps) => {
             try {
                 await fetchInstance.put(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.cards}/${id}`, body)
                 .then(data => {
-                    // setTimeout(() => setIsLoading(false), 2000);
-                    setTimeout(() => toast('success', "Deck Card updated correctly"), 2000);
+                    setTimeout(() => toast('success', "Deck Card updated correctly"), 500);
+                    setTimeout(() => document.querySelector('#edit-' + id)?.classList.remove('hidden'), 1500);
+                    setNameSelected(name);
+                    setNumSelected(num);
                 })
             } catch (error) {
                 toast('error', "Failed to update card");
@@ -75,26 +74,35 @@ const EditDeckComponent = ({title, cards, option}: EditDeckComponentProps) => {
                 <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                     <TopTitle title={title}></TopTitle>
                     <div className="flex flex-col flex-grow gap-3 flex-wrap p-6.5">
-                        {cards.map((item: any) => {
-                            {if (item.board === option) 
-                                return (
-                                    <div className="w-full" key={uuidv4()}>
-                                        <InputNumberFormSimple
-                                            id={`num-${item.id}`}
-                                            name={`num-${item.id}`}
-                                            selectedOption={item.num}
-                                        />
-                                        <InputFormSimple
-                                            id={`name-${item.id}`}
-                                            name={`name-${item.id}`}
-                                            selectedOption={item.name}
-                                        />
-                                        <button className="bg-secondary text-black-2 p-3 ml-4 rounded-md border-[1.5px] border-meta-10" value={item.id} onClick={onHandleEditCard} id={`edit-${item.id}`}>edit</button>
-                                        <button className="bg-primary text-white p-3 ml-4 rounded-md border-[1.5px] border-meta-10" hidden value={item.id} onClick={onHandleSaveCard} id={`save-${item.id}`}>save</button>
-                                    </div>
-                                )
-                            }
-                        })}
+                        {cards.length > 0 ? (
+                                <>
+                                {cards.map((item: any) => {
+                                    if (item.board === option) 
+                                        return (
+                                            <div className="w-full" key={uuidv4()}>
+                                                <InputNumberFormSimple
+                                                    id={`num-${item.id}`}
+                                                    name={`num-${item.id}`}
+                                                    selectedOption={numSelected ?? item.num}
+                                                />
+                                                <InputFormSimple
+                                                    id={`name-${item.id}`}
+                                                    name={`name-${item.id}`}
+                                                    selectedOption={nameSelected ?? item.name}
+                                                />
+                                                <button className="bg-secondary text-black-2 p-3 ml-4 rounded-md border-[1.5px] border-meta-10" value={item.id} onClick={onHandleEditCard} id={`edit-${item.id}`}>edit</button>
+                                                <button className="bg-primary text-white p-3 ml-4 rounded-md border-[1.5px] border-meta-10 hidden" value={item.id} onClick={onHandleSaveCard} id={`save-${item.id}`}>save</button>
+                                            </div>
+                                        )
+                                    }
+                                )}
+                                </>
+                            ) : (
+                                <div className="w-full">
+                                    <p>No cards in this section</p>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </section>
