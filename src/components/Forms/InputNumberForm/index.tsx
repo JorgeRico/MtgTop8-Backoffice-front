@@ -2,7 +2,6 @@ import { useState } from 'react';
 import InputLabelForm from '@/components/Forms/InputLabel';
 
 interface InputProps {
-    id                : string;
     name              : string;
     label             : string;
     placeholder       : string;
@@ -10,7 +9,7 @@ interface InputProps {
     setSelectedOption : Function;
 }
 
-const InputForm = ({ id, name, label, placeholder, selectedOption, setSelectedOption }: InputProps) => {
+const InputForm = ({ name, label, placeholder, selectedOption, setSelectedOption }: InputProps) => {
     const [ option ] = useState<number | null>(selectedOption);
 
     const onChange = (event: any) => {
@@ -25,7 +24,6 @@ const InputForm = ({ id, name, label, placeholder, selectedOption, setSelectedOp
                     <InputLabelForm label={label}></InputLabelForm>
                     <input
                         type="number"
-                        id={id}
                         name={name}
                         defaultValue={option ?? ''}
                         placeholder={placeholder}

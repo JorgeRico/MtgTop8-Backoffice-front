@@ -2,13 +2,15 @@ import flatpickr from 'flatpickr';
 import { useEffect } from 'react';
 import DatePicker from '../../Icons/DatePicker';
 import Flatpickr from "react-flatpickr";
+import InputLabelForm from '@/components/Forms/InputLabel';
 
 interface DatePickerProps {
+    name            : string;
     selectedDate    : string | null;
     setSelectedDate : Function;
 }
 
-const DatePickerOne = ({ selectedDate, setSelectedDate}: DatePickerProps) => {
+const DatePickerOne = ({ name, selectedDate, setSelectedDate}: DatePickerProps) => {
     useEffect(() => {
         // Init flatpickr
         flatpickr('.form-datepicker', {
@@ -26,17 +28,14 @@ const DatePickerOne = ({ selectedDate, setSelectedDate}: DatePickerProps) => {
     }
 
     return (
-        <div>
-            <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                Select Date
-            </label>
+        <section>
+            <InputLabelForm label="Select Date"></InputLabelForm>
             <div className="relative">
-
                 <Flatpickr
                     className="form-datepicker w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     placeholder="dd/mm/yy"
                     data-class="flatpickr-right"
-                    name="datepicker"
+                    name={name}
                     options={{
                         altInput: true, 
                         altFormat: "M j, Y",
@@ -49,7 +48,7 @@ const DatePickerOne = ({ selectedDate, setSelectedDate}: DatePickerProps) => {
                    <DatePicker></DatePicker>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 
