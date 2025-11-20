@@ -1,30 +1,37 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useId } from 'react'
 import DefaultLayout from '@/layout/DefaultLayout';
 import InputForm from '@/components/Forms/InputForm';
 import TopTitle from '@/components/Forms/Top';
-import Dropdown from '@/components/Dropdowns/Dropdown';
-import DropdownYear from '@/components/Dropdowns/DropdownYear';
+import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
 import { routing } from '@/types/routing';
 import { toast } from '@/hooks/toast';
 import { useParams } from 'react-router-dom';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
+import { getDropdownYears } from '@/hooks/years';
 
 const FormLayout = () => {
-    const [ showData, setShowData ]                 = useState<boolean>(false);
-    const [ isLoading, setIsLoading ]               = useState<boolean>(false);
-    const [ selectedFormat, setSelectedFormat ]     = useState<number | null>(null);
-    const [ selectedCurrent, setSelectedCurrent ]   = useState<number | null>(null);
-    const [ selectedActive, setSelectedActive ]     = useState<number | null>(null);
-    const [ selectedYear, setSelectedYear ]         = useState<number | null>(null);
-    const id                                        = useParams();
-    const [ isFirstLoad, setIsFirstLoad ]           = useState<boolean>(false);
-    const [ selectedName, setSelectedName ]         = useState<string | null>(null);
-    const [isYearSelected, setIsYearSelected]       = useState<boolean>(false);
-    const [isCurrentSelected, setIsCurrentSelected] = useState<boolean>(false);
-    const [isFormatSelected, setIsFormatSelected]   = useState<boolean>(false);
-    const [isActiveSelected, setIsActiveSelected]   = useState<boolean>(false);
+    const [ showData, setShowData ]                   = useState<boolean>(false);
+    const [ isLoading, setIsLoading ]                 = useState<boolean>(false);
+    const [ selectedFormat, setSelectedFormat ]       = useState<number | null>(null);
+    const [ selectedCurrent, setSelectedCurrent ]     = useState<number | null>(null);
+    const [ selectedActive, setSelectedActive ]       = useState<number | null>(null);
+    const [ selectedYear, setSelectedYear ]           = useState<number | null>(null);
+    const [ selectedName, setSelectedName ]           = useState<string | null>(null);
+    const [ isFirstLoad, setIsFirstLoad ]             = useState<boolean>(false);
+    const id                                          = useParams();
+    // dropdown selector css
+    const [ isYearSelected, setIsYearSelected ]       = useState<boolean>(false);
+    const [ isCurrentSelected, setIsCurrentSelected ] = useState<boolean>(false);
+    const [ isFormatSelected, setIsFormatSelected ]   = useState<boolean>(false);
+    const [ isActiveSelected, setIsActiveSelected ]   = useState<boolean>(false);
+    // form ids
+    const idFormat  = useId();
+    const idCurrent = useId();
+    const idActive  = useId();
+    const idYear    = useId();
+    const idName    = useId();
 
     const onChangeYearSubmit = (event: any) => {
         setIsYearSelected(true);
@@ -50,43 +57,15 @@ const FormLayout = () => {
         event.preventDefault();
         setIsLoading(true);
 
-        // extra double check
-        if (selectedName == null) {
-            toast('error', "Name is not added");
-            setIsLoading(false);
-            return ''
-        }
-
-        if (selectedFormat == null) {
-            toast('error', "Date is not selected");
-            setIsLoading(false);
-            return ''
-        }
-        
-        if (selectedYear == null) {
-            toast('error', "Players is not selected");
-            setIsLoading(false);
-            return ''
-        }
-
-        if (selectedCurrent == null) {
-            toast('error', "idTournament is not selected");
-            setIsLoading(false);
-            return ''
-        }
-
-        if (selectedActive == null) {
-            toast('error', "idTournament is not selected");
-            setIsLoading(false);
-            return ''
-        }
+        // get form values
+        const formDataValues = new FormData(event.target)
 
         const body = {
-            'name'     : selectedName,
-            'isLegacy' : selectedFormat,
-            'year'     : selectedYear,
-            'current'  : selectedCurrent,
-            'active'   : selectedActive
+            'name'     : formDataValues.get(idName),
+            'isLegacy' : Number(formDataValues.get(idFormat)),
+            'year'     : Number(formDataValues.get(idYear)),
+            'current'  : Number(formDataValues.get(idCurrent)),
+            'active'   : Number(formDataValues.get(idActive))
         }
         
         try {
@@ -136,35 +115,37 @@ const FormLayout = () => {
                                     <>
                                         <InputForm
                                             disabled={false}
-                                            id="name"
-                                            name="name"
+                                            name={idName}
                                             label="League name" 
                                             placeholder="Enter League name"
                                             selectedOption={selectedName}
-                                            setSelectedOption={setSelectedName}
                                         />
                                         <Dropdown 
                                             disabled={false}
                                             options={[{ value: 1, key: 'Legacy' }]}
-                                            text="Select Format"
-                                            name="Format"
+                                            label="Select Format"
+                                            name={idFormat}
                                             selectedOption={selectedFormat}
                                             isOptionSelected={isFormatSelected}
                                             onChangeSubmit={onChangeFormatSubmit}>
                                         </Dropdown>
-                                        <DropdownYear 
+                                        <Dropdown
+                                            disabled={false}
+                                            options={getDropdownYears()}
+                                            label="Select year"
+                                            name={idYear}
                                             selectedOption={selectedYear}
                                             isOptionSelected={isYearSelected}
                                             onChangeSubmit={onChangeYearSubmit}>
-                                        </DropdownYear>
+                                        </Dropdown>
                                         <Dropdown 
                                             disabled={false}
                                             options={[
                                                 { value: 1, key: 'Current season' },
                                                 { value: 0, key: 'Past season' }
                                             ]}
-                                            text="Select Current Season"
-                                            name="Current"
+                                            label="Select Current Season"
+                                            name={idCurrent}
                                             selectedOption={selectedCurrent}
                                             isOptionSelected={isCurrentSelected}
                                             onChangeSubmit={onChangeCurrentSubmit}>
@@ -175,8 +156,8 @@ const FormLayout = () => {
                                                 { value: 1, key: 'Active' },
                                                 { value: 0, key: 'Disabled' }
                                             ]}
-                                            text="Select Active Status"
-                                            name="Active"
+                                            label="Select Active Status"
+                                            name={idActive}
                                             selectedOption={selectedActive}
                                             isOptionSelected={isActiveSelected}
                                             onChangeSubmit={onChangeActiveSubmit}>
