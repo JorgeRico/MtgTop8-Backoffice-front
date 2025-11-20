@@ -56,7 +56,7 @@ const EditDeckComponent = ({title, cards, option}: EditDeckComponentProps) => {
             }
     
             try {
-                await fetchInstance.put(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.cards}/${id}`, body)
+                await fetchInstance.put(`${import.meta.env.VITE_API_URL}${routing.cards}/${id}`, body)
                 .then(data => {
                     setTimeout(() => toast('success', "Deck Card updated correctly"), 500);
                     setTimeout(() => document.querySelector('#edit-' + id)?.classList.remove('hidden'), 1500);

@@ -90,7 +90,7 @@ const FormLayout = () => {
         }
         
         try {
-            await fetchInstance.put(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}/${id.id}`, body)
+            await fetchInstance.put(`${import.meta.env.VITE_API_URL}${routing.leagues}/${id.id}`, body)
             .then(data => {
                 setTimeout(() => setIsLoading(false), 2000);
                 setTimeout(() => toast('success', "League updated correctly"), 2000);
@@ -102,7 +102,7 @@ const FormLayout = () => {
 
     const getData = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}/${id.id}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.leagues}/${id.id}`)
             .then(data => {
                 setSelectedName(data[0].name)
                 setSelectedFormat(data[0].isLegacy);

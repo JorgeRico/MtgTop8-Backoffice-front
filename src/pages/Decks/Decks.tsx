@@ -19,7 +19,7 @@ const Decks = () => {
         setIsLoading(true);
 
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}?page=${page}&limit=${limit}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.decks}?page=${page}&limit=${limit}`)
             .then(data => {
                  const dataDeck = (data || []).map((item: any) => ({
                     id       : item.id,
@@ -36,7 +36,7 @@ const Decks = () => {
     };
 
     const getNumITems = async() => {
-        const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}/num`);
+        const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.decks}/num`);
         
         setTotalItems(result.count)
     }

@@ -41,7 +41,7 @@ const CreateTournament = () => {
         }
         
         try {
-            await fetchInstance.post(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}`, body)
+            await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.tournaments}`, body)
             .then(data => {
                 setTimeout(() => setIsCreated(true), 2000);
                 setTimeout(() => toast('success', "Tournament created correctly, id: "+data.data[0].id), 2000);
@@ -53,7 +53,7 @@ const CreateTournament = () => {
 
     const apiCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.leagues}`)
             .then(data => {
                 const dataLeague = (data || []).map((item: any) => ({
                     value : item.id,

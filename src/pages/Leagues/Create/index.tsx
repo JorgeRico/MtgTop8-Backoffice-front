@@ -87,7 +87,7 @@ const CreateLeague = () => {
         }
         
         try {
-            await fetchInstance.post(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}`, body)
+            await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.leagues}`, body)
             .then(data => {
                 setTimeout(() => setIsCreated(true), 2000);
                 setTimeout(() => toast('success', "League created correctly, id: " + data.data[0].id), 2000);

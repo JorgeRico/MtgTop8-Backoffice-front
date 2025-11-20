@@ -20,7 +20,7 @@ const Tournaments = () => {
         setIsLoading(true);
 
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}?page=${page ?? 1}&limit=${limit}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.leagues}?page=${page ?? 1}&limit=${limit}`)
             .then(data => {
                 const dataLeague = (data || []).map((item: any) => ({
                     id      : item.id,
@@ -40,7 +40,7 @@ const Tournaments = () => {
     };
 
     const getNumITems = async() => {
-        const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}/num`);
+        const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.leagues}/num`);
         
         setTotalItems(result.count)
     }

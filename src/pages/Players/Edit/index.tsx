@@ -43,7 +43,7 @@ const FormLayout = () => {
         }
                 
         try {
-            await fetchInstance.put(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}/${id.id}`, body)
+            await fetchInstance.put(`${import.meta.env.VITE_API_URL}${routing.players}/${id.id}`, body)
             .then(data => {
                 setTimeout(() => setIsLoading(false), 2000);
                 setTimeout(() => toast('success', "Player updated correctly"), 2000);
@@ -55,7 +55,7 @@ const FormLayout = () => {
          
     const apiTournamentsCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     value : item.id,
@@ -71,7 +71,7 @@ const FormLayout = () => {
 
     const apiGetPlayerCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}/${id.id}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.players}/${id.id}`)
             .then(data => {
                 setSelectedName(data[0].name);
                 setSelectedTournament(data[0].idTournament);
@@ -87,7 +87,7 @@ const FormLayout = () => {
 
     const apiGetDeckCall = async (idDeck: number) => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}/${idDeck}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.decks}/${idDeck}`)
             .then(data => {
                 setSelectedDeckName(data[0].name);
                 setShowData(true);
@@ -99,7 +99,7 @@ const FormLayout = () => {
 
     const getCardsDeck = async (idDeck: number) => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}/${idDeck}/cards`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.decks}/${idDeck}/cards`)
             .then(data => {
                 const card = (data || []).map((item: any) => ({
                     id    : item.id,

@@ -44,7 +44,7 @@ const FormLayout = () => {
         }
         
         try {
-            await fetchInstance.put(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}/${id.id}`, body)
+            await fetchInstance.put(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id.id}`, body)
             .then(data => {
                 setTimeout(() => toast('success', "Tournament updated correctly"), 2000);
                 setTimeout(() => setIsCreated(true), 2000);
@@ -67,7 +67,7 @@ const FormLayout = () => {
 
     const getTournament = async() => {
          try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}/${id.id}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id.id}`)
             .then(data => {
                 setSelectedName(data[0].name)
                 setSelectedLeague(data[0].idLeague);
@@ -83,7 +83,7 @@ const FormLayout = () => {
 
     const apiCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.leagues}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.leagues}`)
             .then(data => {
                 const dataLeague = (data || []).map((item: any) => ({
                     value : item.id,

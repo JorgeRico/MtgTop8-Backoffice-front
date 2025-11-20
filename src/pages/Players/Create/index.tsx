@@ -48,7 +48,7 @@ const CreatePlayer = () => {
         }
 
         try {
-            await fetchInstance.post(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}`, deckOptions)
+            await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.decks}`, deckOptions)
             .then(data => {
                 const body = {
                     'name'         : selectedName,
@@ -66,7 +66,7 @@ const CreatePlayer = () => {
 
     const createPlayer = async (idDeck: number, body: object) => {
         try {
-            await fetchInstance.post(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}`, body)
+            await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.players}`, body)
             .then(data => {
                 updateIdPlayerDeck(idDeck, {'idPlayer' : data.data[0].id})
                 setTimeout(() => setIsCreated(true), 2000);
@@ -79,7 +79,7 @@ const CreatePlayer = () => {
 
     const updateIdPlayerDeck = async (idDeck: number, body: object) => {
         try {
-            await fetchInstance.put(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}/${idDeck}`, body)
+            await fetchInstance.put(`${import.meta.env.VITE_API_URL}${routing.decks}/${idDeck}`, body)
         } catch (error) {
             toast('error', "Failed to add idPlayer to deck");
         }
@@ -87,7 +87,7 @@ const CreatePlayer = () => {
     
     const apiTournamentsCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     value : item.id,

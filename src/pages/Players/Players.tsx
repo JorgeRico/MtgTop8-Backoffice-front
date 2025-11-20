@@ -20,7 +20,7 @@ const Players = () => {
         setIsLoading(true);
 
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}?page=${page}&limit=${limit}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.players}?page=${page}&limit=${limit}`)
             .then(data => {
                 const dataPlayer = (data || []).map((item: any) => ({
                     id           : item.id,
@@ -39,7 +39,7 @@ const Players = () => {
     };
 
     const getNumITems = async() => {
-        const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.players}/num`);
+        const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.players}/num`);
         
         setTotalItems(result.count)
     }

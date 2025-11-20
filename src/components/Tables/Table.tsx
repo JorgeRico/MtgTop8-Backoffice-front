@@ -29,7 +29,7 @@ const Table = ({ header, name, data, endpoint, apiCall, apiNumItemsCall, isLoadi
         document.querySelector('#edit-item-'+id)?.classList.toggle('hidden');
         
         try {
-            await fetchInstance.delete(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}/${endpoint}/${id}`)
+            await fetchInstance.delete(`${import.meta.env.VITE_API_URL}/${endpoint}/${id}`)
             .then(data => {
                 setTimeout(() => toast('success', "Deleted correctly, id: " + id), 1000);
                 setTimeout(() => apiNumItemsCall(), 100);

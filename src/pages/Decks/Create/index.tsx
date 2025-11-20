@@ -42,7 +42,7 @@ const FormLayout = () => {
         }
 
         try {
-            await fetchInstance.post(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.decks}`, body)
+            await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.decks}`, body)
             .then(data => {
                 setTimeout(() => setIsCreated(true), 2000);
                 setTimeout(() => toast('success', "Player created correctly, id: "+data.data[0].id), 2000);
@@ -54,7 +54,7 @@ const FormLayout = () => {
 
     const apiTournamentsCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     value : item.id,
@@ -70,7 +70,7 @@ const FormLayout = () => {
 
     const apiPlayersCall = async (id: number) => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}${routing.tournaments}/${id}/players`)
+            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id}/players`)
             .then(data => {
                 const dataPlayer = (data || []).map((item: any) => ({
                     value : item.id,
