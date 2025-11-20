@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import InputLabelForm from '@/components/Forms/InputLabel';
 
 interface InputProps {
     id                : string;
@@ -21,9 +22,7 @@ const InputForm = ({ id, name, label, placeholder, selectedOption, setSelectedOp
         <>
             <section className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                 <article className="w-full">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                        {label}
-                    </label>
+                    <InputLabelForm label={label}></InputLabelForm>
                     <input
                         type="number"
                         id={id}
