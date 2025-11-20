@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import DefaultLayout from '@/layout/DefaultLayout';
 import DatePicker from '@/components/Forms/DatePicker/DatePicker';
 import Loader from '@/common/LoaderSmall';
@@ -7,7 +7,7 @@ import { routing } from '@/types/routing';
 import { toast } from '@/hooks/toast';
 import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
-import Dropdown from '@/components/Dropdowns/Dropdown';
+import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import TopTitle from '@/components/Forms/Top';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 
@@ -17,11 +17,17 @@ const CreateTournament = () => {
     const [ selectedLeague, setSelectedLeague]              = useState<number | null>(null);
     const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
     const [ leagues, setLeagues ]                           = useState<any[] | null>(null);
+    const [ selectedName ]                                  = useState<string | null>(null);
     const [ selectedNumber, setSelectedNumber ]             = useState<number | null>(null);
     const [ selectedDate, setSelectedDate ]                 = useState<string | null>(null);
     const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
-    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
     const [ isLeagueSelected, setIsLeagueSelected ]         = useState<boolean>(false);
+    // form ids
+    const idName       = useId();
+    const idDate       = useId();
+    const idLeague     = useId();
+    const idNumber     = useId();
+    const idTournament = useId();
 
     const onChangeLeagueSubmit = (event: any) => {
         setIsLeagueSelected(true);
@@ -32,12 +38,15 @@ const CreateTournament = () => {
         event.preventDefault();
         setIsLoading(true);
 
+        // get form values
+        const formDataValues = new FormData(event.target)
+
         const body = {
-            'name'         : selectedName,
-            'date'         : selectedDate,
-            'idLeague'     : selectedLeague,
-            'players'      : selectedNumber,
-            'idTournament' : selectedIdTournament
+            'name'         : formDataValues.get(idName),
+            'date'         : formDataValues.get(idDate),
+            'idLeague'     : Number(formDataValues.get(idLeague)),
+            'players'      : Number(formDataValues.get(idNumber)),
+            'idTournament' : Number(formDataValues.get(idTournament)),
         }
         
         try {
@@ -90,24 +99,20 @@ const CreateTournament = () => {
                             <form onSubmit={onSubmitForm} className="p-6.5">
                                 <InputForm
                                     disabled={false}
-                                    id="name"
-                                    name="name"
+                                    name={idName}
                                     label="Tournament name" 
                                     placeholder="Enter Tournament name"
                                     selectedOption={selectedName}
-                                    setSelectedOption={setSelectedName}
                                 />
                                 <InputNumberForm
-                                    id="idTournament"
-                                    name="idTournament"
+                                    name={idTournament}
                                     label="Id mtgTop8 Tournament" 
                                     placeholder="Enter id tournament from mtgtop8 website"
                                     selectedOption={selectedIdTournament}
                                     setSelectedOption={setSelectedIdTournament}
                                 />
                                 <InputNumberForm
-                                    id="players"
-                                    name="players"
+                                    name={idNumber}
                                     label="Number of players" 
                                     placeholder="Enter number of players"
                                     selectedOption={selectedNumber}
@@ -115,15 +120,19 @@ const CreateTournament = () => {
                                 />
                                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                                     <div className="w-full">
-                                        <DatePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+                                        <DatePicker 
+                                            name={idDate}
+                                            selectedDate={selectedDate} 
+                                            setSelectedDate={setSelectedDate} 
+                                        />
                                     </div>
                                 </div>
                                 {leagues ? (
                                         <Dropdown 
                                             disabled={false}
                                             options={leagues}
-                                            text="Select League"
-                                            name="League"
+                                            label="Select League"
+                                            name={idLeague}
                                             selectedOption={selectedLeague}
                                             isOptionSelected={isLeagueSelected}
                                             onChangeSubmit={onChangeLeagueSubmit}>
