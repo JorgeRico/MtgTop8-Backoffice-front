@@ -5,40 +5,61 @@ import { fetchInstance } from '@/hooks/apiCalls';
 import { toast } from '@/hooks/toast';
 import LoaderSmall from '@/common/LoaderSmall';
 import Loader from '@/common/Loader';
+import { useState, useEffect } from 'react';
+import "./module.css";
 
 interface TableProps {
-    header          : string[]; 
-    name            : string;
-    data            : Record<string, any>[]; 
-    endpoint        : string;
-    apiCall         : Function;
-    apiNumItemsCall : Function;
-    isLoading       : boolean;
+    header         : string[]; 
+    name           : string;
+    data           : Record<string, any>[]; 
+    endpoint       : string;
+    isLoading      : boolean;
+    changeNumItems : Function;
 }
 
-const Table = ({ header, name, data, endpoint, apiCall, apiNumItemsCall, isLoading }: TableProps) => {
+const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: TableProps) => {
+    const [ dataItems, setDataItems ] = useState<Record<string, any>[]>(data);
+
     const editSubmit = (event: any, id: string) => {
         event.preventDefault();
         window.location.href = endpoint + "/edit/" + id;
     }
 
+    const loading = (id: string) => {
+        document.querySelector('#loading-item-'+id)?.classList.remove('hidden');
+        document.querySelector('#edit-item-'+id)?.setAttribute('hidden', 'true');
+        document.querySelector('#delete-item-'+id)?.setAttribute('hidden', 'true');
+    }
+
+    const removeItem = (id: string) => {
+        document.querySelector('#slideSource-'+id)?.classList.toggle('fade');
+        setTimeout(() => toast('success', "Deleted correctly, id: " + id), 1000);
+        setTimeout(() => handleDelete(parseInt(id)), 1000);
+        setTimeout(() => changeNumItems(), 1000);
+    }
+
+    // fake reload list
+    const handleDelete = (id: number) => {
+        setDataItems(dataItems.filter(item => item.id !== id));
+    };
+
     const deleteSubmit = async (event: any, id: string) => {
         event.preventDefault();
-        event.currentTarget.classList.toggle('hidden');
-        document.querySelector('#loading-item-'+id)?.classList.toggle('hidden');
-        document.querySelector('#edit-item-'+id)?.classList.toggle('hidden');
+        loading(id);
         
         try {
             await fetchInstance.delete(`${import.meta.env.VITE_API_URL}/${endpoint}/${id}`)
             .then(data => {
-                setTimeout(() => toast('success', "Deleted correctly, id: " + id), 1000);
-                setTimeout(() => apiNumItemsCall(), 100);
-                setTimeout(() => apiCall(), 1500);
+                removeItem(id);
             })
         } catch (error) {
             toast('error', "Failed to delete Deck and Player");
         }
     }
+
+    useEffect(() => {
+        setDataItems(data);
+    }, [data]);
 
     return (
         <>
@@ -68,8 +89,8 @@ const Table = ({ header, name, data, endpoint, apiCall, apiNumItemsCall, isLoadi
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.map((item) => (
-                                    <tr key={uuidv4()}>
+                                {dataItems.map((item) => (
+                                    <tr key={uuidv4()} id={`slideSource-${item.id}`} className="slideSource">
                                         {Object.entries(item).map(([key, value]) => (
                                             <td key={uuidv4()} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                                 <p className={`text-black dark:text-white ${key}`}>
@@ -79,7 +100,7 @@ const Table = ({ header, name, data, endpoint, apiCall, apiNumItemsCall, isLoadi
                                         ))}
                                     
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <div className="flex items-center space-x-3.5">
+                                            <div className="flex items-center space-x-3.5" >
                                                 <div className="loading hidden" id={`loading-item-${item.id}`}>
                                                     <LoaderSmall></LoaderSmall>
                                                 </div>

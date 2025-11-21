@@ -4,12 +4,12 @@ import Loader from '@/common/LoaderSmall';
 import { paginationHelpers } from '@/hooks/pagination';
 
 interface PaginationProps {
-    totalItems : number;
-    limit      : number;
-    apiCall    : Function;
+    totalItems   : number;
+    limit        : number;
+    onChangePage : Function;
 }
 
-const TablePagination = ({totalItems, limit, apiCall}: PaginationProps) => {
+const TablePagination = ({ totalItems, limit, onChangePage }: PaginationProps) => {
     const [ currentPage, setCurrentPage ]              = useState<number>(1);
     const [ isFirstLoad, setIsFirstLoad ]              = useState<boolean>(false);
     const [ paginationIsLoaded, sePaginationIsLoaded ] = useState<boolean>(false);
@@ -24,29 +24,28 @@ const TablePagination = ({totalItems, limit, apiCall}: PaginationProps) => {
     // pagination button status
     const isFirstPage = currentPage === 1;
     const isLastPage  = currentPage === totalPages;
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        onChangePage(page);
+    }
     
     const onClickPrevious = (event: any) => {
         event.preventDefault();
-
         let page = currentPage - 1;
-        setCurrentPage(page);
-        apiCall(page);
+        handlePageChange(page);
     }
 
     const onClickNext = (event: any) => {
         event.preventDefault();
-
         let page = currentPage + 1;
-        setCurrentPage(page);
-        apiCall(page);
+        handlePageChange(page);
     }
 
     const onClickPage = (event: any) => {
         event.preventDefault();
         let page = parseInt(event.target.value);
-
-        setCurrentPage(page);   
-        apiCall(page);
+        handlePageChange(page);   
     }
 
     useEffect(() => {
