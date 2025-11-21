@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import DefaultLayout from '@/layout/DefaultLayout';
 import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
 import { routing } from '@/types/routing';
 import { toast } from '@/hooks/toast';
-import Dropdown from '@/components/Dropdowns/Dropdown';
+import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
 import TopTitle from "@/components/Forms/Top";
@@ -25,6 +25,11 @@ const FormLayout = () => {
     const id                                                = useParams();
     const [ cards, setCards ]                               = useState<any[]>([]);
     const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
+    // form ids
+    const idPosition   = useId();
+    const idTournament = useId();
+    const idDeck       = useId();
+    const idName       = useId();
 
     const onChangeTournamentSubmit = (event: any) => {
         setIsTournamentSelected(true);
@@ -35,11 +40,13 @@ const FormLayout = () => {
         event.preventDefault();
         setIsLoading(true);
 
+        const formDataValues = new FormData(event.target)
+
         const body = {
-            'name'         : selectedName,
-            'position'     : selectedPosition,
-            'idTournament' : selectedTournament,
-            'idDeck'       : selectedIdDeck
+            'name'         : formDataValues.get(idName),
+            'position'     : formDataValues.get(idPosition),
+            'idTournament' : formDataValues.get(idTournament),
+            'idDeck'       : formDataValues.get(idDeck),
         }
                 
         try {
@@ -141,16 +148,13 @@ const FormLayout = () => {
                                     <>
                                         <InputForm
                                             disabled={false}
-                                            id="name"
-                                            name="name"
+                                            name={idName}
                                             label="Player name" 
                                             placeholder="Enter player name"
                                             selectedOption={selectedName}
-                                            setSelectedOption={setSelectedName}
                                         />
                                         <InputNumberForm
-                                            id="position"
-                                            name="position"
+                                            name={idPosition}
                                             label="Position" 
                                             placeholder="Enter player position"
                                             selectedOption={selectedPosition}
@@ -160,8 +164,8 @@ const FormLayout = () => {
                                                 <Dropdown 
                                                     disabled={true}
                                                     options={tournaments}
-                                                    text="Select Tournament"
-                                                    name="Tournament"
+                                                    label="Select Tournament"
+                                                    name={idTournament}
                                                     selectedOption={selectedTournament}
                                                     isOptionSelected={isTournamentSelected}
                                                     onChangeSubmit={onChangeTournamentSubmit}>
@@ -172,12 +176,10 @@ const FormLayout = () => {
                                         }
                                         <InputForm
                                             disabled={true}
-                                            id="deckName"
-                                            name="deckName"
+                                            name={idDeck}
                                             label="Deck name" 
                                             placeholder="Enter deck name"
                                             selectedOption={selectedDeckName}
-                                            setSelectedOption={setSelectedDeckName}
                                         />
                                         {!isLoading ? (
                                             <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">

@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import DefaultLayout from '@/layout/DefaultLayout';
 import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
 import { routing } from '@/types/routing';
 import { toast } from '@/hooks/toast';
-import Dropdown from '@/components/Dropdowns/Dropdown';
+import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
 import TopTitle from "@/components/Forms/Top";
@@ -16,10 +16,15 @@ const CreatePlayer = () => {
     const [ selectedTournament, setSelectedTournament ]     = useState<number | null>(null);
     const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
     const [ tournaments, setTournaments ]                   = useState<any[] | null>(null);
-    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
-    const [ selectedDeckName, setSelectedDeckName ]         = useState<string | null>(null);
+    const [ selectedName ]                                  = useState<string | null>(null);
+    const [ selectedDeckName ]                              = useState<string | null>(null);
     const [ selectedPosition, setSelectedPosition ]         = useState<number | null>(null);
     const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
+    // form ids
+    const idPosition   = useId();
+    const idTournament = useId();
+    const idDeck       = useId();
+    const idName       = useId();
 
     const onChangeTournamentSubmit = (event: any) => {
         setIsTournamentSelected(true);
@@ -30,30 +35,20 @@ const CreatePlayer = () => {
         event.preventDefault();
         setIsLoading(true);
 
-        const tournamentPosition = selectedPosition;
+        // get form values
+        const formDataValues = new FormData(event.target)
 
-        if (selectedTournament == null) {
-            toast('error', "idTournament is not selected");
-            return ''
-        }
-
-        if (tournamentPosition == null) {
-            toast('error', "Position is not selected");
-            return ''
-        }
-
-        // create deck
         const deckOptions = {
-            'name' : selectedDeckName
+            'name' : formDataValues.get(idName)
         }
 
         try {
             await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.decks}`, deckOptions)
             .then(data => {
                 const body = {
-                    'name'         : selectedName,
-                    'position'     : tournamentPosition,
-                    'idTournament' : selectedTournament,
+                    'name'         : formDataValues.get(idName),
+                    'position'     : formDataValues.get(idPosition),
+                    'idTournament' : formDataValues.get(idTournament),
                     'idDeck'       : parseInt(data.data[0].id)
                 }
 
@@ -125,16 +120,13 @@ const CreatePlayer = () => {
                             <form onSubmit={onSubmitForm} className="p-6.5">
                                 <InputForm
                                     disabled={false}
-                                    id="name"
-                                    name="name"
+                                    name={idName}
                                     label="Player name" 
                                     placeholder="Enter player name"
                                     selectedOption={selectedName}
-                                    setSelectedOption={setSelectedName}
                                 />
                                 <InputNumberForm
-                                    id="position"
-                                    name="position"
+                                    name={idPosition}
                                     label="Position" 
                                     placeholder="Enter player position"
                                     selectedOption={selectedPosition}
@@ -144,8 +136,8 @@ const CreatePlayer = () => {
                                         <Dropdown 
                                             disabled={false}
                                             options={tournaments}
-                                            text="Select Tournament"
-                                            name="Tournament"
+                                            label="Select Tournament"
+                                            name={idTournament}
                                             selectedOption={selectedTournament}
                                             isOptionSelected={isTournamentSelected}
                                             onChangeSubmit={onChangeTournamentSubmit}>
@@ -156,12 +148,10 @@ const CreatePlayer = () => {
                                 }
                                 <InputForm
                                     disabled={false}
-                                    id="deckName"
-                                    name="deckName"
+                                    name={idDeck}
                                     label="Deck name" 
                                     placeholder="Enter deck name"
                                     selectedOption={selectedDeckName}
-                                    setSelectedOption={setSelectedDeckName}
                                 />
                                 {(!isLoading && !isCreated) &&
                                     <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
