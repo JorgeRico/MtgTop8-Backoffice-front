@@ -1,5 +1,5 @@
 import DefaultLayout from '@/layout/DefaultLayout';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useId } from 'react';
 import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
 import { routing } from '@/types/routing';
@@ -7,20 +7,20 @@ import { toast } from '@/hooks/toast';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
-import DropdownText from '@/components/Dropdowns/DropdownText';
+import DropdownText from '@/components/Dropdowns/Dropdown/Text';
 import TopTitle from '@/components/Forms/Top';
 import { cardTypes } from "@/types/cardTypes";
-import Dropdown from '@/components/Dropdowns/Dropdown';
+import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 
 const FormLayout = () => {
     const [ isCreated, setIsCreated ]                       = useState<boolean>(false);
     const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
-    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
+    const [ selectedName ]                                  = useState<string | null>(null);
     const [ selectedNum, setSelectedNum ]                   = useState<number | null>(null);
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
     const [ selectedBoard, setSelectedBoard ]               = useState<string>('');
     const [ selectedCardType, setSelectedCardType ]         = useState<string>('');
-    const [ selectedImgUrl, setSelectedImgUrl ]             = useState<string | null>(null);
+    const [ selectedImgUrl  ]                               = useState<string | null>(null);
     const [ tournaments, setTournaments ]                   = useState<any[] | null>(null);
     const [ selectedTournament, setSelectedTournament ]     = useState<number | null>(null);
     const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
@@ -29,6 +29,14 @@ const FormLayout = () => {
     const [ decks, setDecks ]                               = useState<any[] | null>(null);
     const [ selectedDeck, setSelectedDeck ]                 = useState<number | null>(null);
     const [ isDeckSelected, setIsDeckSelected ]             = useState<boolean>(false);
+    // form ids
+    const idName       = useId();
+    const idNum        = useId();
+    const idTournament = useId();
+    const idImgUrl     = useId();
+    const idDeck       = useId();
+    const idBoard      = useId();
+    const idCardType   = useId();
     
     const onChangeDeckSubmit = (event: any) => {
         setIsDeckSelected(true);
@@ -55,13 +63,16 @@ const FormLayout = () => {
         event.preventDefault();
         setIsLoading(true);
 
+        // get form values
+        const formDataValues = new FormData(event.target)
+
         const body = {
-            'name'     : selectedName,
-            'num'      : selectedNum,
-            'board'    : selectedBoard,
-            'cardType' : selectedCardType,
-            'idDeck'   : selectedDeck,
-            'imgUrl'   : selectedImgUrl
+            'name'     : formDataValues.get(idName),
+            'num'      : formDataValues.get(idNum),
+            'board'    : formDataValues.get(idBoard),
+            'cardType' : formDataValues.get(idCardType),
+            'idDeck'   : formDataValues.get(idDeck),
+            'imgUrl'   : formDataValues.get(idImgUrl)
         }
 
         try {
@@ -135,16 +146,13 @@ const FormLayout = () => {
                             <form onSubmit={onSubmitForm} className="p-6.5">
                                 <InputForm
                                     disabled={false}
-                                    id="name"
-                                    name="name"
+                                    name={idName}
                                     label="Card name" 
                                     placeholder="Enter card name"
                                     selectedOption={selectedName}
-                                    setSelectedOption={setSelectedName}
                                 />
                                 <InputNumberForm
-                                    id="num"
-                                    name="num"
+                                    name={idNum}
                                     label="Num cards" 
                                     placeholder="Enter num card"
                                     selectedOption={selectedNum}
@@ -154,8 +162,8 @@ const FormLayout = () => {
                                         <Dropdown
                                             disabled={false}
                                             options={tournaments}
-                                            text="Select Tournament"
-                                            name="Tournament"
+                                            label="Select Tournament"
+                                            name={idTournament}
                                             selectedOption={selectedTournament}
                                             isOptionSelected={isTournamentSelected}
                                             onChangeSubmit={onChangeTournamentSubmit}>
@@ -168,8 +176,8 @@ const FormLayout = () => {
                                     <Dropdown
                                         disabled={false}
                                         options={decks}
-                                        text="Select Deck"
-                                        name="Deck"
+                                        label="Select Deck"
+                                        name={idDeck}
                                         selectedOption={selectedDeck}
                                         isOptionSelected={isDeckSelected}
                                         onChangeSubmit={onChangeDeckSubmit}>
@@ -177,25 +185,25 @@ const FormLayout = () => {
                                 }
                                 <InputForm
                                     disabled={false}
-                                    id="imgUrl"
-                                    name="imgUrl"
+                                    name={idImgUrl}
                                     label="ImgUrl" 
                                     placeholder="Enter image url"
                                     selectedOption={selectedImgUrl}
-                                    setSelectedOption={setSelectedImgUrl}
                                 />
                                 <DropdownText 
+                                    disabled={false}
                                     options={[
                                         { value: cardTypes.MD, key: cardTypes.MD },
                                         { value: cardTypes.SB, key: cardTypes.SB }
                                     ]}
-                                    text="Select deck option"
-                                    name="board"
+                                    label="Select deck option"
+                                    name={idBoard}
                                     selectedOption={selectedBoard}
                                     isOptionSelected={isBoardSelected}
                                     onChangeSubmit={onChangeBoardSubmit}>
                                 </DropdownText>  
                                 <DropdownText 
+                                    disabled={false}
                                     options={[
                                         { value: cardTypes.CREATURE,     key: cardTypes.CREATURE },
                                         { value: cardTypes.INSTANT,      key: cardTypes.INSTANT },
@@ -205,8 +213,8 @@ const FormLayout = () => {
                                         { value: cardTypes.LAND,         key: cardTypes.LAND },
                                         { value: cardTypes.PLANESWALKER, key: cardTypes.PLANESWALKER },
                                     ]}
-                                    text="Select Card Type"
-                                    name="cardType"
+                                    label="Select Card Type"
+                                    name={idCardType}
                                     selectedOption={selectedCardType}
                                     isOptionSelected={isCardTypeSelected}
                                     onChangeSubmit={onChangeCardTypeSubmit}>
