@@ -70,7 +70,7 @@ const FormLayout = () => {
 
         let day         = splitValues[0];
         let month       = splitValues[1]
-        let year        = splitValues[2].substr(splitValues[2].length - 2)
+        let year        = splitValues[2].slice(-2)
 
         return new Date(month + '/' + day + '/' + year).toUTCString();
     }
