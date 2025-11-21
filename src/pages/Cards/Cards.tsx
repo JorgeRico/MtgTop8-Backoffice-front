@@ -7,13 +7,12 @@ import TableComponent from '@/components/Tables/TableComponent';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 
 const Decks = () => {
-    const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);
-    const [ cards, setCards ]             = useState<any[] | null>(null);
-    const [ headerItem ]                  = useState<string[]>([ 'id', 'name', 'idDeck' ]);
-    const [ page ]                        = useState<number>(1);
-    const [ limit ]                       = useState<number>(2500);
-    const [ isLoading, setIsLoading ]     = useState<boolean>(false);
-    const [ totalItems, setTotalItems]    = useState<number>(0);
+    const [ cards, setCards ]          = useState<any[] | null>(null);
+    const [ headerItem ]               = useState<string[]>([ 'id', 'name', 'idDeck' ]);
+    const [ currentPage ]              = useState<number>(1);
+    const [ limit ]                    = useState<number>(2500);
+    const [ isLoading, setIsLoading ]  = useState<boolean>(false);
+    const [ totalItems, setTotalItems] = useState<number>(0);
 
     const apiCall = async (page: number) => {
         setIsLoading(true);
@@ -37,16 +36,18 @@ const Decks = () => {
 
     const getNumITems = async() => {
         const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.cards}/num`);
-        
         setTotalItems(result.count)
     }
 
+    const onChangePage = (currentPage: number) => {
+        apiCall(currentPage);
+        getNumITems();
+    }
+
     useEffect(() => {
-        if (isFirstLoad == false) {
-            apiCall(page);
-            setIsFirstLoad(true);
-        }
-    }, [isFirstLoad]);
+        apiCall(currentPage);
+        getNumITems();
+    }, []);
 
     return (
         <>
@@ -57,15 +58,14 @@ const Decks = () => {
                         text="Add new Card">
                     </CreateButton>
                     <TableComponent
-                        header          = {headerItem} 
-                        data            = {cards ? cards : []}
-                        name            = "Cards"
-                        endpoint        = {endpoints.cards}
-                        apiCall         = {apiCall}
-                        isLoading       = {isLoading}
-                        limit           = {limit}
-                        apiNumItemsCall = {getNumITems}
-                        totalItems      = {totalItems}
+                        header       = {headerItem} 
+                        data         = {cards ? cards : []}
+                        name         = "Cards"
+                        endpoint     = {endpoints.cards}
+                        onChangePage = {onChangePage}
+                        isLoading    = {isLoading}
+                        limit        = {limit}
+                        totalItems   = {totalItems}
                     ></TableComponent>
                 </div>
             </DefaultLayout>

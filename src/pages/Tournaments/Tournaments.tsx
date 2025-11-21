@@ -8,13 +8,12 @@ import { toast } from '@/hooks/toast';
 import TableComponent from '@/components/Tables/TableComponent';
 
 const Tournaments = () => {
-    const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);
     const [ tournaments, setTournaments ] = useState<any[] | null>(null);
     const [ headerItem ]                  = useState<string[]>([ 'id', 'name', 'date', 'players' ]);
-    const [ page ]                        = useState<number>(1);
+    const [ currentPage ]                 = useState<number>(1);
     const [ limit ]                       = useState<number>(10);
     const [ isLoading, setIsLoading ]     = useState<boolean>(false);
-    const [ totalItems, setTotalItems ]   = useState<number>(1);
+    const [ totalItems, setTotalItems]    = useState<number>(0);
 
     const apiCall = async (page: number) => {
         setIsLoading(true);
@@ -38,16 +37,18 @@ const Tournaments = () => {
 
     const getNumITems = async() => {
         const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/num`);
-        
-        setTotalItems(result.count);
+        setTotalItems(result.count)
+    }
+
+    const onChangePage = (currentPage: number) => {
+        apiCall(currentPage);
+        getNumITems();
     }
 
     useEffect(() => {
-        if (isFirstLoad == false) {
-            apiCall(page);
-            setIsFirstLoad(true);
-        }
-    }, [isFirstLoad]);
+        apiCall(currentPage);
+        getNumITems();
+    }, []);
 
     return (
         <>
@@ -58,15 +59,14 @@ const Tournaments = () => {
                         text="Add new Tournament">
                     </CreateButton>
                     <TableComponent
-                        header          = {headerItem} 
-                        data            = {tournaments ? tournaments : []}
-                        name            = "Tournaments"
-                        endpoint        = {endpoints.tournaments}
-                        apiCall         = {apiCall}
-                        isLoading       = {isLoading}
-                        limit           = {limit}
-                        apiNumItemsCall = {getNumITems}
-                        totalItems      = {totalItems}
+                        header       = {headerItem} 
+                        data         = {tournaments ? tournaments : []}
+                        name         = "Tournaments"
+                        endpoint     = {endpoints.tournaments}
+                        onChangePage = {onChangePage}
+                        isLoading    = {isLoading}
+                        limit        = {limit}
+                        totalItems   = {totalItems}
                     ></TableComponent>
                 </div>
             </DefaultLayout>
