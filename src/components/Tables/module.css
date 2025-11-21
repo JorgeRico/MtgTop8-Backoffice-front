@@ -1,0 +1,8 @@
+.slideSource {
+    opacity: 1;
+    transition: opacity 2s; 
+}
+
+.slideSource.fade {
+    opacity: 0;
+}
