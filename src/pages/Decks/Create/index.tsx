@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import DefaultLayout from '@/layout/DefaultLayout';
 import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
@@ -7,12 +7,12 @@ import { toast } from '@/hooks/toast';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import InputForm from '@/components/Forms/InputForm';
 import TopTitle from "@/components/Forms/Top";
-import Dropdown from '@/components/Dropdowns/Dropdown';
+import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 
 const FormLayout = () => {
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
     const [ isCreated, setIsCreated ]                       = useState<boolean>(false);
-    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
+    const [ selectedName ]                                  = useState<string | null>(null);
     const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
     const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
     const [ selectedTournament, setSelectedTournament]      = useState<number | null>(null);
@@ -20,6 +20,10 @@ const FormLayout = () => {
     const [ isPlayerSelected, setIsPlayerSelected ]         = useState<boolean>(false);
     const [ selectedPlayer, setSelectedPlayer]              = useState<number | null>(null);
     const [ players, setPlayers ]                           = useState<any[] | null>(null);
+    // form ids
+    const idPlayer     = useId();
+    const idTournament = useId();
+    const idName       = useId();
 
     const onChangeTournamentSubmit = (event: any) => {
         setIsTournamentSelected(true);
@@ -36,9 +40,12 @@ const FormLayout = () => {
         event.preventDefault();
         setIsLoading(true);
 
+        // get form values
+        const formDataValues = new FormData(event.target)
+
         const body = {
-            'name'     : selectedName,
-            'idPlayer' : selectedPlayer
+            'name'     : formDataValues.get(idName),
+            'isPlayer' : Number(formDataValues.get(idPlayer))
         }
 
         try {
@@ -107,19 +114,17 @@ const FormLayout = () => {
                             <form onSubmit={onSubmitForm} className="p-6.5">
                                 <InputForm
                                     disabled={false}
-                                    id="name"
-                                    name="name"
+                                    name={idName}
                                     label="Deck name" 
                                     placeholder="Enter Deck name"
                                     selectedOption={selectedName}
-                                    setSelectedOption={setSelectedName}
                                 />
                                 {tournaments ? (
                                         <Dropdown 
                                             disabled={false}
                                             options={tournaments}
-                                            text="Select Tournament"
-                                            name="Tournament"
+                                            label="Select Tournament"
+                                            name={idTournament}
                                             selectedOption={selectedTournament}
                                             isOptionSelected={isTournamentSelected}
                                             onChangeSubmit={onChangeTournamentSubmit}>
@@ -132,8 +137,8 @@ const FormLayout = () => {
                                     <Dropdown 
                                         disabled={false}
                                         options={players}
-                                        text="Select Player"
-                                        name="Player"
+                                        label="Select Player"
+                                        name={idPlayer}
                                         selectedOption={selectedPlayer}
                                         isOptionSelected={isPlayerSelected}
                                         onChangeSubmit={onChangePlayerSubmit}>
