@@ -67,10 +67,10 @@ const FormLayout = () => {
 
         const body = {
             'name'     : formDataValues.get(idName),
-            'num'      : formDataValues.get(idNum),
+            'num'      : Number(formDataValues.get(idNum)),
             'board'    : formDataValues.get(idBoard),
             'cardType' : formDataValues.get(idCardType),
-            'idDeck'   : formDataValues.get(idDeck),
+            'idDeck'   : Number(formDataValues.get(idDeck)),
             'imgUrl'   : formDataValues.get(idImgUrl)
         }
 

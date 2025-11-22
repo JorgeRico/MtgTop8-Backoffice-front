@@ -42,11 +42,11 @@ const TableComponent = ({ header, name, data, endpoint, onChangePage, isLoading,
                         isLoading      = {isLoading}
                         changeNumItems = {changeNumItems}
                     />
-                    <TablePagination
+                    {/* <TablePagination
                         totalItems     = {numItems}
                         limit          = {limit}
                         onChangePage   = {onChangePage}
-                    />
+                    /> */}
                 </>
             ) : (
                 <Loader />  

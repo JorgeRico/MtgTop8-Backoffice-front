@@ -43,10 +43,11 @@ const FormLayout = () => {
 
         const body = {
             'name'         : formDataValues.get(idName),
-            'position'     : formDataValues.get(idPosition),
-            'idTournament' : formDataValues.get(idTournament),
-            'idDeck'       : formDataValues.get(idDeck),
+            'position'     : Number(formDataValues.get(idPosition)),
+            'idTournament' : Number(selectedTournament),
+            'idDeck'       : Number(selectedIdDeck)
         }
+        console.log(body)
                 
         try {
             await fetchInstance.put(`${import.meta.env.VITE_API_URL}${routing.players}/${id.id}`, body)

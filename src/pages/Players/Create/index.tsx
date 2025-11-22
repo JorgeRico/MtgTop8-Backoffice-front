@@ -46,9 +46,9 @@ const CreatePlayer = () => {
             .then(data => {
                 const body = {
                     'name'         : formDataValues.get(idName),
-                    'position'     : formDataValues.get(idPosition),
-                    'idTournament' : formDataValues.get(idTournament),
-                    'idDeck'       : parseInt(data.data[0].id)
+                    'position'     : Number(formDataValues.get(idPosition)),
+                    'idTournament' : Number(formDataValues.get(idTournament)),
+                    'idDeck'       : Number(data.data[0].id)
                 }
 
                 createPlayer(parseInt(data.data[0].id), body);

@@ -18,12 +18,14 @@ const CreateTournament = () => {
     const [ leagues, setLeagues ]                           = useState<any[] | null>(null);
     const [ selectedName ]                                  = useState<string | null>(null);
     const [ selectedNumber, setSelectedNumber ]             = useState<number | null>(null);
-    const [ selectedDate, setSelectedDate ]                 = useState<string | null>(null);
+    const [ selectedDate, setSelectedDate ]                 = useState<string>('');
     const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
     const [ isLeagueSelected, setIsLeagueSelected ]         = useState<boolean>(false);
     // form ids
     const idName       = useId();
-    const idDate       = useId();
+    const idDay        = useId();
+    const idMonth      = useId();
+    const idYear       = useId();
     const idLeague     = useId();
     const idNumber     = useId();
     const idTournament = useId();
@@ -32,6 +34,10 @@ const CreateTournament = () => {
         setIsLeagueSelected(true);
         setSelectedLeague(parseInt(event));
     };
+
+    function getDateConverted(day: string, month: string, year: string) {
+        return day + '/' + month + '/' + year;
+    }
 
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -42,7 +48,7 @@ const CreateTournament = () => {
 
         const body = {
             'name'         : formDataValues.get(idName),
-            'date'         : formDataValues.get(idDate),
+            'date'         : getDateConverted(formDataValues.get(idDay) as string ?? '' , formDataValues.get(idMonth) as string ?? '', formDataValues.get(idYear) as string ?? ''),
             'idLeague'     : Number(formDataValues.get(idLeague)),
             'players'      : Number(formDataValues.get(idNumber)),
             'idTournament' : Number(formDataValues.get(idTournament)),
@@ -117,9 +123,12 @@ const CreateTournament = () => {
                                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                                     <div className="w-full">
                                         <DatePicker 
-                                            name={idDate}
+                                            idDay={idDay}
+                                            idMonth={idMonth}
+                                            idYear={idYear}
+                                            label="Tournament date (DD/MM/YY)"
                                             selectedDate={selectedDate} 
-                                            setSelectedDate={setSelectedDate} 
+                                            disabled={false}
                                         />
                                     </div>
                                 </div>

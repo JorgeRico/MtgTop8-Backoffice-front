@@ -19,7 +19,7 @@ const FormLayout = () => {
     const [ leagues, setLeagues ]                           = useState<any[] | null>(null);
     const [ selectedNumber, setSelectedNumber ]             = useState<number | null>(null);
     const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
-    const [ selectedDate, setSelectedDate ]                 = useState<string | null>(null);
+    const [ selectedDate, setSelectedDate ]                 = useState<string>('');
     const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
     const id                                                = useParams();
     const [ showData, setShowData ]                         = useState<boolean>(false);
@@ -27,7 +27,9 @@ const FormLayout = () => {
 
     // form ids
     const idName       = useId();
-    const idDate       = useId();
+    const idDay        = useId();
+    const idMonth      = useId();
+    const idYear       = useId();
     const idLeague     = useId();
     const idNumber     = useId();
     const idTournament = useId();
@@ -36,6 +38,10 @@ const FormLayout = () => {
         setIsLeagueSelected(true);
         setSelectedLeague(parseInt(event));
     };
+
+    function getDateConverted(day: string, month: string, year: string) {
+        return day + '/' + month + '/' + year;
+    }
 
     const onSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -46,7 +52,7 @@ const FormLayout = () => {
 
         const body = {
             'name'         : formDataValues.get(idName),
-            'date'         : formDataValues.get(idDate),
+            'date'         : getDateConverted(formDataValues.get(idDay) as string ?? '' , formDataValues.get(idMonth) as string ?? '', formDataValues.get(idYear) as string ?? ''),
             'idLeague'     : Number(formDataValues.get(idLeague)),
             'players'      : Number(formDataValues.get(idNumber)),
             'idTournament' : Number(formDataValues.get(idTournament)),
@@ -64,16 +70,6 @@ const FormLayout = () => {
         }
     };
 
-    function getDateConverted(dateValue: string) {
-        let splitValues = dateValue.split('/');
-
-        let day         = splitValues[0];
-        let month       = splitValues[1]
-        let year        = splitValues[2].slice(-2)
-
-        return new Date(month + '/' + day + '/' + year).toUTCString();
-    }
-
     const getTournament = async() => {
          try {
             await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id.id}`)
@@ -81,7 +77,7 @@ const FormLayout = () => {
                 setSelectedName(data[0].name)
                 setSelectedLeague(data[0].idLeague);
                 setSelectedIdTournament(data[0].idTournament);
-                setSelectedDate(getDateConverted(data[0].date));
+                setSelectedDate(data[0].date);
                 setSelectedNumber(data[0].players);
                 setShowData(true);
             })
@@ -145,15 +141,20 @@ const FormLayout = () => {
                                                 selectedOption={selectedNumber}
                                                 setSelectedOption={setSelectedNumber}
                                             />
-                                            <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                                                <div className="w-full">
-                                                    <DatePicker 
-                                                        name={idDate} 
-                                                        selectedDate={selectedDate} 
-                                                        setSelectedDate={setSelectedDate} 
-                                                    />
+                                            {selectedDate != '' &&
+                                                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                                                    <div className="w-full">
+                                                        <DatePicker 
+                                                            idDay={idDay}
+                                                            idMonth={idMonth}
+                                                            idYear={idYear}
+                                                            label="Tournament date (DD/MM/YY)"
+                                                            selectedDate={selectedDate} 
+                                                            disabled={false}
+                                                        />
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            }
                                             {leagues ? (
                                                     <Dropdown 
                                                         disabled={false}

@@ -1,54 +1,94 @@
-import flatpickr from 'flatpickr';
-import { useEffect } from 'react';
-import DatePicker from '../../Icons/DatePicker';
-import Flatpickr from "react-flatpickr";
 import InputLabelForm from '@/components/Forms/InputLabel';
+import { useEffect, useState } from 'react';
+import Dropdown from '@/components/Dropdowns/Dropdown/DatePicker';
+import InputDatePickerForm from '@/components/Forms/InputNumberForm/DatePicker';
 
 interface DatePickerProps {
-    name            : string;
-    selectedDate    : string | null;
-    setSelectedDate : Function;
+    selectedDate : string;
+    disabled     : boolean;
+    label        : string;
+    idDay        : string;
+    idMonth      : string;
+    idYear       : string;
 }
 
-const DatePickerOne = ({ name, selectedDate, setSelectedDate}: DatePickerProps) => {
-    useEffect(() => {
-        // Init flatpickr
-        flatpickr('.form-datepicker', {
-            mode              : 'single',
-            static            : false,
-            monthSelectorType : 'static',
-            dateFormat        : 'M j, Y',
-            prevArrow         : '<svg className="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-            nextArrow         : '<svg className="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-        });        
-    }, []);
+const DatePickerOne = ({ idDay, idMonth, idYear, label, selectedDate, disabled}: DatePickerProps) => {
+    const [ day, setDay ]                         = useState<number | null>(null);
+    const [ month, setMonth ]                     = useState<number | null>(null);
+    const [ year, setYear ]                       = useState<number | null>(null);
+    const [ isMonthSelected, setIsMonthSelected ] = useState<boolean>(false);
 
-    const onHandleChange = (event: any) => {
-        setSelectedDate(new Date(event).toISOString());
+    const months = [
+        {  value : 1, key: "January (1)" },
+        {  value : 2, key: "Feabruary (2)" },
+        {  value : 3, key: "March (3)" },
+        {  value : 4, key: "April (4)" },
+        {  value : 5, key: "May (5)" },
+        {  value : 6, key: "June (6)" },
+        {  value : 7, key: "July (7)" },
+        {  value : 8, key: "August (8)" },
+        {  value : 9, key: "September (9)" },
+        {  value : 10, key: "Octobrer (10)" },
+        {  value : 11, key: "November (11)" },
+        {  value : 12, key: "December (12)" }
+    ]
+
+    function splitSelectedDate(dateValue: string) {
+        let splitValues = dateValue.split('/');
+
+        setDay(parseInt(splitValues[0]));
+        setMonth(parseInt(splitValues[1]));
+        setYear(parseInt(splitValues[2]));
     }
 
+    const onChangeMonthSubmit = (event: any) => {
+        setIsMonthSelected(true);
+        setMonth(parseInt(event));
+    }
+
+     useEffect(() => {
+        if (selectedDate != '') {
+            splitSelectedDate(selectedDate);
+        }
+    }, []);
+
     return (
-        <section>
-            <InputLabelForm label="Select Date"></InputLabelForm>
-            <div className="relative">
-                <Flatpickr
-                    className="form-datepicker w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    placeholder="dd/mm/yy"
-                    data-class="flatpickr-right"
-                    name={name}
-                    options={{
-                        altInput: true, 
-                        altFormat: "M j, Y",
-                        dateFormat: "M j, Y",
-                    }}
-                    defaultValue={selectedDate ??  ''}
-                    onChange={(event)=>onHandleChange(event)}
-                />
-                <div className="pointer-events-none absolute inset-0 left-auto right-5 flex items-center">
-                   <DatePicker></DatePicker>
-                </div>
-            </div>
-        </section>
+        <>
+            <section className="mb-2.5 flex flex-row items-center gap-6">
+                <InputLabelForm label={label}></InputLabelForm>
+            </section>
+            <section className="mb-4.5 flex flex-row items-center gap-6">
+                {day &&
+                    <InputDatePickerForm
+                        disabled={disabled}
+                        name={idDay}
+                        placeholder="DD"
+                        selectedOption={day}
+                        setSelectedOption={setDay}
+                    />
+                }
+                {months &&
+                    <Dropdown 
+                        disabled={disabled}
+                        options={months ?? []}
+                        label="-"
+                        name={idMonth}
+                        selectedOption={month}
+                        isOptionSelected={isMonthSelected}
+                        onChangeSubmit={onChangeMonthSubmit}>
+                    </Dropdown>
+                }
+                {year &&
+                    <InputDatePickerForm
+                        disabled={disabled}
+                        name={idYear}
+                        placeholder="YY"
+                        selectedOption={year}
+                        setSelectedOption={setDay}
+                    />
+                }
+            </section>    
+        </>
     );
 };
 
