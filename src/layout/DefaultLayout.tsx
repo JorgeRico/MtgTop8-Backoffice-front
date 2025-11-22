@@ -10,22 +10,18 @@ interface InputProps {
 const DefaultLayout = ({ children }: InputProps) => {
     const [ sidebarOpen, setSidebarOpen ] = useState<boolean>(false);
     const [ isLogued, setIsLogued ]       = useState<boolean>(false);
-    const [ isFirstLoad, setIsFirstLoad ] = useState<boolean>(false);
 
     const logout = () => {
         window.location.href = '/';
     }
 
     useEffect(() => {
-        if (isFirstLoad == false) {
-            if (Cookies.get('authToken') !== undefined) {
-                setIsLogued(true);
-            } else {
-                logout();
-            }
-            setIsFirstLoad(true);
+        if (Cookies.get('authToken') !== undefined) {
+            setIsLogued(true);
+        } else {
+            logout();
         }
-    }, [isFirstLoad == true]);
+    }, []);
 
     return (
         (isLogued === true) && (

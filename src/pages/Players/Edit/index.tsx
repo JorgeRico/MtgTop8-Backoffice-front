@@ -16,7 +16,6 @@ const FormLayout = () => {
     const [ showData, setShowData ]                         = useState<boolean>(false);
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
     const [ selectedTournament, setSelectedTournament ]     = useState<number | null>(null);
-    const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
     const [ tournaments, setTournaments ]                   = useState<any[] | null>(null);
     const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
     const [ selectedDeckName, setSelectedDeckName ]         = useState<string | null>(null);
@@ -124,12 +123,9 @@ const FormLayout = () => {
     }
     
     useEffect(() => {
-        if (isFirstLoad == false) {
-            apiTournamentsCall();
-            apiGetPlayerCall();
-            setIsFirstLoad(true);
-        }
-    }, [isFirstLoad]);
+        apiTournamentsCall();
+        apiGetPlayerCall();
+    }, []);
 
     return (
         <>

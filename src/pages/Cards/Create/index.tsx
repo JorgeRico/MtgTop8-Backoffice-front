@@ -14,7 +14,6 @@ import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 
 const FormLayout = () => {
     const [ isCreated, setIsCreated ]                       = useState<boolean>(false);
-    const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
     const [ selectedName ]                                  = useState<string | null>(null);
     const [ selectedNum, setSelectedNum ]                   = useState<number | null>(null);
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
@@ -125,10 +124,7 @@ const FormLayout = () => {
     }
 
     useEffect(() => {
-        if (!isFirstLoad) {
-            apiTournamentsCall();
-            setIsFirstLoad(true);
-        }
+        apiTournamentsCall();
     }, []);
 
     return (

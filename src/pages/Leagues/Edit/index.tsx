@@ -19,7 +19,6 @@ const FormLayout = () => {
     const [ selectedActive, setSelectedActive ]       = useState<number | null>(null);
     const [ selectedYear, setSelectedYear ]           = useState<number | null>(null);
     const [ selectedName, setSelectedName ]           = useState<string | null>(null);
-    const [ isFirstLoad, setIsFirstLoad ]             = useState<boolean>(false);
     const id                                          = useParams();
     // dropdown selector css
     const [ isYearSelected, setIsYearSelected ]       = useState<boolean>(false);
@@ -96,10 +95,7 @@ const FormLayout = () => {
     }
 
     useEffect(() => {
-        if (!isFirstLoad) {
-            getData();
-            setIsFirstLoad(true);
-        }
+        getData();
     }, []);
     
     return (

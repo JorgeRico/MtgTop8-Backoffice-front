@@ -10,9 +10,8 @@ interface PaginationProps {
 }
 
 const TablePagination = ({ totalItems, limit, onChangePage }: PaginationProps) => {
-    const [ currentPage, setCurrentPage ]              = useState<number>(1);
-    const [ isFirstLoad, setIsFirstLoad ]              = useState<boolean>(false);
-    const [ paginationIsLoaded, sePaginationIsLoaded ] = useState<boolean>(false);
+    const [ currentPage, setCurrentPage ]               = useState<number>(1);
+    const [ paginationIsLoaded, setPaginationIsLoaded ] = useState<boolean>(false);
 
     // pagination items styles
     const common     = 'px-4 py-2 rounded text-gray-700 flex w-10 items-center justify-center h-10 text-sm font-medium hover:bg-blue-500/[0.08] dark:hover:text-brand-500';
@@ -49,11 +48,8 @@ const TablePagination = ({ totalItems, limit, onChangePage }: PaginationProps) =
     }
 
     useEffect(() => {
-        if (isFirstLoad == false) {
-            setTimeout(() => { sePaginationIsLoaded(true); }, 1000);
-            setIsFirstLoad(true);
-        }
-    }, [isFirstLoad]);
+        setTimeout(() => { setPaginationIsLoaded(true); }, 1000);
+    }, []);
 
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 py-3 shadow-default dark:border-strokedark dark:bg-boxdark">

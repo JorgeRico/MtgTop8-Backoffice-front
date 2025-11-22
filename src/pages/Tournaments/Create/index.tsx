@@ -15,7 +15,6 @@ const CreateTournament = () => {
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
     const [ isCreated, setIsCreated ]                       = useState<boolean>(false);
     const [ selectedLeague, setSelectedLeague]              = useState<number | null>(null);
-    const [ isFirstLoad, setIsFirstLoad ]                   = useState<boolean>(false);
     const [ leagues, setLeagues ]                           = useState<any[] | null>(null);
     const [ selectedName ]                                  = useState<string | null>(null);
     const [ selectedNumber, setSelectedNumber ]             = useState<number | null>(null);
@@ -82,11 +81,8 @@ const CreateTournament = () => {
     }
 
     useEffect(() => {
-        if (isFirstLoad == false) {
-            apiCall()
-            setIsFirstLoad(true);
-        }
-    }, [isFirstLoad]);
+        apiCall()
+    }, []);
     
     return (
         <>
