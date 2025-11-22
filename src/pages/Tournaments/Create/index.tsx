@@ -129,6 +129,7 @@ const CreateTournament = () => {
                                             label="Tournament date (DD/MM/YY)"
                                             selectedDate={selectedDate} 
                                             disabled={false}
+                                            isEdit={false}
                                         />
                                     </div>
                                 </div>

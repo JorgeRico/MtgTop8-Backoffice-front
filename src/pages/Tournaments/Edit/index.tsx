@@ -151,6 +151,7 @@ const FormLayout = () => {
                                                             label="Tournament date (DD/MM/YY)"
                                                             selectedDate={selectedDate} 
                                                             disabled={false}
+                                                            isEdit={true}
                                                         />
                                                     </div>
                                                 </div>
