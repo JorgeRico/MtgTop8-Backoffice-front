@@ -220,7 +220,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                                             to="/forms/form-elements"
                                                             className={({ isActive }) =>
                                                                 'hidden group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                (isActive && '!text-white')
+                                                                (isActive && 'text-white!')
                                                             }
                                                         >
                                                             Form Elements
@@ -231,7 +231,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                                             to="/forms/form-layout"
                                                             className={({ isActive }) =>
                                                                 'hidden group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                                                (isActive && '!text-white')
+                                                                (isActive && 'text-white!')
                                                             }
                                                         >
                                                             Form Layout

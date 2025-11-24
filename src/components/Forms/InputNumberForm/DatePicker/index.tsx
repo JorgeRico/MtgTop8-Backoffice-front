@@ -3,13 +3,13 @@ import { useState } from 'react';
 interface InputProps {
     name              : string;
     placeholder       : string;
-    selectedOption    : number | null;
+    selectedOption    : number;
     setSelectedOption : Function;
     disabled          : boolean;
 }
 
 const InputDatePickerForm = ({ name, placeholder, selectedOption, setSelectedOption, disabled }: InputProps) => {
-    const [ option ] = useState<number | null>(selectedOption);
+    const [ option ] = useState<number>(selectedOption);
 
     const onChange = (event: any) => {
         event.preventDefault();
@@ -23,7 +23,7 @@ const InputDatePickerForm = ({ name, placeholder, selectedOption, setSelectedOpt
                     disabled={disabled}
                     type="number"
                     name={name}
-                    defaultValue={option ?? ''}
+                    defaultValue={option}
                     pattern="[0-9]{1,2}" 
                     maxLength={2} 
                     placeholder={placeholder}

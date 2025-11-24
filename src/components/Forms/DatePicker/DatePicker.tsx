@@ -10,15 +10,13 @@ interface DatePickerProps {
     idDay        : string;
     idMonth      : string;
     idYear       : string;
-    isEdit       : boolean;
 }
 
-const DatePickerOne = ({ idDay, idMonth, idYear, label, selectedDate, disabled, isEdit}: DatePickerProps) => {
+const DatePickerOne = ({ idDay, idMonth, idYear, label, selectedDate, disabled}: DatePickerProps) => {
     const [ day, setDay ]                         = useState<number | null>(null);
-    const [ month, setMonth ]                     = useState<number>(0);
-    const [ year, setYear ]                       = useState<number>(0);
+    const [ month, setMonth ]                     = useState<number | null>(null);
+    const [ year, setYear ]                       = useState<number | null>(null);
     const [ isMonthSelected, setIsMonthSelected ] = useState<boolean>(false);
-    const [ isValueLoaded, setIsValueLoaded ]     = useState<boolean>(false);
 
     const months = [
         {  value : 1, key: "January (1)" },
@@ -36,12 +34,19 @@ const DatePickerOne = ({ idDay, idMonth, idYear, label, selectedDate, disabled, 
     ]
 
     function splitSelectedDate(dateValue: string) {
-        let splitValues = dateValue.split('/');
+        console.log('iiii')
+        if (dateValue == '') {
+            console.log('kkkkkkk')
+            setDay(0);
+            setMonth(0);
+            setYear(0);    
+        } else {
+            let splitValues = dateValue.split('/');
 
-        setDay(parseInt(splitValues[0]));
-        setMonth(parseInt(splitValues[1]));
-        setYear(parseInt(splitValues[2]));
-        setIsValueLoaded(true)
+            setDay(parseInt(splitValues[0]));
+            setMonth(parseInt(splitValues[1]));
+            setYear(parseInt(splitValues[2]));
+        }
     }
 
     const onChangeMonthSubmit = (event: any) => {
@@ -50,10 +55,8 @@ const DatePickerOne = ({ idDay, idMonth, idYear, label, selectedDate, disabled, 
     }
 
      useEffect(() => {
-        if (selectedDate != '') {
-            splitSelectedDate(selectedDate);
-        }
-    }, [day]);
+        splitSelectedDate(selectedDate);
+    }, []);
 
     return (
         <>
@@ -61,58 +64,41 @@ const DatePickerOne = ({ idDay, idMonth, idYear, label, selectedDate, disabled, 
                 <InputLabelForm label={label}></InputLabelForm>
             </section>
             <section className="mb-4.5 flex flex-row items-center gap-6">
-                {(isEdit && isValueLoaded) ? (
-                        <>
-                            <InputDatePickerForm
-                                disabled={disabled}
-                                name={idDay}
-                                placeholder="DD"
-                                selectedOption={day}
-                                setSelectedOption={setDay}
-                            />
-                        </>
-                    ) : (
-                        <InputDatePickerForm
-                            disabled={disabled}
-                            name={idDay}
-                            placeholder="DD"
-                            selectedOption={0}
-                            setSelectedOption={setDay}
-                        />
-                    )
+                {(day || day == 0) &&
+                    <InputDatePickerForm
+                        disabled={disabled}
+                        name={idDay}
+                        placeholder="DD"
+                        selectedOption={day}
+                        setSelectedOption={setDay}
+                    />
                 }
                 {months &&
-                    <Dropdown 
+                    <>
+                        <section className="flex flex-col gap-6 xl:flex-row">
+                            <div className="relative z-20 bg-transparent dark:bg-form-input">
+                                <Dropdown 
+                                    disabled={disabled}
+                                    options={months ?? []}
+                                    label="-"
+                                    name={idMonth}
+                                    selectedOption={month}
+                                    isOptionSelected={isMonthSelected}
+                                    onChangeSubmit={onChangeMonthSubmit}>
+                                </Dropdown>
+                            </div>
+                        </section>
+                    </>
+                }
+                {(year || year==0) &&
+                    <InputDatePickerForm
                         disabled={disabled}
-                        options={months ?? []}
-                        label="-"
-                        name={idMonth}
-                        selectedOption={month}
-                        isOptionSelected={isMonthSelected}
-                        onChangeSubmit={onChangeMonthSubmit}>
-                    </Dropdown>
+                        name={idYear}
+                        placeholder="YY"
+                        selectedOption={year}
+                        setSelectedOption={setYear}
+                    />
                 }
-                {(isEdit && isValueLoaded) ? ( 
-                        <>
-                            <InputDatePickerForm
-                                disabled={disabled}
-                                name={idYear}
-                                placeholder="YY"
-                                selectedOption={year}
-                                setSelectedOption={setDay}
-                            />
-                        </>
-                    ) : (
-                        <InputDatePickerForm
-                            disabled={disabled}
-                            name={idYear}
-                            placeholder="YY"
-                            selectedOption={0}
-                            setSelectedOption={setDay}
-                        />
-                    )
-                }
-                
             </section>    
         </>
     );

@@ -104,10 +104,10 @@ const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: Tabl
                                                 <div className="loading hidden" id={`loading-item-${item.id}`}>
                                                     <LoaderSmall></LoaderSmall>
                                                 </div>
-                                                <button id={`edit-item-${item.id}`} className="hover:text-primary editItem" onClick={(e) => editSubmit(e, item.id)}>
+                                                <button id={`edit-item-${item.id}`} className="hover:text-primary editItem cursor-pointer" onClick={(e) => editSubmit(e, item.id)}>
                                                     <EditIcon></EditIcon>
                                                 </button>
-                                                <button id={`delete-item-${item.id}`} className="hover:text-primary deleteItem" onClick={(e) => deleteSubmit(e, item.id)}>
+                                                <button id={`delete-item-${item.id}`} className="hover:text-primary deleteItem cursor-pointer" onClick={(e) => deleteSubmit(e, item.id)}>
                                                     <TrashIcon></TrashIcon>
                                                 </button>
                                             </div>

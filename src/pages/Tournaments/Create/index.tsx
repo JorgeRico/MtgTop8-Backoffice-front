@@ -18,7 +18,7 @@ const CreateTournament = () => {
     const [ leagues, setLeagues ]                           = useState<any[] | null>(null);
     const [ selectedName ]                                  = useState<string | null>(null);
     const [ selectedNumber, setSelectedNumber ]             = useState<number | null>(null);
-    const [ selectedDate, setSelectedDate ]                 = useState<string>('');
+    const [ selectedDate ]                                  = useState<string>('');
     const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
     const [ isLeagueSelected, setIsLeagueSelected ]         = useState<boolean>(false);
     // form ids
@@ -129,7 +129,6 @@ const CreateTournament = () => {
                                             label="Tournament date (DD/MM/YY)"
                                             selectedDate={selectedDate} 
                                             disabled={false}
-                                            isEdit={false}
                                         />
                                     </div>
                                 </div>
@@ -148,7 +147,7 @@ const CreateTournament = () => {
                                     )
                                 }
                                 {(!isLoading && !isCreated) &&
-                                    <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+                                    <button className="cursor-pointer flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
                                         Create Tournament
                                     </button>
                                 }
@@ -158,7 +157,7 @@ const CreateTournament = () => {
                                     </div>
                                 }
                                 {isCreated &&
-                                    <button onClick={(event) => onClickBack(event)}className="flex w-full justify-center rounded bg-secondary p-3 font-medium text-white hover:bg-opacity-90">
+                                    <button onClick={(event) => onClickBack(event)}className="cursor-pointer flex w-full justify-center rounded bg-secondary p-3 font-medium text-white hover:bg-opacity-90">
                                         Back to tournaments
                                     </button>
                                 }

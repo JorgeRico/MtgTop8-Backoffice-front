@@ -7,7 +7,7 @@ const CreateButton = ({ endpoint, text }: { endpoint: string; text: string }) =>
     return (
         <>
             <div className="flex w-full justify-end items-end">
-                <button className="flex w-auto justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90" onClick={() => onClickCreate()}>
+                <button className="flex w-auto justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 cursor-pointer" onClick={() => onClickCreate()}>
                     {text}
                 </button>
             </div>

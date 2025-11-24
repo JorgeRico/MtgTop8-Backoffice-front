@@ -73,7 +73,7 @@ const EditDeckComponent = ({title, cards, option}: EditDeckComponentProps) => {
             <section className="flex flex-col gap-9 mb-5">
                 <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                     <TopTitle title={title}></TopTitle>
-                    <div className="flex flex-col flex-grow gap-3 flex-wrap p-6.5">
+                    <div className="flex flex-col grow gap-3 flex-wrap p-6.5">
                         {cards.length > 0 ? (
                                 <>
                                 {cards.map((item: any) => {

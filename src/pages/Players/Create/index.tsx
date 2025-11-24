@@ -149,7 +149,7 @@ const CreatePlayer = () => {
                                     selectedOption={selectedDeckName}
                                 />
                                 {(!isLoading && !isCreated) &&
-                                    <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+                                    <button className="cursor-pointer flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
                                         Create Player
                                     </button>
                                 }
@@ -159,7 +159,7 @@ const CreatePlayer = () => {
                                     </div>
                                 }
                                 {isCreated &&
-                                    <button onClick={(event) => onClickBack(event)}className="flex w-full justify-center rounded bg-secondary p-3 font-medium text-white hover:bg-opacity-90">
+                                    <button onClick={(event) => onClickBack(event)}className="cursor-pointer flex w-full justify-center rounded bg-secondary p-3 font-medium text-white hover:bg-opacity-90">
                                         Back to Players
                                     </button>
                                 }

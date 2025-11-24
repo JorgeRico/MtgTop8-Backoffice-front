@@ -14,8 +14,8 @@ const TablePagination = ({ totalItems, limit, onChangePage }: PaginationProps) =
     const [ paginationIsLoaded, setPaginationIsLoaded ] = useState<boolean>(false);
 
     // pagination items styles
-    const common     = 'px-4 py-2 rounded text-gray-700 flex w-10 items-center justify-center h-10 text-sm font-medium hover:bg-blue-500/[0.08] dark:hover:text-brand-500';
-    const currentCss = "bg-blue-500/[0.5] dark:text-white";
+    const common     = 'cursor-pointer px-4 py-2 rounded text-gray-700 flex w-10 items-center justify-center h-10 text-sm font-medium hover:bg-blue-500/8 dark:hover:text-brand-500';
+    const currentCss = "bg-blue-500/50 dark:text-white";
     const otherCss   = "dark:text-gray-400 hover:text-brand-500 ";
     // pagination options
     const totalPages = paginationHelpers.getTotalPages(totalItems, limit)
@@ -63,7 +63,7 @@ const TablePagination = ({ totalItems, limit, onChangePage }: PaginationProps) =
                     {paginationIsLoaded ? (
                             <>
                                 {!isFirstPage && (
-                                <button id="prev" onClick={onClickPrevious} className="mr-2.5 flex items-center h-10 justify-center rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-700 shadow-theme-xs hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] text-sm">
+                                <button id="prev" onClick={onClickPrevious} className="cursor-pointer mr-2.5 flex items-center h-10 justify-center rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-700 shadow-theme-xs hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/3 text-sm">
                                     Previous
                                 </button>
                                 )}
@@ -75,7 +75,7 @@ const TablePagination = ({ totalItems, limit, onChangePage }: PaginationProps) =
                                     )))}
                                 </div>
                                 {!isLastPage && (
-                                <button id="next" onClick={onClickNext} className="ml-2.5 flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-700 shadow-theme-xs text-sm hover:bg-gray-50 h-10 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
+                                <button id="next" onClick={onClickNext} className="cursor-pointer ml-2.5 flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-700 shadow-theme-xs text-sm hover:bg-gray-50 h-10 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/3">
                                     Next
                                 </button>
                                 )}

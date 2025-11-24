@@ -151,7 +151,6 @@ const FormLayout = () => {
                                                             label="Tournament date (DD/MM/YY)"
                                                             selectedDate={selectedDate} 
                                                             disabled={false}
-                                                            isEdit={true}
                                                         />
                                                     </div>
                                                 </div>
@@ -173,7 +172,7 @@ const FormLayout = () => {
                                         </>
                                     }
                                     {!isLoading &&
-                                        <button className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+                                        <button className="cursor-pointer flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
                                             Edit Tournament
                                         </button>
                                     }
