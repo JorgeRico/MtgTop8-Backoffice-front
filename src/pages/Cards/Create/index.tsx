@@ -132,7 +132,7 @@ const FormLayout = () => {
             <DefaultLayout>
                 <div className="grid grid-cols-1 gap-9 sm:grid-cols-2 mb-8">
                     <div className="flex flex-col gap-9">
-                        <BreadcrumbBack pageName="Cards" />
+                        <BreadcrumbBack pageName="Cards" link={routing.cards}/>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 gap-9 xl:grid-cols-2">

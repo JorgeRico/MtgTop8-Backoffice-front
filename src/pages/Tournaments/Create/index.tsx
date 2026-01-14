@@ -95,7 +95,7 @@ const CreateTournament = () => {
             <DefaultLayout>
                 <section className="grid grid-cols-1 gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
-                        <BreadcrumbBack pageName="Tournaments" />
+                        <BreadcrumbBack pageName="Tournaments" link={routing.tournaments} />
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <TopTitle title="New Tournament"></TopTitle>
                             <form onSubmit={onSubmitForm} className="p-6.5">

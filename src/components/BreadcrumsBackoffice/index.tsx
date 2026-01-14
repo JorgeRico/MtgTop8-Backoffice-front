@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom';
 import { routing } from '../../types/routing';
 
 interface BreadcrumbProps {
-  pageName: string;
+  pageName : string;
+  link     : string;
 }
 
-const BreadcrumbBack = ({ pageName }: BreadcrumbProps) => {
+const BreadcrumbBack = ({ pageName, link }: BreadcrumbProps) => {
     return (
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <nav>
@@ -16,7 +17,7 @@ const BreadcrumbBack = ({ pageName }: BreadcrumbProps) => {
                         </Link>
                     </li>
                     <li className="font-medium text-primary">
-                    <Link className="font-medium" to={routing.tournaments}>
+                    <Link className="font-medium" to={link}>
                         {pageName}
                     </Link>
                     </li>

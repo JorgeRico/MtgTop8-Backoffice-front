@@ -109,7 +109,7 @@ const CreatePlayer = () => {
             <DefaultLayout>
                 <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
-                        <BreadcrumbBack pageName="Cards" />
+                        <BreadcrumbBack pageName="Cards" link={routing.cards} />
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <TopTitle title="Create Player"></TopTitle>
                             <form onSubmit={onSubmitForm} className="p-6.5">
