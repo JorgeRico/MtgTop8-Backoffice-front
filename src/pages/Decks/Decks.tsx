@@ -8,7 +8,7 @@ import TableComponent from '@/components/Tables/TableComponent';
 
 const Decks = () => {
     const [ decks, setDecks ]          = useState<any[] | null>(null);
-    const [ headerItem ]               = useState<string[]>([ 'id', 'name', 'idPlayer' ]);
+    const [ headerItem ]               = useState<string[]>([ 'id', 'name', 'player', 'league' ]);
     const [ currentPage ]              = useState<number>(1);
     const [ limit ]                    = useState<number>(250);
     const [ isLoading, setIsLoading ]  = useState<boolean>(false);
@@ -23,7 +23,8 @@ const Decks = () => {
                  const dataDeck = (data || []).map((item: any) => ({
                     id       : item.id,
                     name     : item.name,
-                    idPlayer : item.idPlayer
+                    player   : item.player,
+                    league   : item.league
                 }));
 
                 setDecks(dataDeck);
