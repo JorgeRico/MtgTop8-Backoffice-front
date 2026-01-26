@@ -9,7 +9,7 @@ import TableComponent from '@/components/Tables/TableComponent';
 
 const Players = () => {
     const [ players, setPlayers ]      = useState<any[] | null>(null);
-    const [ headerItem ]               = useState<string[]>([ 'id', 'name', 'position', 'idTournament', 'idDeck' ]);
+    const [ headerItem ]               = useState<string[]>([ 'id', 'name', 'position', 'Tournament', 'Deck' ]);
     const [ currentPage ]              = useState<number>(1);
     const [ limit ]                    = useState<number>(250);
     const [ isLoading, setIsLoading ]  = useState<boolean>(false);
@@ -22,11 +22,11 @@ const Players = () => {
             await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.players}?page=${page}&limit=${limit}`)
             .then(data => {
                 const dataPlayer = (data || []).map((item: any) => ({
-                    id           : item.id,
-                    name         : item.name,
-                    position     : item.position,
-                    idTournament : item.idTournament,
-                    idDeck       : item.idDeck
+                    id         : item.id,
+                    name       : item.name,
+                    position   : item.position,
+                    tournament : item.date + ' - ' + item.tournament,
+                    deck       : item.deck
                 }));
 
                 setPlayers(dataPlayer);
