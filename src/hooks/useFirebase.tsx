@@ -4,7 +4,7 @@ import { getAuth, onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
 import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import Cookies from 'js-cookie';
 import { routing } from '../types/web-routing';
-import { toast } from './toast';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 
 const firebaseConfig = {
     apiKey            : import.meta.env.VITE_FIREBASE_API_KEY,
@@ -21,6 +21,8 @@ initializeApp(firebaseConfig)
 //initialize firebase auth
 const auth = getAuth()
 let unwatchAuthState: Unsubscribe = () => {}
+
+const { toast } = commonFunctions;
 
 const FirebaseHook = {
     watchAuthState() {
@@ -67,7 +69,7 @@ const FirebaseHook = {
         })
     },
 
-    async recover(email: string) {              
+    async recover(email: string) {
         return await sendPasswordResetEmail(auth, email).then(() => {
             return true;
         }).catch(function() {
@@ -88,10 +90,9 @@ const FirebaseHook = {
 
     // async signup(email: string, password: string){
     //     var errorMessage = null;
-    //     const toast      = useToast();
 
     //     return await createUserWithEmailAndPassword(auth, email, password).then(() => {
-    //         toast.success('User created correctly');
+    //         toast('success', 'User created correctly');
             
     //         return true;
     //     }).catch(function(error) {
@@ -106,7 +107,7 @@ const FirebaseHook = {
     //                 errorMessage = 'System error';
     //                 break;
     //         }
-    //         toast.error(errorMessage);
+    //         toast('error', errorMessage);
             
     //         return false;
     //     })

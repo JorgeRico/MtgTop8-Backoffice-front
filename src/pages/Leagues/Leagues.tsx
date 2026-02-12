@@ -1,10 +1,10 @@
 import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useEffect } from 'react';
 import { endpoints } from '@/types/api-endpoints';
-import { fetchInstance } from '@/hooks/apiCalls';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
 import CreateButton from '@/components/MtgComponent/CreateButton';
-import { toast } from '@/hooks/toast';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import TableComponent from '@/components/Tables/TableComponent';
 
 const Tournaments = () => {
@@ -14,12 +14,14 @@ const Tournaments = () => {
     const [ limit ]                    = useState<number>(2500);
     const [ isLoading, setIsLoading ]  = useState<boolean>(false);
     const [ totalItems, setTotalItems] = useState<number>(0);
+    const { get }                      = fetchInstance;
+    const { toast }                    = commonFunctions;
 
     const apiCall = async (page: number) => {
         setIsLoading(true);
 
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.leagues}?page=${page ?? 1}&limit=${limit}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.leagues}?page=${page ?? 1}&limit=${limit}`)
             .then(data => {
                 const dataLeague = (data || []).map((item: any) => ({
                     id      : item.id,
@@ -39,7 +41,7 @@ const Tournaments = () => {
     };
 
     const getNumITems = async() => {
-        const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.leagues}/num`);
+        const result = await get(`${import.meta.env.VITE_API_URL}${routing.leagues}/num`);
         setTotalItems(result.count)
     }
 

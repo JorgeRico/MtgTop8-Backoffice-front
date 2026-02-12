@@ -1,8 +1,8 @@
 import TrashIcon from '@/components/Icons/Trash';
 import { v4 as uuidv4 } from "uuid";
 import EditIcon from '@/components/Icons/Edit';
-import { fetchInstance } from '@/hooks/apiCalls';
-import { toast } from '@/hooks/toast';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import LoaderSmall from '@/common/LoaderSmall';
 import Loader from '@/common/Loader';
 import { useState, useEffect } from 'react';
@@ -19,6 +19,8 @@ interface TableProps {
 
 const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: TableProps) => {
     const [ dataItems, setDataItems ] = useState<Record<string, any>[]>(data);
+    const { delete: deleteInstance }  = fetchInstance;
+    const { toast }                   = commonFunctions
 
     const editSubmit = (event: any, id: string) => {
         event.preventDefault();
@@ -46,12 +48,10 @@ const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: Tabl
     const deleteSubmit = async (event: any, id: string) => {
         event.preventDefault();
         loading(id);
-        
+
         try {
-            await fetchInstance.delete(`${import.meta.env.VITE_API_URL}/${endpoint}/${id}`)
-            .then(data => {
-                removeItem(id);
-            })
+            await deleteInstance(`${import.meta.env.VITE_API_URL}/${endpoint}/${id}`);
+            removeItem(id);
         } catch (error) {
             toast('error', "Failed to delete Deck and Player");
         }

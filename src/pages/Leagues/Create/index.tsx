@@ -1,16 +1,16 @@
 import { useState, useId } from 'react';
 import DefaultLayout from '@/layout/DefaultLayout';
 import Loader from '@/common/LoaderSmall';
-import { fetchInstance } from '@/hooks/apiCalls';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
-import { toast } from '@/hooks/toast';
 import InputForm from '@/components/Forms/InputForm';
 import TopTitle from '@/components/Forms/Top';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
-import { getDropdownYears } from '@/hooks/years';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 
 const CreateLeague = () => {
+    const { getDropdownYears, toast }                 = commonFunctions;
     const [ isLoading, setIsLoading ]                 = useState<boolean>(false);
     const [ isCreated, setIsCreated ]                 = useState<boolean>(false);
     const [ selectedFormat, setSelectedFormat ]       = useState<number | null>(null);
@@ -23,6 +23,8 @@ const CreateLeague = () => {
     const [ isCurrentSelected, setIsCurrentSelected ] = useState<boolean>(false);
     const [ isFormatSelected, setIsFormatSelected ]   = useState<boolean>(false);
     const [ isActiveSelected, setIsActiveSelected ]   = useState<boolean>(false);
+    const { post }                                    = fetchInstance;
+
     // form ids
     const idFormat  = useId();
     const idCurrent = useId();
@@ -66,7 +68,7 @@ const CreateLeague = () => {
         }
         
         try {
-            await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.leagues}`, body)
+            await post(`${import.meta.env.VITE_API_URL}${routing.leagues}`, body)
             .then(data => {
                 setTimeout(() => setIsCreated(true), 2000);
                 setTimeout(() => toast('success', "League created correctly, id: " + data.data[0].id), 2000);

@@ -2,7 +2,7 @@ import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useEffect } from 'react';
 import { routing } from '@/types/web-routing';
 import { endpoints } from '@/types/api-endpoints';
-import { fetchInstance } from '@/hooks/apiCalls';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 import TableComponent from '@/components/Tables/TableComponent';
 
@@ -13,12 +13,13 @@ const Decks = () => {
     const [ limit ]                    = useState<number>(250);
     const [ isLoading, setIsLoading ]  = useState<boolean>(false);
     const [ totalItems, setTotalItems] = useState<number>(0);
+    const { get }                      = fetchInstance;
 
     const apiCall = async (page: number) => {
         setIsLoading(true);
 
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.decks}?page=${page}&limit=${limit}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.decks}?page=${page}&limit=${limit}`)
             .then(data => {
                  const dataDeck = (data || []).map((item: any) => ({
                     id       : item.id,
@@ -36,7 +37,7 @@ const Decks = () => {
     };
 
     const getNumITems = async() => {
-        const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.decks}/num`);
+        const result = await get(`${import.meta.env.VITE_API_URL}${routing.decks}/num`);
         setTotalItems(result.count)
     }
 

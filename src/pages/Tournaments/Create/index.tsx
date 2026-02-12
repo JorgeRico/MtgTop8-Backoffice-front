@@ -2,9 +2,9 @@ import { useState, useEffect, useId } from "react";
 import DefaultLayout from '@/layout/DefaultLayout';
 import DatePicker from '@/components/Forms/DatePicker/DatePicker';
 import Loader from '@/common/LoaderSmall';
-import { fetchInstance } from '@/hooks/apiCalls';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
-import { toast } from '@/hooks/toast';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
@@ -21,6 +21,9 @@ const CreateTournament = () => {
     const [ selectedDate ]                                  = useState<string>('');
     const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
     const [ isLeagueSelected, setIsLeagueSelected ]         = useState<boolean>(false);
+    const { post, get }                                     = fetchInstance;
+    const { toast }                                         = commonFunctions;
+
     // form ids
     const idName       = useId();
     const idDay        = useId();
@@ -55,7 +58,7 @@ const CreateTournament = () => {
         }
         
         try {
-            await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.tournaments}`, body)
+            await post(`${import.meta.env.VITE_API_URL}${routing.tournaments}`, body)
             .then(data => {
                 setTimeout(() => setIsCreated(true), 2000);
                 setTimeout(() => toast('success', "Tournament created correctly, id: "+data.data[0].id), 2000);
@@ -67,7 +70,7 @@ const CreateTournament = () => {
 
     const apiCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.leagues}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.leagues}`)
             .then(data => {
                 const dataLeague = (data || []).map((item: any) => ({
                     value : item.id,

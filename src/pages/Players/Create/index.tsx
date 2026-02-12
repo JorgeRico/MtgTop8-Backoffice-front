@@ -1,9 +1,9 @@
 import { useState, useEffect, useId } from "react";
 import DefaultLayout from '@/layout/DefaultLayout';
 import Loader from '@/common/LoaderSmall';
-import { fetchInstance } from '@/hooks/apiCalls';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
-import { toast } from '@/hooks/toast';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
@@ -19,6 +19,9 @@ const CreatePlayer = () => {
     const [ selectedDeckName ]                              = useState<string | null>(null);
     const [ selectedPosition, setSelectedPosition ]         = useState<number | null>(null);
     const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
+    const { post, put, get }                                = fetchInstance;
+    const { toast }                                         = commonFunctions;
+
     // form ids
     const idPosition   = useId();
     const idTournament = useId();
@@ -42,7 +45,7 @@ const CreatePlayer = () => {
         }
 
         try {
-            await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.decks}`, deckOptions)
+            await post(`${import.meta.env.VITE_API_URL}${routing.decks}`, deckOptions)
             .then(data => {
                 const body = {
                     'name'         : formDataValues.get(idName),
@@ -60,7 +63,7 @@ const CreatePlayer = () => {
 
     const createPlayer = async (idDeck: number, body: object) => {
         try {
-            await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.players}`, body)
+            await post(`${import.meta.env.VITE_API_URL}${routing.players}`, body)
             .then(data => {
                 updateIdPlayerDeck(idDeck, {'idPlayer' : data.data[0].id})
                 setTimeout(() => setIsCreated(true), 2000);
@@ -73,7 +76,7 @@ const CreatePlayer = () => {
 
     const updateIdPlayerDeck = async (idDeck: number, body: object) => {
         try {
-            await fetchInstance.put(`${import.meta.env.VITE_API_URL}${routing.decks}/${idDeck}`, body)
+            await put(`${import.meta.env.VITE_API_URL}${routing.decks}/${idDeck}`, body)
         } catch (error) {
             toast('error', "Failed to add idPlayer to deck");
         }
@@ -81,7 +84,7 @@ const CreatePlayer = () => {
     
     const apiTournamentsCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     value : item.id,

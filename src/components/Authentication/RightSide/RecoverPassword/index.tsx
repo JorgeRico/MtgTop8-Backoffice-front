@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MailImage from '@/components/Icons/Mail';
 import { routing } from '@/types/web-routing';
-import firebase from '@/hooks/firebase.tsx';
+import firebase from '@/hooks/useFirebase.tsx';
 import Loader from '@/common/LoaderSmall';
-import { toast } from '@/hooks/toast';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 
 const RecoverPassword = () => {
     const [ isLoading, setIsLoading ] = useState(false);
+    const { recover } = firebase;
+    const { toast }   = commonFunctions;
 
     const onSubmitForm = async () => {
         setIsLoading(true);
@@ -15,7 +17,7 @@ const RecoverPassword = () => {
         var email = document.querySelector<HTMLInputElement>('input[name="email"]')?.value;
 
         if (email) {
-            if (await firebase.recover(email)) {
+            if (await recover(email)) {
                 setTimeout(() => toast('success', "Check your e-mail to proceed to change your password"), 1500);
                 setTimeout(() => setIsLoading(false), 1500);
             }

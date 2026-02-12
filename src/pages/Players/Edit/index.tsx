@@ -1,9 +1,9 @@
 import { useState, useEffect, useId } from "react";
 import DefaultLayout from '@/layout/DefaultLayout';
 import Loader from '@/common/LoaderSmall';
-import { fetchInstance } from '@/hooks/apiCalls';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
-import { toast } from '@/hooks/toast';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
@@ -24,6 +24,9 @@ const FormLayout = () => {
     const id                                                = useParams();
     const [ cards, setCards ]                               = useState<any[]>([]);
     const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
+    const { put, get }                                      = fetchInstance;
+    const { toast }                                         = commonFunctions;
+
     // form ids
     const idPosition   = useId();
     const idTournament = useId();
@@ -50,7 +53,7 @@ const FormLayout = () => {
         console.log(body)
                 
         try {
-            await fetchInstance.put(`${import.meta.env.VITE_API_URL}${routing.players}/${id.id}`, body)
+            await put(`${import.meta.env.VITE_API_URL}${routing.players}/${id.id}`, body)
             .then(data => {
                 setTimeout(() => setIsLoading(false), 2000);
                 setTimeout(() => toast('success', "Player updated correctly"), 2000);
@@ -62,7 +65,7 @@ const FormLayout = () => {
          
     const apiTournamentsCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     value : item.id,
@@ -78,7 +81,7 @@ const FormLayout = () => {
 
     const apiGetPlayerCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.players}/${id.id}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.players}/${id.id}`)
             .then(data => {
                 setSelectedName(data[0].name);
                 setSelectedTournament(data[0].idTournament);
@@ -94,7 +97,7 @@ const FormLayout = () => {
 
     const apiGetDeckCall = async (idDeck: number) => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.decks}/${idDeck}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.decks}/${idDeck}`)
             .then(data => {
                 setSelectedDeckName(data[0].name);
                 setShowData(true);
@@ -106,7 +109,7 @@ const FormLayout = () => {
 
     const getCardsDeck = async (idDeck: number) => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.decks}/${idDeck}/cards`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.decks}/${idDeck}/cards`)
             .then(data => {
                 const card = (data || []).map((item: any) => ({
                     id    : item.id,

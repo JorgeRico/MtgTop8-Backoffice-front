@@ -1,9 +1,9 @@
 import { useState, useEffect, useId } from "react";
 import DefaultLayout from '@/layout/DefaultLayout';
 import Loader from '@/common/LoaderSmall';
-import { fetchInstance } from '@/hooks/apiCalls';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
-import { toast } from '@/hooks/toast';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import InputForm from '@/components/Forms/InputForm';
 import TopTitle from "@/components/Forms/Top";
@@ -19,6 +19,9 @@ const FormLayout = () => {
     const [ isPlayerSelected, setIsPlayerSelected ]         = useState<boolean>(false);
     const [ selectedPlayer, setSelectedPlayer]              = useState<number | null>(null);
     const [ players, setPlayers ]                           = useState<any[] | null>(null);
+    const { post, get }                                     = fetchInstance;
+    const { toast }                                         = commonFunctions;
+
     // form ids
     const idPlayer     = useId();
     const idTournament = useId();
@@ -48,7 +51,7 @@ const FormLayout = () => {
         }
 
         try {
-            await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.decks}`, body)
+            await post(`${import.meta.env.VITE_API_URL}${routing.decks}`, body)
             .then(data => {
                 setTimeout(() => setIsCreated(true), 2000);
                 setTimeout(() => toast('success', "Player created correctly, id: "+data.data[0].id), 2000);
@@ -60,7 +63,7 @@ const FormLayout = () => {
 
     const apiTournamentsCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     value : item.id,
@@ -76,7 +79,7 @@ const FormLayout = () => {
 
     const apiPlayersCall = async (id: number) => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id}/players`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id}/players`)
             .then(data => {
                 const dataPlayer = (data || []).map((item: any) => ({
                     value : item.id,

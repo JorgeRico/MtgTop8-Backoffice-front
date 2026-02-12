@@ -3,9 +3,9 @@ import InputNumberFormSimple from '@/components/Forms/InputNumberForm/DeckCard';
 import TopTitle from '@/components/Forms/Top';
 import { v4 as uuidv4 } from "uuid";
 import { useState } from 'react';
-import { fetchInstance } from '@/hooks/apiCalls';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
-import { toast } from '@/hooks/toast';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 
 interface EditDeckComponentProps {
     title  : string;
@@ -16,6 +16,8 @@ interface EditDeckComponentProps {
 const EditDeckComponent = ({title, cards, option}: EditDeckComponentProps) => {
     const [ numSelected, setNumSelected ]   = useState<number | null>(null);
     const [ nameSelected, setNameSelected ] = useState<string | null>(null);
+    const { put }                           = fetchInstance;
+    const { toast }                         = commonFunctions;
 
     const onHandleEditCard = (event: any) => {
         event.preventDefault();
@@ -56,7 +58,7 @@ const EditDeckComponent = ({title, cards, option}: EditDeckComponentProps) => {
             }
     
             try {
-                await fetchInstance.put(`${import.meta.env.VITE_API_URL}${routing.cards}/${id}`, body)
+                await put(`${import.meta.env.VITE_API_URL}${routing.cards}/${id}`, body)
                 .then(data => {
                     setTimeout(() => toast('success', "Deck Card updated correctly"), 500);
                     setTimeout(() => document.querySelector('#edit-' + id)?.classList.remove('hidden'), 1500);

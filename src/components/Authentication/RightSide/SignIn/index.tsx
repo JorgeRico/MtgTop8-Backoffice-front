@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import LockImage from '@/components/Icons/Lock.tsx';
 import MailImage from '@/components/Icons/Mail.tsx';
-import firebase from '@/hooks/firebase.tsx';
+import firebase from '@/hooks/useFirebase.tsx';
 import Loader from '@/common/LoaderSmall';
 
 const SignIn = () => {
     const [ isLoading, setIsLoading ] = useState(false);
+    const { login } = firebase;
+
 
     const onSubmitForm = () => {
         setIsLoading(true);
@@ -15,7 +17,7 @@ const SignIn = () => {
         var password = document.querySelector<HTMLInputElement>('input[name="password"]')?.value;
 
         if (email && password) {
-            firebase.login(email, password);   
+            login(email, password);   
         }
     }
     

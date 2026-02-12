@@ -1,9 +1,9 @@
 import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useEffect, useId } from 'react';
 import Loader from '@/common/LoaderSmall';
-import { fetchInstance } from '@/hooks/apiCalls';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
-import { toast } from '@/hooks/toast';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
@@ -28,6 +28,9 @@ const FormLayout = () => {
     const [ decks, setDecks ]                               = useState<any[] | null>(null);
     const [ selectedDeck, setSelectedDeck ]                 = useState<number | null>(null);
     const [ isDeckSelected, setIsDeckSelected ]             = useState<boolean>(false);
+    const { post, get }                                     = fetchInstance;
+    const { toast }                                         = commonFunctions;
+
     // form ids
     const idName       = useId();
     const idNum        = useId();
@@ -75,7 +78,7 @@ const FormLayout = () => {
         }
 
         try {
-            await fetchInstance.post(`${import.meta.env.VITE_API_URL}${routing.cards}`, body)
+            await post(`${import.meta.env.VITE_API_URL}${routing.cards}`, body)
             .then(data => {
                 setTimeout(() => setIsLoading(false), 2000);
                 setTimeout(() => setIsCreated(false), 2000);
@@ -88,7 +91,7 @@ const FormLayout = () => {
 
     const apiTournamentsCall = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     value : item.id,
@@ -104,7 +107,7 @@ const FormLayout = () => {
 
     const apiTournamentDecksCall = async (id: number) => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id}/decks`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id}/decks`)
             .then(data => {
                 const dataDeck = (data || []).map((item: any) => ({
                     value : item.decks.id,

@@ -4,14 +4,14 @@ import InputForm from '@/components/Forms/InputForm';
 import TopTitle from '@/components/Forms/Top';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import Loader from '@/common/LoaderSmall';
-import { fetchInstance } from '@/hooks/apiCalls';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
-import { toast } from '@/hooks/toast';
 import { useParams } from 'react-router-dom';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
-import { getDropdownYears } from '@/hooks/years';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 
 const FormLayout = () => {
+    const { getDropdownYears, toast }                 = commonFunctions;
     const [ showData, setShowData ]                   = useState<boolean>(false);
     const [ isLoading, setIsLoading ]                 = useState<boolean>(false);
     const [ selectedFormat, setSelectedFormat ]       = useState<number | null>(null);
@@ -25,6 +25,9 @@ const FormLayout = () => {
     const [ isCurrentSelected, setIsCurrentSelected ] = useState<boolean>(false);
     const [ isFormatSelected, setIsFormatSelected ]   = useState<boolean>(false);
     const [ isActiveSelected, setIsActiveSelected ]   = useState<boolean>(false);
+
+    const { put, get }                                = fetchInstance;
+
     // form ids
     const idFormat  = useId();
     const idCurrent = useId();
@@ -68,7 +71,7 @@ const FormLayout = () => {
         }
         
         try {
-            await fetchInstance.put(`${import.meta.env.VITE_API_URL}${routing.leagues}/${id.id}`, body)
+            await put(`${import.meta.env.VITE_API_URL}${routing.leagues}/${id.id}`, body)
             .then(data => {
                 setTimeout(() => setIsLoading(false), 2000);
                 setTimeout(() => toast('success', "League updated correctly"), 2000);
@@ -80,7 +83,7 @@ const FormLayout = () => {
 
     const getData = async () => {
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.leagues}/${id.id}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.leagues}/${id.id}`)
             .then(data => {
                 setSelectedName(data[0].name)
                 setSelectedFormat(data[0].isLegacy);

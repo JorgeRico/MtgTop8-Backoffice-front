@@ -1,10 +1,10 @@
 import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useEffect } from 'react';
 import { endpoints } from '@/types/api-endpoints';
-import { fetchInstance } from '@/hooks/apiCalls';
+import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
 import CreateButton from '@/components/MtgComponent/CreateButton';
-import { toast } from '@/hooks/toast';
+import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import TableComponent from '@/components/Tables/TableComponent';
 
 const Players = () => {
@@ -14,12 +14,14 @@ const Players = () => {
     const [ limit ]                    = useState<number>(250);
     const [ isLoading, setIsLoading ]  = useState<boolean>(false);
     const [ totalItems, setTotalItems] = useState<number>(0);
+    const { get }                      = fetchInstance;
+    const { toast }                    = commonFunctions;
 
     const apiCall = async (page: number) => {
         setIsLoading(true);
 
         try {
-            await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.players}?page=${page}&limit=${limit}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.players}?page=${page}&limit=${limit}`)
             .then(data => {
                 const dataPlayer = (data || []).map((item: any) => ({
                     id         : item.id,
@@ -38,7 +40,7 @@ const Players = () => {
     };
 
     const getNumITems = async() => {
-        const result = await fetchInstance.get(`${import.meta.env.VITE_API_URL}${routing.players}/num`);
+        const result = await get(`${import.meta.env.VITE_API_URL}${routing.players}/num`);
         setTotalItems(result.count)
     }
 
