@@ -1,9 +1,13 @@
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import './css/style.css';
 import './css/satoshi.css';
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
-root.render(
-    <App />
-);
+const rootElement = document.getElementById('root');
+if (rootElement) {
+    createRoot(rootElement).render(
+        <App />
+    );
+} else {
+    console.error("Root element not found");
+}
