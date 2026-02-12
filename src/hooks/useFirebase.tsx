@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
 import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import Cookies from 'js-cookie';
-import { routing } from '../types/web-routing';
+import { routing } from '@/types/web-routing';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 
 const firebaseConfig = {

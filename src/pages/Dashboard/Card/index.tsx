@@ -1,6 +1,5 @@
 import CardDataStats from '@/components/CardDataStats';
 import { NavLink } from 'react-router-dom';
-import { routing } from '@/types/web-routing';
 
 interface DashboardProps {
     link  : string;

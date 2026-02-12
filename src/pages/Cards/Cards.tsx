@@ -2,7 +2,7 @@ import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useEffect } from 'react';
 import { routing } from '@/types/web-routing';
 import { endpoints } from '@/types/api-endpoints';
-import { fetchInstance } from '@/hooks/useApiCalls.tsx';
+import { fetchInstance, addUrlPaginationParams } from '@/hooks/useApiCalls.tsx';
 import TableComponent from '@/components/Tables/TableComponent';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 
@@ -19,7 +19,7 @@ const Decks = () => {
         setIsLoading(true);
 
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.cards}?page=${page}&limit=${limit}`)
+            await get(addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.cards, page, limit))
             .then(data => {
                  const dataCard = (data || []).map((item: any) => ({
                     id     : item.id,

@@ -10,7 +10,7 @@ import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
 import DropdownText from '@/components/Dropdowns/Dropdown/Text';
 import TopTitle from '@/components/Forms/Top';
-import { cardTypes } from "@/types/cardTypes";
+import { cardTypes } from "@/types/card-types";
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 
 const FormLayout = () => {

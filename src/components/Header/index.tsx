@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-// import DropdownMessage from './DropdownMessage';
-// import DropdownNotification from './DropdownNotification';
-import DropdownUser from './DropdownUser';
-import LogoIcon from '../../images/logo/logo-icon.svg';
-import DarkModeSwitcher from './DarkModeSwitcher';
-import { routing } from '../../types/web-routing';
-import SearchIcon from '../Icons/Search';
+// import DropdownMessage from '@/components/Header/DropdownMessage';
+// import DropdownNotification from '@/components/Header/DropdownNotification';
+import DropdownUser from '@/components/Header/DropdownUser';
+import LogoIcon from '@/images/logo/logo-icon.svg';
+import DarkModeSwitcher from '@/components/Header/DarkModeSwitcher';
+import { routing } from '@/types/web-routing';
+import SearchIcon from '@/components/Icons/Search';
 
 const Header = (props: {
     sidebarOpen: string | boolean | undefined;

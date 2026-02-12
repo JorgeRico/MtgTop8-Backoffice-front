@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import LockImage from '../../../Icons/Lock';
-import MailImage from '../../../Icons/Mail';
-import { routing } from '../../../../types/web-routing';
+import LockImage from '@/components/Icons/Lock';
+import MailImage from '@/components/Icons/Mail';
+import { routing } from '@/types/web-routing';
 
 const SignUp = () => {
     return (

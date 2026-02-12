@@ -1,7 +1,7 @@
 import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useEffect } from 'react';
 import { endpoints } from '@/types/api-endpoints';
-import { fetchInstance } from '@/hooks/useApiCalls.tsx';
+import { fetchInstance, addUrlPaginationParams } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
@@ -20,7 +20,7 @@ const Tournaments = () => {
     const apiCall = async (page: number) => {
         setIsLoading(true);
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}?page=${page}&limit=${limit}`)
+            await get(addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.tournaments, page, limit))
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     id      : item.id,

@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { routing } from '../types/web-routing';
+import { routing } from '@/types/web-routing';
 
 interface FetchOptions extends RequestInit {
     headers?: HeadersInit;
@@ -75,3 +75,13 @@ export const fetchInstance = {
         }
     }
 };
+
+export function addUrlPaginationParams (endpoint: string, currentPage: number, numItems: number) {
+    const url        = new URL(endpoint);
+    const pagination = url.searchParams;
+
+    pagination.set('limit', String(numItems));
+    pagination.set('page', String(currentPage));
+    
+    return url.toString();
+}
