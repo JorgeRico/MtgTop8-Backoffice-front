@@ -4,7 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import Logo from '@/images/logo/logo.svg';
 import DashboardImage from '@/components/Icons/Dashboard';
 import TournamentImage from '@/components/Icons/Tournament';
-import { routing } from '@/types/routing';
+import { routing } from '@/types/web-routing';
 import NavBlock from '@/components/Sidebar/NavBlock';
 interface SidebarProps {
     sidebarOpen: boolean;

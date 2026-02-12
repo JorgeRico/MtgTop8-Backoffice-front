@@ -3,7 +3,7 @@ import DefaultLayout from '@/layout/DefaultLayout';
 import DatePicker from '@/components/Forms/DatePicker/DatePicker';
 import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
-import { routing } from '@/types/routing';
+import { routing } from '@/types/web-routing';
 import { toast } from '@/hooks/toast';
 import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';

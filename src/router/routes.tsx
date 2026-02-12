@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
-import { routing } from '@/types/routing.ts';
+import { routing } from '@/types/web-routing.ts';
 import PageTitle from '@/components/PageTitle';
 
 const SignIn            = lazy(() => import("@/pages/Authentication/SignIn.tsx"));

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import DropdownUser from './DropdownUser';
 import LogoIcon from '../../images/logo/logo-icon.svg';
 import DarkModeSwitcher from './DarkModeSwitcher';
-import { routing } from '../../types/routing';
+import { routing } from '../../types/web-routing';
 import SearchIcon from '../Icons/Search';
 
 const Header = (props: {

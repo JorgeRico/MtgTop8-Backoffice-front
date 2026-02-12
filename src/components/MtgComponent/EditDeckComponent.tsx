@@ -4,7 +4,7 @@ import TopTitle from '@/components/Forms/Top';
 import { v4 as uuidv4 } from "uuid";
 import { useState } from 'react';
 import { fetchInstance } from '@/hooks/apiCalls';
-import { routing } from '@/types/routing';
+import { routing } from '@/types/web-routing';
 import { toast } from '@/hooks/toast';
 
 interface EditDeckComponentProps {

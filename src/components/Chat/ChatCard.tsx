@@ -5,7 +5,7 @@ import UserTwo from '../../images/user/user-02.png';
 import UserThree from '../../images/user/user-03.png';
 import UserFour from '../../images/user/user-04.png';
 import UserFive from '../../images/user/user-05.png';
-import { routing } from '../../types/routing';
+import { routing } from '../../types/web-routing';
 
 const chatData: Chat[] = [
   {

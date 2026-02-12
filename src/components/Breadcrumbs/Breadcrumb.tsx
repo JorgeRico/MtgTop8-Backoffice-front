@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { routing } from '../../types/routing';
+import { routing } from '../../types/web-routing';
 interface BreadcrumbProps {
   pageName: string;
 }

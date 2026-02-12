@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { routing } from '../types/routing';
+import { routing } from '../types/web-routing';
 
 interface FetchOptions extends RequestInit {
     headers?: HeadersInit;

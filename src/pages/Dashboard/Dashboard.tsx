@@ -1,5 +1,5 @@
 import DefaultLayout from '@/layout/DefaultLayout';
-import { routing } from '@/types/routing';
+import { routing } from '@/types/web-routing';
 import TrophyIcon from '@/components/Icons/Trophy.tsx';
 import TournamentIcon from '@/components/Icons/TournamentIcon';
 import DeckIcon from '@/components/Icons/Deck.tsx';

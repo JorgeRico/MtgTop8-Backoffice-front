@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import LogoDark from './../../../images/logo/logo-dark.svg';
 import Logo from './../../../images/logo/logo.svg';
 import MobileImage from '../../Icons/Mobile';
-import { routing } from '../../../types/routing';
+import { routing } from '../../../types/web-routing';
 
 const LeftSideSignInComponent = () => {
     return (

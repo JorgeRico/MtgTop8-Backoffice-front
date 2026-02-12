@@ -2,7 +2,7 @@ import { useState, useEffect, useId } from "react";
 import DefaultLayout from '@/layout/DefaultLayout';
 import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/apiCalls';
-import { routing } from '@/types/routing';
+import { routing } from '@/types/web-routing';
 import { toast } from '@/hooks/toast';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import InputForm from '@/components/Forms/InputForm';

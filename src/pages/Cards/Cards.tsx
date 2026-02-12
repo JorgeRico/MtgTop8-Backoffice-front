@@ -1,7 +1,7 @@
 import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useEffect } from 'react';
-import { routing } from '@/types/routing';
-import { endpoints } from '@/types/endpoints';
+import { routing } from '@/types/web-routing';
+import { endpoints } from '@/types/api-endpoints';
 import { fetchInstance } from '@/hooks/apiCalls';
 import TableComponent from '@/components/Tables/TableComponent';
 import CreateButton from '@/components/MtgComponent/CreateButton';

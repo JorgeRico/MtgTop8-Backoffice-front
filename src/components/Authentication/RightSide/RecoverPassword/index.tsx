@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MailImage from '@/components/Icons/Mail';
-import { routing } from '@/types/routing';
+import { routing } from '@/types/web-routing';
 import firebase from '@/hooks/firebase.tsx';
 import Loader from '@/common/LoaderSmall';
 import { toast } from '@/hooks/toast';
