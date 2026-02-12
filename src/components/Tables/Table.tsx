@@ -78,7 +78,7 @@ const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: Tabl
                                                 {item}
                                             </th>
                                         ) : (
-                                            <th key={uuidv4()} className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white">
+                                            <th key={uuidv4()} className="min-w-55 py-4 px-4 font-medium text-black dark:text-white">
                                                 {item}
                                             </th>
                                         )

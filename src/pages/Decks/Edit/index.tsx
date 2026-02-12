@@ -72,7 +72,7 @@ const FormLayout = () => {
 
         try {
             await put(`${import.meta.env.VITE_API_URL}${routing.decks}/${id.id}`, body)
-            .then(data => {
+            .then(() => {
                 setTimeout(() => setIsLoading(false), 2000);
                 setTimeout(() => toast('success', "Deck updated correctly"), 2000);
             })

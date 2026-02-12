@@ -54,7 +54,7 @@ const FormLayout = () => {
                 
         try {
             await put(`${import.meta.env.VITE_API_URL}${routing.players}/${id.id}`, body)
-            .then(data => {
+            .then(() => {
                 setTimeout(() => setIsLoading(false), 2000);
                 setTimeout(() => toast('success', "Player updated correctly"), 2000);
             })

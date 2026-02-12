@@ -26,7 +26,7 @@ const FormLayout = () => {
     const [isLeagueSelected, setIsLeagueSelected]           = useState<boolean>(false);
     const { put, get }                                      = fetchInstance;
     const { toast }                                         = commonFunctions;
-    
+
     // form ids
     const idName       = useId();
     const idDay        = useId();
@@ -62,7 +62,7 @@ const FormLayout = () => {
         
         try {
             await put(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id.id}`, body)
-            .then(data => {
+            .then(() => {
                 setTimeout(() => toast('success', "Tournament updated correctly"), 2000);
                 setTimeout(() => setIsCreated(true), 2000);
                 setTimeout(() => setIsLoading(false), 2000);

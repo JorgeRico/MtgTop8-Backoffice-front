@@ -12,6 +12,7 @@ import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 
 const FormLayout = () => {
     const { getDropdownYears, toast }                 = commonFunctions;
+    const { put, get }                                = fetchInstance;
     const [ showData, setShowData ]                   = useState<boolean>(false);
     const [ isLoading, setIsLoading ]                 = useState<boolean>(false);
     const [ selectedFormat, setSelectedFormat ]       = useState<number | null>(null);
@@ -25,9 +26,6 @@ const FormLayout = () => {
     const [ isCurrentSelected, setIsCurrentSelected ] = useState<boolean>(false);
     const [ isFormatSelected, setIsFormatSelected ]   = useState<boolean>(false);
     const [ isActiveSelected, setIsActiveSelected ]   = useState<boolean>(false);
-
-    const { put, get }                                = fetchInstance;
-
     // form ids
     const idFormat  = useId();
     const idCurrent = useId();
@@ -72,7 +70,7 @@ const FormLayout = () => {
         
         try {
             await put(`${import.meta.env.VITE_API_URL}${routing.leagues}/${id.id}`, body)
-            .then(data => {
+            .then(() => {
                 setTimeout(() => setIsLoading(false), 2000);
                 setTimeout(() => toast('success', "League updated correctly"), 2000);
             })
