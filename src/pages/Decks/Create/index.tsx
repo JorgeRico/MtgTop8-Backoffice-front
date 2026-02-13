@@ -9,6 +9,7 @@ import InputForm from '@/components/Forms/InputForm';
 import TopTitle from "@/components/Forms/Top";
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import { useAuthStore } from '@/store/auth';
+import { useNavigate } from 'react-router-dom';
 
 const FormLayout = () => {
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
@@ -23,6 +24,7 @@ const FormLayout = () => {
     const { post, get, defaultHeaders }                     = fetchInstance;
     const { toast }                                         = commonFunctions;
     const { authToken }                                     = useAuthStore();
+    let navigate                                            = useNavigate();
 
     // form ids
     const idPlayer     = useId();
@@ -97,7 +99,7 @@ const FormLayout = () => {
 
     const onClickBack = (event: any) => {
         event.preventDefault();
-        window.location.href = routing.decks
+        navigate(routing.decks);
     }
 
     useEffect(() => {

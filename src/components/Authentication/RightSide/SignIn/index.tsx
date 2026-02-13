@@ -6,11 +6,13 @@ import firebase from '@/hooks/useFirebase.tsx';
 import Loader from '@/common/LoaderSmall';
 import { useAuthStore } from '@/store/auth';
 import { routing } from '@/types/web-routing';
+import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
     const [ isLoading, setIsLoading ] = useState(false);
     const { firebaseLogin }           = firebase;
-    const { createAuthToken, login }  = useAuthStore()
+    const { createAuthToken, login }  = useAuthStore();
+    let navigate                      = useNavigate();
 
     const onSubmitForm = async () => {
         setIsLoading(true);
@@ -24,7 +26,7 @@ const SignIn = () => {
             if (token != null) {
                 createAuthToken(token)
                 login()
-                window.location.href = routing.dashboard;
+                navigate(routing.dashboard);
             }           
         }
     }
@@ -66,7 +68,8 @@ const SignIn = () => {
                                     type="password"
                                     name="password"
                                     placeholder="6+ Characters, 1 Capital letter"
-                                    className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                    autoComplete="off"
+                                    className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:text-white dark:focus:border-primary"
                                     required
                                 />
 

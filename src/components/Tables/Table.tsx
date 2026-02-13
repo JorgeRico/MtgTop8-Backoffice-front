@@ -8,6 +8,7 @@ import Loader from '@/common/Loader';
 import { useState, useEffect } from 'react';
 import "./module.css";
 import { useAuthStore } from '@/store/auth';
+import { useNavigate } from 'react-router-dom';
 
 interface TableProps {
     header         : string[]; 
@@ -19,6 +20,7 @@ interface TableProps {
 }
 
 const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: TableProps) => {
+    let navigate                                     = useNavigate();
     const [ dataItems, setDataItems ]                = useState<Record<string, any>[]>(data);
     const { delete: deleteInstance, defaultHeaders } = fetchInstance;
     const { toast }                                  = commonFunctions;
@@ -26,7 +28,7 @@ const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: Tabl
 
     const editSubmit = (event: any, id: string) => {
         event.preventDefault();
-        window.location.href = endpoint + "/edit/" + id;
+        navigate(endpoint + "/edit/" + id);
     }
 
     const loading = (id: string) => {

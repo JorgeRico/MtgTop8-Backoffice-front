@@ -11,6 +11,7 @@ import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import TopTitle from '@/components/Forms/Top';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import { useAuthStore } from "@/store/auth";
+import { useNavigate } from 'react-router-dom';
 
 const CreateTournament = () => {
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
@@ -25,6 +26,7 @@ const CreateTournament = () => {
     const { post, get, defaultHeaders }                     = fetchInstance;
     const { toast }                                         = commonFunctions;
     const { authToken }                                     = useAuthStore();
+    let navigate                                            = useNavigate();
 
     // form ids
     const idName       = useId();
@@ -88,7 +90,7 @@ const CreateTournament = () => {
 
     const onClickBack = (event: any) => {
         event.preventDefault();
-        window.location.href = routing.tournaments
+        navigate(routing.tournaments);
     }
 
     useEffect(() => {

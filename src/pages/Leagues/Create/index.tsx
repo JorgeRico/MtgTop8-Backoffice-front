@@ -9,6 +9,7 @@ import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import { useAuthStore } from '@/store/auth';
+import { useNavigate } from 'react-router-dom';
 
 const CreateLeague = () => {
     const { getDropdownYears, toast }                 = commonFunctions;
@@ -26,6 +27,7 @@ const CreateLeague = () => {
     const [ isActiveSelected, setIsActiveSelected ]   = useState<boolean>(false);
     const { post, defaultHeaders }                    = fetchInstance;
     const { authToken }                               = useAuthStore();
+    let navigate                                      = useNavigate();
 
     // form ids
     const idFormat  = useId();
@@ -83,7 +85,7 @@ const CreateLeague = () => {
 
     const onClickBack = (event: any) => {
         event.preventDefault();
-        window.location.href = routing.leagues
+        navigate(routing.leagues);
     }
 
     return (

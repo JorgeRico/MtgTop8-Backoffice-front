@@ -10,6 +10,7 @@ import InputNumberForm from '@/components/Forms/InputNumberForm';
 import TopTitle from "@/components/Forms/Top";
 import BreadcrumbBack from "@/components/BreadcrumsBackoffice";
 import { useAuthStore } from '@/store/auth';
+import { useNavigate } from 'react-router-dom';
 
 const CreatePlayer = () => {
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
@@ -23,6 +24,7 @@ const CreatePlayer = () => {
     const { post, put, get, defaultHeaders }                = fetchInstance;
     const { toast }                                         = commonFunctions;
     const { authToken }                                     = useAuthStore();
+    let navigate                                            = useNavigate();
 
     // form ids
     const idPosition   = useId();
@@ -102,7 +104,7 @@ const CreatePlayer = () => {
 
     const onClickBack = (event: any) => {
         event.preventDefault();
-        window.location.href = routing.players
+        navigate(routing.players);
     }
 
     useEffect(() => {

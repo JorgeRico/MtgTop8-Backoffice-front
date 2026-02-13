@@ -1,4 +1,5 @@
 import { routing } from '@/types/web-routing';
+import { useNavigate } from 'react-router-dom';
 interface FetchOptions extends RequestInit {
     headers?: HeadersInit;
 }
@@ -68,9 +69,10 @@ export const fetchInstance = {
     },
 
     checkErrors : (error: any) => {
+        let navigate = useNavigate();
         // un authorized
         if (error instanceof Error && error.message.includes('401')) {
-            window.location.href = routing.home
+            navigate(routing.home)
         }
     }
 };

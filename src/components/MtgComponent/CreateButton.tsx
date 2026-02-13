@@ -1,7 +1,10 @@
+import { useNavigate } from 'react-router-dom';
+
 const CreateButton = ({ endpoint, text }: { endpoint: string; text: string }) => {
+    let navigate = useNavigate();
     
     const onClickCreate = () => {
-        window.location.href = endpoint + '/create'
+        navigate(endpoint + '/create');
     }
 
     return (
