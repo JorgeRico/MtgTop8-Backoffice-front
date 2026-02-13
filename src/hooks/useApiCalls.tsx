@@ -1,19 +1,19 @@
-import Cookies from 'js-cookie';
 import { routing } from '@/types/web-routing';
-
 interface FetchOptions extends RequestInit {
     headers?: HeadersInit;
 }
 
 export const fetchInstance = {
-    defaultHeaders: {
-        'Content-Type': 'application/json',
-        'Authorization': Cookies.get('authToken') || '',
+    defaultHeaders: (authToken : string) => {
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': authToken || ''
+        }
     },
 
     get: async (url: string, options: FetchOptions = {}) => {
         try {
-            return await fetch(url, { method: 'GET', headers: { ...fetchInstance.defaultHeaders, ...options.headers }, ...options })
+            return await fetch(url, { method: 'GET', headers: { ...options.headers }, ...options})
                 .then(async response => {
                     if (!response.ok) {
                         throw new Error(response.status.toString());
@@ -27,7 +27,7 @@ export const fetchInstance = {
 
     post: async (url: string, body: any, options: FetchOptions = {}) => {
         try {
-            return await fetch(url, { method: 'POST', body: JSON.stringify(body), headers: { ...fetchInstance.defaultHeaders, ...options.headers }, ...options })
+            return await fetch(url, { method: 'POST', body: JSON.stringify(body), headers: { ...options.headers }, ...options })
                 .then(async response => {
                     if (!response.ok) {
                         throw new Error(response.status.toString());
@@ -41,7 +41,7 @@ export const fetchInstance = {
 
     put: async (url: string, body: any, options: FetchOptions = {}) => {
         try {
-            return await fetch(url, { method: 'PUT', body: JSON.stringify(body), headers: { ...fetchInstance.defaultHeaders, ...options.headers }, ...options })
+            return await fetch(url, { method: 'PUT', body: JSON.stringify(body), headers: { ...options.headers }, ...options })
                 .then(async response => {
                     if (!response.ok) {
                         throw new Error(response.status.toString());
@@ -55,7 +55,7 @@ export const fetchInstance = {
 
     delete: async (url: string, options: FetchOptions = {}) => {
         try {
-            return await fetch(url, { method: 'DELETE', headers: { ...fetchInstance.defaultHeaders, ...options.headers }, ...options })
+            return await fetch(url, { method: 'DELETE', headers: { ...options.headers }, ...options })
                 .then(async response => {
                     if (!response.ok) {
                         throw new Error(response.status.toString());
@@ -70,7 +70,6 @@ export const fetchInstance = {
     checkErrors : (error: any) => {
         // un authorized
         if (error instanceof Error && error.message.includes('401')) {
-            Cookies.remove('authToken');
             window.location.href = routing.home
         }
     }

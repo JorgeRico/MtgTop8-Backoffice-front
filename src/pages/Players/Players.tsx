@@ -6,6 +6,7 @@ import { routing } from '@/types/web-routing';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import TableComponent from '@/components/Tables/TableComponent';
+import { useAuthStore } from '@/store/auth';
 
 const Players = () => {
     const [ players, setPlayers ]      = useState<any[] | null>(null);
@@ -14,14 +15,15 @@ const Players = () => {
     const [ limit ]                    = useState<number>(250);
     const [ isLoading, setIsLoading ]  = useState<boolean>(false);
     const [ totalItems, setTotalItems] = useState<number>(0);
-    const { get }                      = fetchInstance;
+    const { get, defaultHeaders }      = fetchInstance;
     const { toast }                    = commonFunctions;
+    const { authToken }                = useAuthStore();
 
     const apiCall = async (page: number) => {
         setIsLoading(true);
 
         try {
-            await get(addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.players, page, limit))
+            await get(addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.players, page, limit), {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataPlayer = (data || []).map((item: any) => ({
                     id         : item.id,
@@ -40,7 +42,7 @@ const Players = () => {
     };
 
     const getNumITems = async() => {
-        const result = await get(`${import.meta.env.VITE_API_URL}${routing.players}/num`);
+        const result = await get(`${import.meta.env.VITE_API_URL}${routing.players}/num`, {headers: defaultHeaders(authToken)});
         setTotalItems(result.count)
     }
 

@@ -12,6 +12,7 @@ import DropdownText from '@/components/Dropdowns/Dropdown/Text';
 import TopTitle from '@/components/Forms/Top';
 import { cardTypes } from "@/types/card-types";
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
+import { useAuthStore } from '@/store/auth';
 
 const FormLayout = () => {
     const [ showData, setShowData ]                         = useState<boolean>(false);
@@ -30,8 +31,9 @@ const FormLayout = () => {
     const [ selectedDeck, setSelectedDeck ]                 = useState<number | null>(null);
     const [ isDeckSelected, setIsDeckSelected ]             = useState<boolean>(false);
     const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
-    const { put, get }                                      = fetchInstance;
+    const { put, get, defaultHeaders }                      = fetchInstance;
     const { toast }                                         = commonFunctions;
+    const { authToken }                                     = useAuthStore();
 
     // form ids
     const idName       = useId();
@@ -80,7 +82,7 @@ const FormLayout = () => {
         }
 
         try {
-            await put(`${import.meta.env.VITE_API_URL}${routing.cards}/${id.id}`, body)
+            await put(`${import.meta.env.VITE_API_URL}${routing.cards}/${id.id}`, body, {headers: defaultHeaders(authToken)})
             .then(() => {
                 setTimeout(() => setIsLoading(false), 2000);
                 setTimeout(() => toast('success', "Deck updated correctly"), 2000);
@@ -92,7 +94,7 @@ const FormLayout = () => {
 
     const apiTournamentsCall = async () => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     value : item.id,
@@ -108,7 +110,7 @@ const FormLayout = () => {
 
     const apiTournamentDecksCall = async (id: number) => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id}/decks`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id}/decks`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataDeck = (data || []).map((item: any) => ({
                     value : item.decks.id,
@@ -124,7 +126,7 @@ const FormLayout = () => {
 
     const getData = async () => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.cards}/${id.id}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.cards}/${id.id}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 setSelectedName(data[0].name);
                 setSelectedNum(data[0].num);
@@ -142,7 +144,7 @@ const FormLayout = () => {
 
     const getDeckData = async (id: number) => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.decks}/${id}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.decks}/${id}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 getPlayerData(data[0].idPlayer);
             })
@@ -153,7 +155,7 @@ const FormLayout = () => {
 
     const getPlayerData = async (id: number) => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.players}/${id}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.players}/${id}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 setSelectedTournament(data[0].idTournament)
                 apiTournamentDecksCall(data[0].idTournament)

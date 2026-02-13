@@ -8,6 +8,7 @@ import TopTitle from '@/components/Forms/Top';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
+import { useAuthStore } from '@/store/auth';
 
 const CreateLeague = () => {
     const { getDropdownYears, toast }                 = commonFunctions;
@@ -23,7 +24,8 @@ const CreateLeague = () => {
     const [ isCurrentSelected, setIsCurrentSelected ] = useState<boolean>(false);
     const [ isFormatSelected, setIsFormatSelected ]   = useState<boolean>(false);
     const [ isActiveSelected, setIsActiveSelected ]   = useState<boolean>(false);
-    const { post }                                    = fetchInstance;
+    const { post, defaultHeaders }                    = fetchInstance;
+    const { authToken }                               = useAuthStore();
 
     // form ids
     const idFormat  = useId();
@@ -68,7 +70,7 @@ const CreateLeague = () => {
         }
         
         try {
-            await post(`${import.meta.env.VITE_API_URL}${routing.leagues}`, body)
+            await post(`${import.meta.env.VITE_API_URL}${routing.leagues}`, body, {headers: defaultHeaders(authToken)})
             .then(data => {
                 setTimeout(() => setIsCreated(true), 2000);
                 setTimeout(() => toast('success', "League created correctly, id: " + data.data[0].id), 2000);

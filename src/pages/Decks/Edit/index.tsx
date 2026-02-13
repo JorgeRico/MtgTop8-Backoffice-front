@@ -10,6 +10,7 @@ import InputForm from '@/components/Forms/InputForm';
 import TopTitle from '@/components/Forms/Top';
 import EditDeckComponent from '@/components/MtgComponent/EditDeckComponent.tsx';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
+import { useAuthStore } from '@/store/auth';
 
 const FormLayout = () => {
     const [ showData, setShowData ]                         = useState<boolean>(false);
@@ -23,8 +24,9 @@ const FormLayout = () => {
     const [ isPlayerSelected, setIsPlayerSelected ]         = useState<boolean>(false);
     const [ selectedPlayer, setSelectedPlayer]              = useState<number | null>(null);
     const [ players, setPlayers ]                           = useState<any[] | null>(null);
-    const { put, get }                                      = fetchInstance;
+    const { put, get, defaultHeaders }                      = fetchInstance;
     const { toast }                                         = commonFunctions;
+    const { authToken }                                     = useAuthStore();
 
     // form ids
     const idPlayer     = useId();
@@ -44,7 +46,7 @@ const FormLayout = () => {
 
     const apiTournamentsCall = async () => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     value : item.id,
@@ -71,7 +73,7 @@ const FormLayout = () => {
         }
 
         try {
-            await put(`${import.meta.env.VITE_API_URL}${routing.decks}/${id.id}`, body)
+            await put(`${import.meta.env.VITE_API_URL}${routing.decks}/${id.id}`, body, {headers: defaultHeaders(authToken)})
             .then(() => {
                 setTimeout(() => setIsLoading(false), 2000);
                 setTimeout(() => toast('success', "Deck updated correctly"), 2000);
@@ -83,7 +85,7 @@ const FormLayout = () => {
 
     const getData = async () => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.decks}/${id.id}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.decks}/${id.id}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 setSelectedName(data[0].name)
                 apiGetPlayerCall(data[0].idPlayer);
@@ -96,7 +98,7 @@ const FormLayout = () => {
 
     const getCardsDeck = async () => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.decks}/${id.id}/cards`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.decks}/${id.id}/cards`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const card = (data || []).map((item: any) => ({
                     id    : item.id,
@@ -115,7 +117,7 @@ const FormLayout = () => {
 
     const apiGetPlayerCall = async (idPlayer: number) => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.players}/${idPlayer}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.players}/${idPlayer}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 setSelectedTournament(data[0].idTournament);
                 setIsTournamentSelected(true);
@@ -130,7 +132,7 @@ const FormLayout = () => {
 
     const apiPlayersCall = async (id: number) => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id}/players`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id}/players`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataPlayer = (data || []).map((item: any) => ({
                     value : item.id,
@@ -155,7 +157,7 @@ const FormLayout = () => {
             <DefaultLayout>
                 <div className="grid grid-cols-1 gap-9 sm:grid-cols-2 mb-8">
                     <div className="flex flex-col gap-9">
-                        <BreadcrumbBack pageName="Decks"  link={routing.cards}/>
+                        <BreadcrumbBack pageName="Decks"  link={routing.decks}/>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 gap-9 xl:grid-cols-2">

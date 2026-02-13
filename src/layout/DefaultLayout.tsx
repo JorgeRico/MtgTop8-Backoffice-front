@@ -1,30 +1,30 @@
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header/index';
 import Sidebar from '@/components/Sidebar/index';
-import Cookies from 'js-cookie';
+import { useAuthStore } from '@/store/auth';
+import firebase from '@/hooks/useFirebase.tsx';
 
 interface InputProps {
     children: any;
 }
 
 const DefaultLayout = ({ children }: InputProps) => {
-    const [ sidebarOpen, setSidebarOpen ] = useState<boolean>(false);
-    const [ isLogued, setIsLogued ]       = useState<boolean>(false);
+    const [ sidebarOpen, setSidebarOpen ]                     = useState<boolean>(false);
+    const { isLoggedIn, authToken, logout, destroyAuthToken } = useAuthStore()
+    const { firebaseLogout }                                  = firebase;
 
-    const logout = () => {
-        window.location.href = '/';
+    const handleLogout = () => {
+        firebaseLogout(logout, destroyAuthToken);
     }
-
+    
     useEffect(() => {
-        if (Cookies.get('authToken') !== undefined) {
-            setIsLogued(true);
-        } else {
-            logout();
+        if (authToken == '') {
+            handleLogout()
         }
     }, []);
 
     return (
-        (isLogued === true) && (
+        isLoggedIn && (
             <>
                 <div className="dark:bg-boxdark-2 dark:text-bodydark">
                     <div className="flex h-screen overflow-hidden">

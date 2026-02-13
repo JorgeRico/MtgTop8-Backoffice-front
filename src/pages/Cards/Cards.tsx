@@ -5,6 +5,7 @@ import { endpoints } from '@/types/api-endpoints';
 import { fetchInstance, addUrlPaginationParams } from '@/hooks/useApiCalls.tsx';
 import TableComponent from '@/components/Tables/TableComponent';
 import CreateButton from '@/components/MtgComponent/CreateButton';
+import { useAuthStore } from '@/store/auth';
 
 const Decks = () => {
     const [ cards, setCards ]          = useState<any[] | null>(null);
@@ -13,13 +14,14 @@ const Decks = () => {
     const [ limit ]                    = useState<number>(2500);
     const [ isLoading, setIsLoading ]  = useState<boolean>(false);
     const [ totalItems, setTotalItems] = useState<number>(0);
-    const { get }                      = fetchInstance;
+    const { get, defaultHeaders }      = fetchInstance;
+    const { authToken }                = useAuthStore();
 
     const apiCall = async (page: number) => {
         setIsLoading(true);
 
         try {
-            await get(addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.cards, page, limit))
+            await get(addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.cards, page, limit), {headers: defaultHeaders(authToken)})
             .then(data => {
                  const dataCard = (data || []).map((item: any) => ({
                     id     : item.id,
@@ -36,7 +38,7 @@ const Decks = () => {
     };
 
     const getNumITems = async() => {
-        const result = await get(`${import.meta.env.VITE_API_URL}${routing.cards}/num`);
+        const result = await get(`${import.meta.env.VITE_API_URL}${routing.cards}/num`, {headers: defaultHeaders(authToken)});
         setTotalItems(result.count)
     }
 

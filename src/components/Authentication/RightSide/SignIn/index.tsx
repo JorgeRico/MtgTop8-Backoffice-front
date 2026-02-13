@@ -4,20 +4,28 @@ import LockImage from '@/components/Icons/Lock.tsx';
 import MailImage from '@/components/Icons/Mail.tsx';
 import firebase from '@/hooks/useFirebase.tsx';
 import Loader from '@/common/LoaderSmall';
+import { useAuthStore } from '@/store/auth';
+import { routing } from '@/types/web-routing';
 
 const SignIn = () => {
     const [ isLoading, setIsLoading ] = useState(false);
-    const { login } = firebase;
+    const { firebaseLogin }           = firebase;
+    const { createAuthToken, login }  = useAuthStore()
 
-
-    const onSubmitForm = () => {
+    const onSubmitForm = async () => {
         setIsLoading(true);
 
         var email    = document.querySelector<HTMLInputElement>('input[name="email"]')?.value;
         var password = document.querySelector<HTMLInputElement>('input[name="password"]')?.value;
 
         if (email && password) {
-            login(email, password);   
+            
+            let token = await firebaseLogin(email, password);   
+            if (token != null) {
+                createAuthToken(token)
+                login()
+                window.location.href = routing.dashboard;
+            }           
         }
     }
     
@@ -71,6 +79,7 @@ const SignIn = () => {
                         <div className="mb-5">
                             {!isLoading ? (
                                 <input
+                                    
                                     type="submit"
                                     value="Sign In"
                                     className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"

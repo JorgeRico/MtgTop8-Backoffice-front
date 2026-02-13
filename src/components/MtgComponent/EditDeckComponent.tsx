@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
+import { useAuthStore } from '@/store/auth';
 
 interface EditDeckComponentProps {
     title  : string;
@@ -16,8 +17,9 @@ interface EditDeckComponentProps {
 const EditDeckComponent = ({title, cards, option}: EditDeckComponentProps) => {
     const [ numSelected, setNumSelected ]   = useState<number | null>(null);
     const [ nameSelected, setNameSelected ] = useState<string | null>(null);
-    const { put }                           = fetchInstance;
+    const { put, defaultHeaders }           = fetchInstance;
     const { toast }                         = commonFunctions;
+    const { authToken }                     = useAuthStore();
 
     const onHandleEditCard = (event: any) => {
         event.preventDefault();
@@ -58,7 +60,7 @@ const EditDeckComponent = ({title, cards, option}: EditDeckComponentProps) => {
             }
     
             try {
-                await put(`${import.meta.env.VITE_API_URL}${routing.cards}/${id}`, body)
+                await put(`${import.meta.env.VITE_API_URL}${routing.cards}/${id}`, body, {headers: defaultHeaders(authToken)})
                 .then(() => {
                     setTimeout(() => toast('success', "Deck Card updated correctly"), 500);
                     setTimeout(() => document.querySelector('#edit-' + id)?.classList.remove('hidden'), 1500);

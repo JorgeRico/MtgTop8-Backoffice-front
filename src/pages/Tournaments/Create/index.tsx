@@ -10,6 +10,7 @@ import InputNumberForm from '@/components/Forms/InputNumberForm';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import TopTitle from '@/components/Forms/Top';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
+import { useAuthStore } from "@/store/auth";
 
 const CreateTournament = () => {
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
@@ -21,8 +22,9 @@ const CreateTournament = () => {
     const [ selectedDate ]                                  = useState<string>('');
     const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
     const [ isLeagueSelected, setIsLeagueSelected ]         = useState<boolean>(false);
-    const { post, get }                                     = fetchInstance;
+    const { post, get, defaultHeaders }                     = fetchInstance;
     const { toast }                                         = commonFunctions;
+    const { authToken }                                     = useAuthStore();
 
     // form ids
     const idName       = useId();
@@ -58,7 +60,7 @@ const CreateTournament = () => {
         }
         
         try {
-            await post(`${import.meta.env.VITE_API_URL}${routing.tournaments}`, body)
+            await post(`${import.meta.env.VITE_API_URL}${routing.tournaments}`, body, {headers: defaultHeaders(authToken)})
             .then(data => {
                 setTimeout(() => setIsCreated(true), 2000);
                 setTimeout(() => toast('success', "Tournament created correctly, id: "+data.data[0].id), 2000);
@@ -70,7 +72,7 @@ const CreateTournament = () => {
 
     const apiCall = async () => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.leagues}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.leagues}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataLeague = (data || []).map((item: any) => ({
                     value : item.id,

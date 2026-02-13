@@ -11,6 +11,7 @@ import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import TopTitle from '@/components/Forms/Top';
 import { useParams } from 'react-router-dom';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
+import { useAuthStore } from '@/store/auth';
 
 const FormLayout = () => {
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
@@ -24,8 +25,9 @@ const FormLayout = () => {
     const id                                                = useParams();
     const [ showData, setShowData ]                         = useState<boolean>(false);
     const [isLeagueSelected, setIsLeagueSelected]           = useState<boolean>(false);
-    const { put, get }                                      = fetchInstance;
+    const { put, get, defaultHeaders }                      = fetchInstance;
     const { toast }                                         = commonFunctions;
+    const { authToken }                                     = useAuthStore();
 
     // form ids
     const idName       = useId();
@@ -61,7 +63,7 @@ const FormLayout = () => {
         }
         
         try {
-            await put(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id.id}`, body)
+            await put(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id.id}`, body, {headers: defaultHeaders(authToken)})
             .then(() => {
                 setTimeout(() => toast('success', "Tournament updated correctly"), 2000);
                 setTimeout(() => setIsCreated(true), 2000);
@@ -74,7 +76,7 @@ const FormLayout = () => {
 
     const getTournament = async() => {
          try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id.id}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id.id}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 setSelectedName(data[0].name)
                 setSelectedLeague(data[0].idLeague);
@@ -90,7 +92,7 @@ const FormLayout = () => {
 
     const apiCall = async () => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.leagues}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.leagues}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataLeague = (data || []).map((item: any) => ({
                     value : item.id,

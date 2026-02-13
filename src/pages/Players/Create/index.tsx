@@ -9,6 +9,7 @@ import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
 import TopTitle from "@/components/Forms/Top";
 import BreadcrumbBack from "@/components/BreadcrumsBackoffice";
+import { useAuthStore } from '@/store/auth';
 
 const CreatePlayer = () => {
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
@@ -19,8 +20,9 @@ const CreatePlayer = () => {
     const [ selectedDeckName ]                              = useState<string | null>(null);
     const [ selectedPosition, setSelectedPosition ]         = useState<number | null>(null);
     const [ isTournamentSelected, setIsTournamentSelected ] = useState<boolean>(false);
-    const { post, put, get }                                = fetchInstance;
+    const { post, put, get, defaultHeaders }                = fetchInstance;
     const { toast }                                         = commonFunctions;
+    const { authToken }                                     = useAuthStore();
 
     // form ids
     const idPosition   = useId();
@@ -45,7 +47,7 @@ const CreatePlayer = () => {
         }
 
         try {
-            await post(`${import.meta.env.VITE_API_URL}${routing.decks}`, deckOptions)
+            await post(`${import.meta.env.VITE_API_URL}${routing.decks}`, deckOptions, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const body = {
                     'name'         : formDataValues.get(idName),
@@ -63,7 +65,7 @@ const CreatePlayer = () => {
 
     const createPlayer = async (idDeck: number, body: object) => {
         try {
-            await post(`${import.meta.env.VITE_API_URL}${routing.players}`, body)
+            await post(`${import.meta.env.VITE_API_URL}${routing.players}`, body, {headers: defaultHeaders(authToken)})
             .then(data => {
                 updateIdPlayerDeck(idDeck, {'idPlayer' : data.data[0].id})
                 setTimeout(() => setIsCreated(true), 2000);
@@ -76,7 +78,7 @@ const CreatePlayer = () => {
 
     const updateIdPlayerDeck = async (idDeck: number, body: object) => {
         try {
-            await put(`${import.meta.env.VITE_API_URL}${routing.decks}/${idDeck}`, body)
+            await put(`${import.meta.env.VITE_API_URL}${routing.decks}/${idDeck}`, body, {headers: defaultHeaders(authToken)})
         } catch (error) {
             toast('error', "Failed to add idPlayer to deck");
         }
@@ -84,7 +86,7 @@ const CreatePlayer = () => {
     
     const apiTournamentsCall = async () => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     value : item.id,
@@ -112,7 +114,7 @@ const CreatePlayer = () => {
             <DefaultLayout>
                 <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
-                        <BreadcrumbBack pageName="Cards" link={routing.cards} />
+                        <BreadcrumbBack pageName="Players" link={routing.players} />
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <TopTitle title="Create Player"></TopTitle>
                             <form onSubmit={onSubmitForm} className="p-6.5">

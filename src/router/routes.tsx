@@ -6,7 +6,6 @@ import PageTitle from '@/components/PageTitle';
 const SignIn            = lazy(() => import("@/pages/Authentication/SignIn.tsx"));
 // const SignUp            = lazy(() => import("@/pages/Authentication/SignUp.tsx"));
 const RecoverPassword   = lazy(() => import("@/pages/Authentication/RecoverPassword.tsx"));
-const Chart             = lazy(() => import("@/pages/Chart.tsx"));
 const Dashboard         = lazy(() => import("@/pages/Dashboard/Dashboard.tsx"));
 const Profile           = lazy(() => import("@/pages/Profile.tsx"));
 const Settings          = lazy(() => import("@/pages/Settings.tsx"));
@@ -198,15 +197,6 @@ const Router = () => (
                     <>
                     <PageTitle title="Settings | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                     <Settings />
-                    </>
-                }
-            />
-            <Route
-                path="/chart"
-                element={
-                    <>
-                    <PageTitle title="Basic Chart | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Chart />
                     </>
                 }
             />

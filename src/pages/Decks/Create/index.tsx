@@ -8,6 +8,7 @@ import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import InputForm from '@/components/Forms/InputForm';
 import TopTitle from "@/components/Forms/Top";
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
+import { useAuthStore } from '@/store/auth';
 
 const FormLayout = () => {
     const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
@@ -19,8 +20,9 @@ const FormLayout = () => {
     const [ isPlayerSelected, setIsPlayerSelected ]         = useState<boolean>(false);
     const [ selectedPlayer, setSelectedPlayer]              = useState<number | null>(null);
     const [ players, setPlayers ]                           = useState<any[] | null>(null);
-    const { post, get }                                     = fetchInstance;
+    const { post, get, defaultHeaders }                     = fetchInstance;
     const { toast }                                         = commonFunctions;
+    const { authToken }                                     = useAuthStore();
 
     // form ids
     const idPlayer     = useId();
@@ -51,7 +53,7 @@ const FormLayout = () => {
         }
 
         try {
-            await post(`${import.meta.env.VITE_API_URL}${routing.decks}`, body)
+            await post(`${import.meta.env.VITE_API_URL}${routing.decks}`, body, {headers: defaultHeaders(authToken)})
             .then(data => {
                 setTimeout(() => setIsCreated(true), 2000);
                 setTimeout(() => toast('success', "Player created correctly, id: "+data.data[0].id), 2000);
@@ -63,7 +65,7 @@ const FormLayout = () => {
 
     const apiTournamentsCall = async () => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     value : item.id,
@@ -79,7 +81,7 @@ const FormLayout = () => {
 
     const apiPlayersCall = async (id: number) => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id}/players`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/${id}/players`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataPlayer = (data || []).map((item: any) => ({
                     value : item.id,

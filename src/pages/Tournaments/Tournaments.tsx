@@ -6,6 +6,7 @@ import { routing } from '@/types/web-routing';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import TableComponent from '@/components/Tables/TableComponent';
+import { useAuthStore } from '@/store/auth';
 
 const Tournaments = () => {
     const [ tournaments, setTournaments ] = useState<any[] | null>(null);
@@ -14,13 +15,14 @@ const Tournaments = () => {
     const [ limit ]                       = useState<number>(10);
     const [ isLoading, setIsLoading ]     = useState<boolean>(false);
     const [ totalItems, setTotalItems]    = useState<number>(0);
-    const { get }                         = fetchInstance;
+    const { get, defaultHeaders }         = fetchInstance;
     const { toast }                       = commonFunctions;
+    const { authToken }                   = useAuthStore();
 
     const apiCall = async (page: number) => {
         setIsLoading(true);
         try {
-            await get(addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.tournaments, page, limit))
+            await get(addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.tournaments, page, limit), {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
                     id      : item.id,
@@ -38,7 +40,7 @@ const Tournaments = () => {
     };
 
     const getNumITems = async() => {
-        const result = await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/num`);
+        const result = await get(`${import.meta.env.VITE_API_URL}${routing.tournaments}/num`, {headers: defaultHeaders(authToken)});
         setTotalItems(result.count)
     }
 

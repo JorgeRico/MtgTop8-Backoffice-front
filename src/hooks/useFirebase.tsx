@@ -2,7 +2,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
 import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
-import Cookies from 'js-cookie';
 import { routing } from '@/types/web-routing';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 
@@ -29,26 +28,22 @@ const FirebaseHook = {
         unwatchAuthState = onAuthStateChanged(auth, user => {
             if (!user) {
                 // console.log('User is not authenticated');
-                Cookies.remove('authToken');
                 window.location.href = routing.home;
-            } else {
+            } 
+            // else {
                 // console.log('User is authenticated');
-                console.log(Cookies.get('authToken'))
-            }
+            // }
         })
         if (!unwatchAuthState) {
             console.log("problems watching auth state")
         }
     },
     
-    async login(email: string, password: string) {
+    async firebaseLogin(email: string, password: string): Promise<any> {
         let errorMessage: string;
 
-        await signInWithEmailAndPassword(auth, email, password).then((res) => {
-            res.user.getIdToken(true).then((token) => {
-                Cookies.set('authToken', token);
-                window.location.href = routing.dashboard;
-            })
+        return await signInWithEmailAndPassword(auth, email, password).then((res) => {
+            return res.user.getIdToken(true)
         }).catch(function(error) {
             switch (error.code) {
                 case 'auth/invalid-email':
@@ -66,6 +61,8 @@ const FirebaseHook = {
             }
 
             setTimeout(() => toast('error', errorMessage), 2000);
+
+            return null;
         })
     },
 
@@ -77,14 +74,13 @@ const FirebaseHook = {
         })
     },
 
-    async logout(){
+    async firebaseLogout(logout: Function, destroyAuthToken: Function){
         await signOut(auth).then(() => {
-            // Sign-out successful.
-            Cookies.remove('authToken');
-
+            logout();
+            destroyAuthToken();
             window.location.href = routing.home;
         }).catch((error) => {
-            console.log(error)
+            console.log(error);
         });
     },
 

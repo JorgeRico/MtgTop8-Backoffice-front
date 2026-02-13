@@ -7,6 +7,7 @@ import LoaderSmall from '@/common/LoaderSmall';
 import Loader from '@/common/Loader';
 import { useState, useEffect } from 'react';
 import "./module.css";
+import { useAuthStore } from '@/store/auth';
 
 interface TableProps {
     header         : string[]; 
@@ -18,9 +19,10 @@ interface TableProps {
 }
 
 const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: TableProps) => {
-    const [ dataItems, setDataItems ] = useState<Record<string, any>[]>(data);
-    const { delete: deleteInstance }  = fetchInstance;
-    const { toast }                   = commonFunctions
+    const [ dataItems, setDataItems ]                = useState<Record<string, any>[]>(data);
+    const { delete: deleteInstance, defaultHeaders } = fetchInstance;
+    const { toast }                                  = commonFunctions;
+    const { authToken }                              = useAuthStore()
 
     const editSubmit = (event: any, id: string) => {
         event.preventDefault();
@@ -50,7 +52,7 @@ const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: Tabl
         loading(id);
 
         try {
-            await deleteInstance(`${import.meta.env.VITE_API_URL}/${endpoint}/${id}`);
+            await deleteInstance(`${import.meta.env.VITE_API_URL}/${endpoint}/${id}`, {headers: defaultHeaders(authToken)});
             removeItem(id);
         } catch (error) {
             toast('error', "Failed to delete Deck and Player");

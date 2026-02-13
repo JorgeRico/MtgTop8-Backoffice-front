@@ -9,10 +9,11 @@ import { routing } from '@/types/web-routing';
 import { useParams } from 'react-router-dom';
 import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
+import { useAuthStore } from '@/store/auth';
 
 const FormLayout = () => {
     const { getDropdownYears, toast }                 = commonFunctions;
-    const { put, get }                                = fetchInstance;
+    const { put, get, defaultHeaders }                = fetchInstance;
     const [ showData, setShowData ]                   = useState<boolean>(false);
     const [ isLoading, setIsLoading ]                 = useState<boolean>(false);
     const [ selectedFormat, setSelectedFormat ]       = useState<number | null>(null);
@@ -21,6 +22,7 @@ const FormLayout = () => {
     const [ selectedYear, setSelectedYear ]           = useState<number | null>(null);
     const [ selectedName, setSelectedName ]           = useState<string | null>(null);
     const id                                          = useParams();
+    const { authToken }                               = useAuthStore();
     // dropdown selector css
     const [ isYearSelected, setIsYearSelected ]       = useState<boolean>(false);
     const [ isCurrentSelected, setIsCurrentSelected ] = useState<boolean>(false);
@@ -69,7 +71,7 @@ const FormLayout = () => {
         }
         
         try {
-            await put(`${import.meta.env.VITE_API_URL}${routing.leagues}/${id.id}`, body)
+            await put(`${import.meta.env.VITE_API_URL}${routing.leagues}/${id.id}`, body, {headers: defaultHeaders(authToken)})
             .then(() => {
                 setTimeout(() => setIsLoading(false), 2000);
                 setTimeout(() => toast('success', "League updated correctly"), 2000);
@@ -81,7 +83,7 @@ const FormLayout = () => {
 
     const getData = async () => {
         try {
-            await get(`${import.meta.env.VITE_API_URL}${routing.leagues}/${id.id}`)
+            await get(`${import.meta.env.VITE_API_URL}${routing.leagues}/${id.id}`, {headers: defaultHeaders(authToken)})
             .then(data => {
                 setSelectedName(data[0].name)
                 setSelectedFormat(data[0].isLegacy);
