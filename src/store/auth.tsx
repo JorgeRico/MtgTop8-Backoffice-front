@@ -4,11 +4,12 @@ import { persist } from 'zustand/middleware'
 interface AuthState {
   isLoggedIn       : boolean
   colorMode        : string
+  light            : string
+  dark             : string
   authToken        : string
   login            : () => void
   logout           : () => void
-  lightTheme       : () => void
-  darkTheme        : () => void
+  colorTheme       : (color: string) => void
   createAuthToken  : (token: string) => void
   destroyAuthToken : () => void
 }
@@ -18,11 +19,12 @@ export const useAuthStore = create<AuthState>()(
         (set) => ({
             isLoggedIn       : false,
             colorMode        : 'light',
+            light            : 'light',
+            dark             : 'dark',
             authToken        : '',
             login            : () => set({ isLoggedIn: true }),
             logout           : () => set({ isLoggedIn: false }),
-            lightTheme       : () => set({ colorMode: 'light' }),
-            darkTheme        : () => set({ colorMode: 'color-theme' }),
+            colorTheme       : (color: string) => set({ colorMode: color }),
             createAuthToken  : (token: string) => set({ authToken: token }),
             destroyAuthToken : () => set({ authToken: '' })
         }),
