@@ -6,7 +6,7 @@ import { routing } from '@/types/web-routing';
 import InputForm from '@/components/Forms/InputForm';
 import TopTitle from '@/components/Forms/Top';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
-import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
+import BreadcrumbBack from '@/components/Breadcrumbs/Private';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import { useAuthStore } from '@/store/auth';
 import { useNavigate } from 'react-router-dom';

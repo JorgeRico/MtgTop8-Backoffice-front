@@ -28,7 +28,7 @@ const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: Tabl
 
     const editSubmit = (event: any, id: string) => {
         event.preventDefault();
-        navigate(endpoint + "/edit/" + id);
+        navigate("/" + endpoint + "/edit/" + id);
     }
 
     const loading = (id: string) => {

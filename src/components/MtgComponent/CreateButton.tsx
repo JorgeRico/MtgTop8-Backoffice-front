@@ -4,7 +4,7 @@ const CreateButton = ({ endpoint, text }: { endpoint: string; text: string }) =>
     let navigate = useNavigate();
     
     const onClickCreate = () => {
-        navigate(endpoint + '/create');
+        navigate('/' + endpoint + '/create');
     }
 
     return (

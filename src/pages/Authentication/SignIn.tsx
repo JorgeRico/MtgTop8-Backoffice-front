@@ -1,5 +1,5 @@
 import AuthLayout from '@/layout/AuthLayout';
-import Breadcrumb from '@/components/Breadcrumbs/Breadcrumb';
+import Breadcrumb from '@/components/Breadcrumbs/Public';
 import LeftSideComponent from '@/components/Authentication/LeftSide';
 import SignInComponent from '@/components/Authentication/RightSide/SignIn';
 

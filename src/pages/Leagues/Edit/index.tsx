@@ -7,7 +7,7 @@ import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
 import { useParams } from 'react-router-dom';
-import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
+import BreadcrumbBack from '@/components/Breadcrumbs/Private';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import { useAuthStore } from '@/store/auth';
 

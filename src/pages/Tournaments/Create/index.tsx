@@ -9,7 +9,7 @@ import InputForm from '@/components/Forms/InputForm';
 import InputNumberForm from '@/components/Forms/InputNumberForm';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import TopTitle from '@/components/Forms/Top';
-import BreadcrumbBack from '@/components/BreadcrumsBackoffice';
+import BreadcrumbBack from '@/components/Breadcrumbs/Private';
 import { useAuthStore } from "@/store/auth";
 import { useNavigate } from 'react-router-dom';
 
