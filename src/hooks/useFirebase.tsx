@@ -3,25 +3,15 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, type Unsubscribe } from 'firebase/auth';
 import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { routing } from '@/types/web-routing';
+import { firebaseConfig } from '@/types/firebase-config';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 
-const firebaseConfig = {
-    apiKey            : import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain        : import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-    projectId         : import.meta.env.VITE_FIREBASE_PROJECT_ID,
-    storageBucket     : import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId : import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-    appId             : import.meta.env.VITE_FIREBASE_APP_ID
-};
-
+const { toast } = commonFunctions;
 //initialize the firebase app
 initializeApp(firebaseConfig)
-
 //initialize firebase auth
 const auth = getAuth()
 let unwatchAuthState: Unsubscribe = () => {}
-
-const { toast } = commonFunctions;
 
 const FirebaseHook = {
     watchAuthState() {
@@ -29,10 +19,7 @@ const FirebaseHook = {
             if (!user) {
                 // console.log('User is not authenticated');
                 window.location.href = routing.home;
-            } 
-            // else {
-                // console.log('User is authenticated');
-            // }
+            }
         })
         if (!unwatchAuthState) {
             console.log("problems watching auth state")
