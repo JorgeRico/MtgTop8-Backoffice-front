@@ -34,9 +34,7 @@ const DatePickerOne = ({ idDay, idMonth, idYear, label, selectedDate, disabled}:
     ]
 
     function splitSelectedDate(dateValue: string) {
-        console.log('iiii')
         if (dateValue == '') {
-            console.log('kkkkkkk')
             setDay(0);
             setMonth(0);
             setYear(0);    

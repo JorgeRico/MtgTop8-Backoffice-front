@@ -65,7 +65,6 @@ const FirebaseHook = {
         await signOut(auth).then(() => {
             logout();
             destroyAuthToken();
-            window.location.href = routing.home;
         }).catch((error) => {
             console.log(error);
         });

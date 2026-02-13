@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { routing } from '@/types/web-routing';
 import PageTitle from '@/components/PageTitle';
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 const SignIn            = lazy(() => import("@/pages/Authentication/SignIn.tsx"));
 // const SignUp            = lazy(() => import("@/pages/Authentication/SignUp.tsx"));
@@ -31,152 +32,185 @@ const Router = () => (
             <Route path={routing.home}
                 element={
                     <>
-                        <PageTitle title="Signin | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                        <PageTitle title="Signin | MTG STATS Admin Tailwind CSS backoffice" />
                         <SignIn />
+                    </>
+                }
+            />
+            <Route path={routing.recover}
+                element={
+                    <>
+                        <PageTitle title="Recover password | MTG STATS Admin Tailwind CSS backoffice" />
+                        <RecoverPassword />
                     </>
                 }
             />
             {/* <Route path={routing.signup}
                 element={
                     <>
-                        <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                        <PageTitle title="Signup | MTG STATS Admin Tailwind CSS backoffice" />
                         <SignUp />
                     </>
                 }
             /> */}
-            <Route path={routing.recover}
-                element={
-                    <>
-                        <PageTitle title="Recover password | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <RecoverPassword />
-                    </>
-                }
-            />
+            
+            
             <Route path={routing.dashboard}
                 element={
                     <>
-                        <PageTitle title="Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <Dashboard />
+                        <ProtectedRoute>
+                            <PageTitle title="Dashboard | MTG STATS Admin Tailwind CSS backoffice" />
+                            <Dashboard />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.tournaments}
                 element={
                     <>
-                        <PageTitle title="Tournaments | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <Tournaments />
+                        <ProtectedRoute>
+                            <PageTitle title="Tournaments | MTG STATS Admin Tailwind CSS backoffice" />
+                            <Tournaments />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.tournaments + '/edit/:id'}
                 element={
                     <>
-                        <PageTitle title="Tournaments | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <TournamentsEdit />
+                        <ProtectedRoute>
+                            <PageTitle title="Tournaments | MTG STATS Admin Tailwind CSS backoffice" />
+                            <TournamentsEdit />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.tournaments + '/create'}
                 element={
                     <>
-                        <PageTitle title="Tournaments | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <TournamentsCreate />
+                        <ProtectedRoute>
+                            <PageTitle title="Tournaments | MTG STATS Admin Tailwind CSS backoffice" />
+                            <TournamentsCreate />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.leagues}
                 element={
                     <>
-                        <PageTitle title="Leagues | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <Leagues />
+                        <ProtectedRoute>
+                            <PageTitle title="Leagues | MTG STATS Admin Tailwind CSS backoffice" />
+                            <Leagues />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.leagues + "/edit/:id"}
                 element={
                     <>
-                        <PageTitle title="Leagues | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <LeaguesEdit />
+                        <ProtectedRoute>
+                            <PageTitle title="Leagues | MTG STATS Admin Tailwind CSS backoffice" />
+                            <LeaguesEdit />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.leagues + "/create"}
                 element={
                     <>
-                        <PageTitle title="Leagues | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <LeaguesCreate />
+                        <ProtectedRoute>
+                            <PageTitle title="Leagues | MTG STATS Admin Tailwind CSS backoffice" />
+                            <LeaguesCreate />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.players}
                 element={
                     <>
-                        <PageTitle title="Players | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <Players />
+                        <ProtectedRoute>
+                            <PageTitle title="Players | MTG STATS Admin Tailwind CSS backoffice" />
+                            <Players />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.players + "/edit/:id"}
                 element={
                     <>
-                        <PageTitle title="Players | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <PlayersEdit />
+                        <ProtectedRoute>
+                            <PageTitle title="Players | MTG STATS Admin Tailwind CSS backoffice" />
+                            <PlayersEdit />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.players + "/create"}
                 element={
                     <>
-                        <PageTitle title="Players | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <PlayersCreate />
+                        <ProtectedRoute>
+                            <PageTitle title="Players | MTG STATS Admin Tailwind CSS backoffice" />
+                            <PlayersCreate />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.decks}
                 element={
                     <>
-                        <PageTitle title="Decks | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <Decks />
+                        <ProtectedRoute>
+                            <PageTitle title="Decks | MTG STATS Admin Tailwind CSS backoffice" />
+                            <Decks />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.decks + "/edit/:id"}
                 element={
                     <>
-                        <PageTitle title="Decks | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <DecksEdit />
+                        <ProtectedRoute>
+                            <PageTitle title="Decks | MTG STATS Admin Tailwind CSS backoffice" />
+                            <DecksEdit />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.decks + "/create"}
                 element={
                     <>
-                        <PageTitle title="Decks | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <DecksCreate />
+                        <ProtectedRoute>
+                            <PageTitle title="Decks | MTG STATS Admin Tailwind CSS backoffice" />
+                            <DecksCreate />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.cards}
                 element={
                     <>
-                        <PageTitle title="Cards | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <Cards />
+                        <ProtectedRoute>
+                            <PageTitle title="Cards | MTG STATS Admin Tailwind CSS backoffice" />
+                            <Cards />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.cards + "/edit/:id"}
                 element={
                     <>
-                        <PageTitle title="Cards | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <CardsEdit />
+                        <ProtectedRoute>
+                            <PageTitle title="Cards | MTG STATS Admin Tailwind CSS backoffice" />
+                            <CardsEdit />
+                        </ProtectedRoute>
                     </>
                 }
             />
             <Route path={routing.cards + "/create"}
                 element={
-                    <>
-                        <PageTitle title="Cards | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                        <CardsCreate />
+                    <>  <ProtectedRoute>
+                            <PageTitle title="Cards | MTG STATS Admin Tailwind CSS backoffice" />
+                            <CardsCreate />
+                        </ProtectedRoute>
                     </>
                 }
             />
@@ -186,8 +220,10 @@ const Router = () => (
                 path={routing.profile}
                 element={
                     <>
-                    <PageTitle title="Profile | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Profile />
+                        <ProtectedRoute>
+                            <PageTitle title="Profile | MTG STATS Admin Tailwind CSS backoffice" />
+                            <Profile />
+                        </ProtectedRoute>
                     </>
                 }
             />
@@ -195,8 +231,10 @@ const Router = () => (
                 path={routing.settings}
                 element={
                     <>
-                    <PageTitle title="Settings | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                    <Settings />
+                        <ProtectedRoute>
+                            <PageTitle title="Settings | MTG STATS Admin Tailwind CSS backoffice" />
+                            <Settings />
+                        </ProtectedRoute>
                     </>
                 }
             />
