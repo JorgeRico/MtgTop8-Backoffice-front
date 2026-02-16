@@ -20,6 +20,9 @@ const CreateLeague = () => {
     const [ selectedActive, setSelectedActive ]       = useState<number | null>(null);
     const [ selectedYear, setSelectedYear ]           = useState<number | null>(null);
     const [ selectedName ]                            = useState<string | null>(null);
+    const [ selectedLocation ]                        = useState<string | null>(null);
+    const [ selectedLocationName ]                    = useState<string | null>(null);
+
     // dropdown selector css
     const [ isYearSelected, setIsYearSelected ]       = useState<boolean>(false);
     const [ isCurrentSelected, setIsCurrentSelected ] = useState<boolean>(false);
@@ -30,11 +33,13 @@ const CreateLeague = () => {
     let navigate                                      = useNavigate();
 
     // form ids
-    const idFormat  = useId();
-    const idCurrent = useId();
-    const idActive  = useId();
-    const idYear    = useId();
-    const idName    = useId();
+    const idFormat       = useId();
+    const idCurrent      = useId();
+    const idActive       = useId();
+    const idYear         = useId();
+    const idName         = useId();
+    const idLocation     = useId();
+    const idLocationName = useId();
 
     const onChangeYearSubmit = (event: any) => {
         setIsYearSelected(true);
@@ -64,11 +69,13 @@ const CreateLeague = () => {
         const formDataValues = new FormData(event.target)
 
         const body = {
-            'name'     : formDataValues.get(idName),
-            'isLegacy' : Number(formDataValues.get(idFormat)),
-            'year'     : Number(formDataValues.get(idYear)),
-            'current'  : Number(formDataValues.get(idCurrent)),
-            'active'   : Number(formDataValues.get(idActive))
+            'name'         : formDataValues.get(idName),
+            'isLegacy'     : Number(formDataValues.get(idFormat)),
+            'year'         : Number(formDataValues.get(idYear)),
+            'current'      : Number(formDataValues.get(idCurrent)),
+            'active'       : Number(formDataValues.get(idActive)),
+            'location'     : String(formDataValues.get(idLocation)),
+            'locationName' : String(formDataValues.get(idLocationName))
         }
         
         try {
@@ -103,6 +110,20 @@ const CreateLeague = () => {
                                     label="League name" 
                                     placeholder="Enter League name"
                                     selectedOption={selectedName}
+                                />
+                                <InputForm
+                                    disabled={false}
+                                    name={idLocationName}
+                                    label="Location name" 
+                                    placeholder="Enter Location name"
+                                    selectedOption={selectedLocationName}
+                                />
+                                <InputForm
+                                    disabled={false}
+                                    name={idLocation}
+                                    label="League Location (maps code)" 
+                                    placeholder="Enter Location (maps code)"
+                                    selectedOption={selectedLocation}
                                 />
                                 <Dropdown 
                                     disabled={false}

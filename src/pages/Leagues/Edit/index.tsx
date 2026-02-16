@@ -12,28 +12,32 @@ import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import { useAuthStore } from '@/store/auth';
 
 const FormLayout = () => {
-    const { getDropdownYears, toast }                 = commonFunctions;
-    const { put, get, defaultHeaders }                = fetchInstance;
-    const [ showData, setShowData ]                   = useState<boolean>(false);
-    const [ isLoading, setIsLoading ]                 = useState<boolean>(false);
-    const [ selectedFormat, setSelectedFormat ]       = useState<number | null>(null);
-    const [ selectedCurrent, setSelectedCurrent ]     = useState<number | null>(null);
-    const [ selectedActive, setSelectedActive ]       = useState<number | null>(null);
-    const [ selectedYear, setSelectedYear ]           = useState<number | null>(null);
-    const [ selectedName, setSelectedName ]           = useState<string | null>(null);
-    const id                                          = useParams();
-    const { authToken }                               = useAuthStore();
+    const { getDropdownYears, toast }                       = commonFunctions;
+    const { put, get, defaultHeaders }                      = fetchInstance;
+    const [ showData, setShowData ]                         = useState<boolean>(false);
+    const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
+    const [ selectedFormat, setSelectedFormat ]             = useState<number | null>(null);
+    const [ selectedCurrent, setSelectedCurrent ]           = useState<number | null>(null);
+    const [ selectedActive, setSelectedActive ]             = useState<number | null>(null);
+    const [ selectedYear, setSelectedYear ]                 = useState<number | null>(null);
+    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
+    const [ selectedLocation, setSelectedLocation ]         = useState<string | null>(null);
+    const [ selectedLocationName, setSelectedLocationName ] = useState<string | null>(null);
+    const id                                                = useParams();
+    const { authToken }                                     = useAuthStore();
     // dropdown selector css
     const [ isYearSelected, setIsYearSelected ]       = useState<boolean>(false);
     const [ isCurrentSelected, setIsCurrentSelected ] = useState<boolean>(false);
     const [ isFormatSelected, setIsFormatSelected ]   = useState<boolean>(false);
     const [ isActiveSelected, setIsActiveSelected ]   = useState<boolean>(false);
     // form ids
-    const idFormat  = useId();
-    const idCurrent = useId();
-    const idActive  = useId();
-    const idYear    = useId();
-    const idName    = useId();
+    const idFormat       = useId();
+    const idCurrent      = useId();
+    const idActive       = useId();
+    const idYear         = useId();
+    const idName         = useId();
+    const idLocation     = useId();
+    const idLocationName = useId();
 
     const onChangeYearSubmit = (event: any) => {
         setIsYearSelected(true);
@@ -67,7 +71,9 @@ const FormLayout = () => {
             'isLegacy' : Number(formDataValues.get(idFormat)),
             'year'     : Number(formDataValues.get(idYear)),
             'current'  : Number(formDataValues.get(idCurrent)),
-            'active'   : Number(formDataValues.get(idActive))
+            'active'   : Number(formDataValues.get(idActive)),
+            'location'     : String(formDataValues.get(idLocation)),
+            'locationName' : String(formDataValues.get(idLocationName))
         }
         
         try {
@@ -91,6 +97,8 @@ const FormLayout = () => {
                 setSelectedActive(data[0].active);
                 setSelectedYear(data[0].year);
                 setShowData(true);
+                setSelectedLocation(data[0].location);
+                setSelectedLocationName(data[0].locationName);
             })
         } catch (error) {
             toast('error', 'Failed to load leagues');
@@ -119,6 +127,20 @@ const FormLayout = () => {
                                             placeholder="Enter League name"
                                             selectedOption={selectedName}
                                         />
+                                        <InputForm
+                                    disabled={false}
+                                    name={idLocationName}
+                                    label="Location name" 
+                                    placeholder="Enter Location name"
+                                    selectedOption={selectedLocationName}
+                                />
+                                <InputForm
+                                    disabled={false}
+                                    name={idLocation}
+                                    label="League Location (maps code)" 
+                                    placeholder="Enter Location (maps code)"
+                                    selectedOption={selectedLocation}
+                                />
                                         <Dropdown 
                                             disabled={false}
                                             options={[{ value: 1, key: 'Legacy' }]}
