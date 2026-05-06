@@ -1,6 +1,7 @@
 import { useState, useEffect, useId } from 'react'
 import DefaultLayout from '@/layout/DefaultLayout';
 import InputForm from '@/components/Forms/InputForm';
+import InputFormOptional from '@/components/Forms/InputFormOptional';
 import TopTitle from '@/components/Forms/Top';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import Loader from '@/common/LoaderSmall';
@@ -67,13 +68,13 @@ const FormLayout = () => {
         const formDataValues = new FormData(event.target)
 
         const body = {
-            'name'     : formDataValues.get(idName),
-            'isLegacy' : Number(formDataValues.get(idFormat)),
-            'year'     : Number(formDataValues.get(idYear)),
-            'current'  : Number(formDataValues.get(idCurrent)),
-            'active'   : Number(formDataValues.get(idActive)),
-            'location'     : String(formDataValues.get(idLocation)),
-            'locationName' : String(formDataValues.get(idLocationName))
+            'name'         : formDataValues.get(idName),
+            'isLegacy'     : Number(formDataValues.get(idFormat)),
+            'year'         : Number(formDataValues.get(idYear)),
+            'current'      : Number(formDataValues.get(idCurrent)),
+            'active'       : Number(formDataValues.get(idActive)),
+            'location'     : String(formDataValues.get(idLocation) ?? ''),
+            'locationName' : String(formDataValues.get(idLocationName) ?? '')
         }
         
         try {
@@ -121,67 +122,67 @@ const FormLayout = () => {
                                 {showData && 
                                     <>
                                         <InputForm
-                                            disabled={false}
-                                            name={idName}
-                                            label="League name" 
-                                            placeholder="Enter League name"
-                                            selectedOption={selectedName}
+                                            disabled       = {false}
+                                            name           = {idName}
+                                            label          = "League name" 
+                                            placeholder    = "Enter League name"
+                                            selectedOption = {selectedName}
                                         />
-                                        <InputForm
-                                    disabled={false}
-                                    name={idLocationName}
-                                    label="Location name" 
-                                    placeholder="Enter Location name"
-                                    selectedOption={selectedLocationName}
-                                />
-                                <InputForm
-                                    disabled={false}
-                                    name={idLocation}
-                                    label="League Location (maps code)" 
-                                    placeholder="Enter Location (maps code)"
-                                    selectedOption={selectedLocation}
-                                />
+                                        <InputFormOptional
+                                            disabled       = {false}
+                                            name           = {idLocationName}
+                                            label          = "Location name" 
+                                            placeholder    = "Enter Location name"
+                                            selectedOption = {selectedLocationName}
+                                        />
+                                        <InputFormOptional
+                                            disabled       = {false}
+                                            name           = {idLocation}
+                                            label          = "League Location (maps code)" 
+                                            placeholder    = "Enter Location (maps code)"
+                                            selectedOption = {selectedLocation}
+                                        />
                                         <Dropdown 
-                                            disabled={false}
-                                            options={[{ value: 1, key: 'Legacy' }]}
-                                            label="Select Format"
-                                            name={idFormat}
-                                            selectedOption={selectedFormat}
-                                            isOptionSelected={isFormatSelected}
-                                            onChangeSubmit={onChangeFormatSubmit}>
+                                            disabled         = {false}
+                                            options          = {[{ value: 1, key: 'Legacy' }]}
+                                            label            = "Select Format"
+                                            name             = {idFormat}
+                                            selectedOption   = {selectedFormat}
+                                            isOptionSelected = {isFormatSelected}
+                                            onChangeSubmit   = {onChangeFormatSubmit}>
                                         </Dropdown>
                                         <Dropdown
-                                            disabled={false}
-                                            options={getDropdownYears()}
-                                            label="Select year"
-                                            name={idYear}
-                                            selectedOption={selectedYear}
-                                            isOptionSelected={isYearSelected}
-                                            onChangeSubmit={onChangeYearSubmit}>
+                                            disabled         = {false}
+                                            options          = {getDropdownYears()}
+                                            label            = "Select year"
+                                            name             = {idYear}
+                                            selectedOption   = {selectedYear}
+                                            isOptionSelected = {isYearSelected}
+                                            onChangeSubmit   = {onChangeYearSubmit}>
                                         </Dropdown>
                                         <Dropdown 
-                                            disabled={false}
-                                            options={[
+                                            disabled         = {false}
+                                            options          = {[
                                                 { value: 1, key: 'Current season' },
                                                 { value: 0, key: 'Past season' }
                                             ]}
-                                            label="Select Current Season"
-                                            name={idCurrent}
-                                            selectedOption={selectedCurrent}
-                                            isOptionSelected={isCurrentSelected}
-                                            onChangeSubmit={onChangeCurrentSubmit}>
+                                            label            = "Select Current Season"
+                                            name             = {idCurrent}
+                                            selectedOption   = {selectedCurrent}
+                                            isOptionSelected = {isCurrentSelected}
+                                            onChangeSubmit   = {onChangeCurrentSubmit}>
                                         </Dropdown>
                                         <Dropdown 
-                                            disabled={false}
-                                            options={[
+                                            disabled         = {false}
+                                            options          = {[
                                                 { value: 1, key: 'Active' },
                                                 { value: 0, key: 'Disabled' }
                                             ]}
-                                            label="Select Active Status"
-                                            name={idActive}
-                                            selectedOption={selectedActive}
-                                            isOptionSelected={isActiveSelected}
-                                            onChangeSubmit={onChangeActiveSubmit}>
+                                            label            = "Select Active Status"
+                                            name             = {idActive}
+                                            selectedOption   = {selectedActive}
+                                            isOptionSelected = {isActiveSelected}
+                                            onChangeSubmit   = {onChangeActiveSubmit}>
                                         </Dropdown>
                                     </>
                                 }

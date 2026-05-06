@@ -4,6 +4,7 @@ import Loader from '@/common/LoaderSmall';
 import { fetchInstance } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
 import InputForm from '@/components/Forms/InputForm';
+import InputFormOptional from '@/components/Forms/InputFormOptional';
 import TopTitle from '@/components/Forms/Top';
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
 import BreadcrumbBack from '@/components/Breadcrumbs/Private';
@@ -74,8 +75,8 @@ const CreateLeague = () => {
             'year'         : Number(formDataValues.get(idYear)),
             'current'      : Number(formDataValues.get(idCurrent)),
             'active'       : Number(formDataValues.get(idActive)),
-            'location'     : String(formDataValues.get(idLocation)),
-            'locationName' : String(formDataValues.get(idLocationName))
+            'location'     : String(formDataValues.get(idLocation) ?? ''),
+            'locationName' : String(formDataValues.get(idLocationName) ?? '')
         }
         
         try {
@@ -100,72 +101,72 @@ const CreateLeague = () => {
             <DefaultLayout>
                 <section className="grid grid-cols-1 gap-9 sm:grid-cols-2">
                     <div className="flex flex-col gap-9">
-                        <BreadcrumbBack pageName="Leagues"  link={routing.leagues}/>
+                        <BreadcrumbBack pageName="Leagues" link={routing.leagues}/>
                         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <TopTitle title="Create League"></TopTitle>
                             <form onSubmit={onSubmitForm} className="p-6.5">
                                 <InputForm
-                                    disabled={false}
-                                    name={idName}
-                                    label="League name" 
-                                    placeholder="Enter League name"
-                                    selectedOption={selectedName}
+                                    disabled       = {false}
+                                    name           = {idName}
+                                    label          = "League name" 
+                                    placeholder    = "Enter League name"
+                                    selectedOption = {selectedName}
                                 />
-                                <InputForm
-                                    disabled={false}
-                                    name={idLocationName}
-                                    label="Location name" 
-                                    placeholder="Enter Location name"
-                                    selectedOption={selectedLocationName}
+                                <InputFormOptional
+                                    disabled       = {false}
+                                    name           = {idLocationName}
+                                    label          = "Location name" 
+                                    placeholder    = "Enter Location name"
+                                    selectedOption = {selectedLocationName}
                                 />
-                                <InputForm
-                                    disabled={false}
-                                    name={idLocation}
-                                    label="League Location (maps code)" 
-                                    placeholder="Enter Location (maps code)"
-                                    selectedOption={selectedLocation}
+                                <InputFormOptional
+                                    disabled       = {false}
+                                    name           = {idLocation}
+                                    label          = "League Location (maps code)" 
+                                    placeholder    = "Enter Location (maps code)"
+                                    selectedOption = {selectedLocation}
                                 />
                                 <Dropdown 
-                                    disabled={false}
-                                    options={[{ value: 1, key: 'Legacy' }]}
-                                    label="Select Format"
-                                    name={idFormat}
-                                    selectedOption={selectedFormat}
-                                    isOptionSelected={isFormatSelected}
-                                    onChangeSubmit={onChangeFormatSubmit}>
+                                    disabled         = {false}
+                                    options          = {[{ value: 1, key: 'Legacy' }]}
+                                    label            = "Select Format"
+                                    name             = {idFormat}
+                                    selectedOption   = {selectedFormat}
+                                    isOptionSelected = {isFormatSelected}
+                                    onChangeSubmit   = {onChangeFormatSubmit}>
                                 </Dropdown>
                                 <Dropdown
-                                    disabled={false}
-                                    options={getDropdownYears()}
-                                    label="Select year"
-                                    name={idYear}
-                                    selectedOption={selectedYear}
-                                    isOptionSelected={isYearSelected}
-                                    onChangeSubmit={onChangeYearSubmit}>
+                                    disabled         = {false}
+                                    options          = {getDropdownYears()}
+                                    label            = "Select year"
+                                    name             = {idYear}
+                                    selectedOption   = {selectedYear}
+                                    isOptionSelected = {isYearSelected}
+                                    onChangeSubmit   = {onChangeYearSubmit}>
                                 </Dropdown>
                                 <Dropdown 
-                                    disabled={false}
-                                    options={[
+                                    disabled         = {false}
+                                    options          = {[
                                         { value: 1, key: 'Current season' },
                                         { value: 0, key: 'Past season' }
                                     ]}
-                                    label="Select Current Season"
-                                    name={idCurrent}
-                                    selectedOption={selectedCurrent}
-                                    isOptionSelected={isCurrentSelected}
-                                    onChangeSubmit={onChangeCurrentSubmit}>
+                                    label            = "Select Current Season"
+                                    name             = {idCurrent}
+                                    selectedOption   = {selectedCurrent}
+                                    isOptionSelected = {isCurrentSelected}
+                                    onChangeSubmit   = {onChangeCurrentSubmit}>
                                 </Dropdown>
                                 <Dropdown 
-                                    disabled={false}
-                                    options={[
+                                    disabled         = {false}
+                                    options          = {[
                                         { value: 1, key: 'Active' },
                                         { value: 0, key: 'Disabled' }
                                     ]}
-                                    label="Select Active Status"
-                                    name={idActive}
-                                    selectedOption={selectedActive}
-                                    isOptionSelected={isActiveSelected}
-                                    onChangeSubmit={onChangeActiveSubmit}>
+                                    label            = "Select Active Status"
+                                    name             = {idActive}
+                                    selectedOption   = {selectedActive}
+                                    isOptionSelected = {isActiveSelected}
+                                    onChangeSubmit   = {onChangeActiveSubmit}>
                                 </Dropdown>
                                 {(!isLoading && !isCreated) &&
                                     <button className="cursor-pointer flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
@@ -178,7 +179,7 @@ const CreateLeague = () => {
                                     </div>
                                 }
                                 {isCreated &&
-                                    <button onClick={(event) => onClickBack(event)}className="cursor-pointer flex w-full justify-center rounded bg-secondary p-3 font-medium text-white hover:bg-opacity-90">
+                                    <button onClick={(event) => onClickBack(event)} className= "cursor-pointer flex w-full justify-center rounded bg-secondary p-3 font-medium text-white hover:bg-opacity-90">
                                         Back to leagues
                                     </button>
                                 }
