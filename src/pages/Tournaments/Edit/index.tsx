@@ -14,29 +14,31 @@ import BreadcrumbBack from '@/components/Breadcrumbs/Private';
 import { useAuthStore } from '@/store/auth';
 
 const FormLayout = () => {
-    const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
-    const [ isCreated, setIsCreated ]                       = useState<boolean>(false);
-    const [ selectedLeague, setSelectedLeague]              = useState<number | null>(null);
-    const [ leagues, setLeagues ]                           = useState<any[] | null>(null);
-    const [ selectedNumber, setSelectedNumber ]             = useState<number | null>(null);
-    const [ selectedName, setSelectedName ]                 = useState<string | null>(null);
-    const [ selectedDate, setSelectedDate ]                 = useState<string>('');
-    const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
-    const id                                                = useParams();
-    const [ showData, setShowData ]                         = useState<boolean>(false);
-    const [isLeagueSelected, setIsLeagueSelected]           = useState<boolean>(false);
-    const { put, get, defaultHeaders }                      = fetchInstance;
-    const { toast }                                         = commonFunctions;
-    const { authToken }                                     = useAuthStore();
+    const [ isLoading, setIsLoading ]                                       = useState<boolean>(false);
+    const [ isCreated, setIsCreated ]                                       = useState<boolean>(false);
+    const [ selectedLeague, setSelectedLeague]                              = useState<number | null>(null);
+    const [ leagues, setLeagues ]                                           = useState<any[] | null>(null);
+    const [ selectedNumber, setSelectedNumber ]                             = useState<number | null>(null);
+    const [ selectedName, setSelectedName ]                                 = useState<string | null>(null);
+    const [ selectedDate, setSelectedDate ]                                 = useState<string>('');
+    const [ selectedIdTournament, setSelectedIdTournament ]                 = useState<number | null>(null);
+    const id                                                                = useParams();
+    const [ showData, setShowData ]                                         = useState<boolean>(false);
+    const [ isLeagueSelected, setIsLeagueSelected ]                         = useState<boolean>(false);
+    const { put, get, defaultHeaders }                                      = fetchInstance;
+    const { toast }                                                         = commonFunctions;
+    const { authToken }                                                     = useAuthStore();
+    const [ selectedIdTournamentMtgDecks, setSelectedIdTournamentMtgDecks ] = useState<number | null>(null);
 
     // form ids
-    const idName       = useId();
-    const idDay        = useId();
-    const idMonth      = useId();
-    const idYear       = useId();
-    const idLeague     = useId();
-    const idNumber     = useId();
-    const idTournament = useId();
+    const idName               = useId();
+    const idDay                = useId();
+    const idMonth              = useId();
+    const idYear               = useId();
+    const idLeague             = useId();
+    const idNumber             = useId();
+    const idTournament         = useId();
+    const idTournamentMtgDecks = useId();
 
     const onChangeLeagueSubmit = (event: any) => {
         setIsLeagueSelected(true);
@@ -55,11 +57,12 @@ const FormLayout = () => {
         const formDataValues = new FormData(event.target)
 
         const body = {
-            'name'         : formDataValues.get(idName),
-            'date'         : getDateConverted(formDataValues.get(idDay) as string ?? '' , formDataValues.get(idMonth) as string ?? '', formDataValues.get(idYear) as string ?? ''),
-            'idLeague'     : Number(formDataValues.get(idLeague)),
-            'players'      : Number(formDataValues.get(idNumber)),
-            'idTournament' : Number(formDataValues.get(idTournament)),
+            'name'                 : formDataValues.get(idName),
+            'date'                 : getDateConverted(formDataValues.get(idDay) as string ?? '' , formDataValues.get(idMonth) as string ?? '', formDataValues.get(idYear) as string ?? ''),
+            'idLeague'             : Number(formDataValues.get(idLeague)),
+            'players'              : Number(formDataValues.get(idNumber)),
+            'idTournament'         : Number(formDataValues.get(idTournament)),
+            'idTournamentMtgDecks' : Number(formDataValues.get(idTournamentMtgDecks) ?? null),
         }
         
         try {
@@ -83,6 +86,7 @@ const FormLayout = () => {
                 setSelectedIdTournament(data[0].idTournament);
                 setSelectedDate(data[0].date);
                 setSelectedNumber(data[0].players);
+                setSelectedIdTournamentMtgDecks(data[0].idTournamentMtgDecks)
                 setShowData(true);
             })
         } catch (error) {
@@ -137,6 +141,13 @@ const FormLayout = () => {
                                                 placeholder="Enter id tournament from mtgtop8 website"
                                                 selectedOption={selectedIdTournament}
                                                 setSelectedOption={setSelectedIdTournament}
+                                            />
+                                            <InputNumberForm
+                                                name={idTournamentMtgDecks}
+                                                label="Id mtgTop8 Tournament" 
+                                                placeholder="Enter id tournament from mtgdecks website"
+                                                selectedOption={selectedIdTournamentMtgDecks}
+                                                setSelectedOption={setSelectedIdTournamentMtgDecks}
                                             />
                                             <InputNumberForm
                                                 name={idNumber}

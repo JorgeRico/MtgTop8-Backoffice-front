@@ -14,28 +14,30 @@ import { useAuthStore } from "@/store/auth";
 import { useNavigate } from 'react-router-dom';
 
 const CreateTournament = () => {
-    const [ isLoading, setIsLoading ]                       = useState<boolean>(false);
-    const [ isCreated, setIsCreated ]                       = useState<boolean>(false);
-    const [ selectedLeague, setSelectedLeague]              = useState<number | null>(null);
-    const [ leagues, setLeagues ]                           = useState<any[] | null>(null);
-    const [ selectedName ]                                  = useState<string | null>(null);
-    const [ selectedNumber, setSelectedNumber ]             = useState<number | null>(null);
-    const [ selectedDate ]                                  = useState<string>('');
-    const [ selectedIdTournament, setSelectedIdTournament ] = useState<number | null>(null);
-    const [ isLeagueSelected, setIsLeagueSelected ]         = useState<boolean>(false);
-    const { post, get, defaultHeaders }                     = fetchInstance;
-    const { toast }                                         = commonFunctions;
-    const { authToken }                                     = useAuthStore();
-    let navigate                                            = useNavigate();
+    const [ isLoading, setIsLoading ]                                       = useState<boolean>(false);
+    const [ isCreated, setIsCreated ]                                       = useState<boolean>(false);
+    const [ selectedLeague, setSelectedLeague]                              = useState<number | null>(null);
+    const [ leagues, setLeagues ]                                           = useState<any[] | null>(null);
+    const [ selectedName ]                                                  = useState<string | null>(null);
+    const [ selectedNumber, setSelectedNumber ]                             = useState<number | null>(null);
+    const [ selectedDate ]                                                  = useState<string>('');
+    const [ selectedIdTournament, setSelectedIdTournament ]                 = useState<number | null>(null);
+    const [ isLeagueSelected, setIsLeagueSelected ]                         = useState<boolean>(false);
+    const { post, get, defaultHeaders }                                     = fetchInstance;
+    const { toast }                                                         = commonFunctions;
+    const { authToken }                                                     = useAuthStore();
+    let navigate                                                            = useNavigate();
+    const [ selectedIdTournamentMtgDecks, setSelectedIdTournamentMtgDecks ] = useState<number | null>(null);
 
     // form ids
-    const idName       = useId();
-    const idDay        = useId();
-    const idMonth      = useId();
-    const idYear       = useId();
-    const idLeague     = useId();
-    const idNumber     = useId();
-    const idTournament = useId();
+    const idName               = useId();
+    const idDay                = useId();
+    const idMonth              = useId();
+    const idYear               = useId();
+    const idLeague             = useId();
+    const idNumber             = useId();
+    const idTournament         = useId();
+    const idTournamentMtgDecks = useId();
 
     const onChangeLeagueSubmit = (event: any) => {
         setIsLeagueSelected(true);
@@ -59,6 +61,7 @@ const CreateTournament = () => {
             'idLeague'     : Number(formDataValues.get(idLeague)),
             'players'      : Number(formDataValues.get(idNumber)),
             'idTournament' : Number(formDataValues.get(idTournament)),
+            'idTournamentMtgDecks' : Number(formDataValues.get(idTournamentMtgDecks) ?? null)
         }
         
         try {
@@ -119,6 +122,13 @@ const CreateTournament = () => {
                                     placeholder="Enter id tournament from mtgtop8 website"
                                     selectedOption={selectedIdTournament}
                                     setSelectedOption={setSelectedIdTournament}
+                                />
+                                <InputNumberForm
+                                    name={idTournamentMtgDecks}
+                                    label="Id mtgTop8 Tournament" 
+                                    placeholder="Enter id tournament from mtgdecks website"
+                                    selectedOption={selectedIdTournamentMtgDecks}
+                                    setSelectedOption={setSelectedIdTournamentMtgDecks}
                                 />
                                 <InputNumberForm
                                     name={idNumber}
