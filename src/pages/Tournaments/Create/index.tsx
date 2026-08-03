@@ -53,15 +53,20 @@ const CreateTournament = () => {
         setIsLoading(true);
 
         // get form values
-        const formDataValues = new FormData(event.target)
+        const formDataValues          = new FormData(event.target)
+        let idTournamentMtgDecksValue = null;
+
+        if (idTournamentMtgDecksValue != 0) {
+            idTournamentMtgDecksValue = Number(formDataValues.get(idTournamentMtgDecks));
+        }
 
         const body = {
-            'name'         : formDataValues.get(idName),
-            'date'         : getDateConverted(formDataValues.get(idDay) as string ?? '' , formDataValues.get(idMonth) as string ?? '', formDataValues.get(idYear) as string ?? ''),
-            'idLeague'     : Number(formDataValues.get(idLeague)),
-            'players'      : Number(formDataValues.get(idNumber)),
-            'idTournament' : Number(formDataValues.get(idTournament)),
-            'idTournamentMtgDecks' : Number(formDataValues.get(idTournamentMtgDecks) ?? null)
+            'name'                 : formDataValues.get(idName),
+            'date'                 : getDateConverted(formDataValues.get(idDay) as string ?? '' , formDataValues.get(idMonth) as string ?? '', formDataValues.get(idYear) as string ?? ''),
+            'idLeague'             : Number(formDataValues.get(idLeague)),
+            'players'              : Number(formDataValues.get(idNumber)),
+            'idTournament'         : Number(formDataValues.get(idTournament)),
+            'idTournamentMtgDecks' : idTournamentMtgDecksValue
         }
         
         try {

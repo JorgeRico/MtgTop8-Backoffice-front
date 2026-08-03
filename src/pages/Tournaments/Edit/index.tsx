@@ -54,7 +54,12 @@ const FormLayout = () => {
         setIsLoading(true);
 
         // get form values
-        const formDataValues = new FormData(event.target)
+        const formDataValues          = new FormData(event.target)
+        let idTournamentMtgDecksValue = null;
+
+        if (idTournamentMtgDecksValue != 0) {
+            idTournamentMtgDecksValue = Number(formDataValues.get(idTournamentMtgDecks));
+        }
 
         const body = {
             'name'                 : formDataValues.get(idName),
@@ -62,7 +67,7 @@ const FormLayout = () => {
             'idLeague'             : Number(formDataValues.get(idLeague)),
             'players'              : Number(formDataValues.get(idNumber)),
             'idTournament'         : Number(formDataValues.get(idTournament)),
-            'idTournamentMtgDecks' : Number(formDataValues.get(idTournamentMtgDecks) ?? null),
+            'idTournamentMtgDecks' : idTournamentMtgDecksValue,
         }
         
         try {
