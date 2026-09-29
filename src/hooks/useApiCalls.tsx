@@ -84,3 +84,12 @@ export function addUrlPaginationParams (endpoint: string, currentPage: number, n
     
     return url.toString();
 }
+
+export function addUrlParam (endpoint: string, param: string, value: string) {
+    const url     = new URL(endpoint);
+    const filters = url.searchParams;
+
+    filters.set(String(param), String(value));
+    
+    return url.toString();
+}

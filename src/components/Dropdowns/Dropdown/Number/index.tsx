@@ -9,13 +9,14 @@ interface DropdownProps {
     selectedOption   : number | null;
     isOptionSelected : boolean;
     disabled         : boolean;
+    padBottom?       : boolean;
 }
 
-const Dropdown = ({ options, label, name, selectedOption, isOptionSelected, onChangeSubmit, disabled }: DropdownProps) => {
+const Dropdown = ({ options, label, name, selectedOption, isOptionSelected, onChangeSubmit, disabled, padBottom }: DropdownProps) => {
     return (
         <>
             <section className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                <article className="w-full mb-4.5">
+                <article className={!padBottom ? 'w-full' : 'w-full mb-4.5'}>
                     <InputLabelForm label={label}></InputLabelForm>
                     <div className="relative z-20 bg-transparent dark:bg-form-input">
                         <SelectGroupOne 
