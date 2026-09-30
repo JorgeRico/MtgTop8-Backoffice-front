@@ -7,7 +7,7 @@ import CreateButton from '@/components/MtgComponent/CreateButton';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import TableComponent from '@/components/Tables/TableComponent';
 import { useAuthStore } from '@/store/auth';
-import Filters from './Filters';
+import Filters from '@/pages/Tournaments/Filters';
 
 const Tournaments = () => {
     const [ tournaments, setTournaments ]           = useState<any[] | null>(null);
@@ -20,10 +20,8 @@ const Tournaments = () => {
     const { toast }                                 = commonFunctions;
     const { authToken }                             = useAuthStore();
     const [ isFilterSelected, setIsFilterSelected ] = useState<boolean>(false);
-    const [ selectedName, setSelectedName ]     = useState<string | null>('');
-
-    const [ selectedYear, setSelectedYear ]     = useState<number | null>(null);
-
+    const [ selectedName, setSelectedName ]         = useState<string | null>('');
+    const [ selectedYear, setSelectedYear ]         = useState<number | null>(null);
 
     const apiCall = async (page: number) => {
         setIsLoading(true);
@@ -101,7 +99,7 @@ const Tournaments = () => {
                         selectedYear        = {selectedYear}
                         selectedName        = {selectedName}
                         setSelectedName     = {setSelectedName}
-                    />  
+                    />
 
                     <TableComponent
                         header       = {headerItem} 

@@ -9,7 +9,7 @@ interface TableProps {
     setSelectedName     : Function;
 }
 
-const TournamentFilters = ({ setIsFilterSelected, setSelectedYear, selectedYear, selectedName, setSelectedName }: TableProps ) => {
+const PlayerFilters = ({ setIsFilterSelected, setSelectedYear, selectedYear, selectedName, setSelectedName }: TableProps ) => {
     
     return (
         <>
@@ -23,11 +23,11 @@ const TournamentFilters = ({ setIsFilterSelected, setSelectedYear, selectedYear,
                 selectedName        = {selectedName}
                 setSelectedName     = {setSelectedName}
                 setIsFilterSelected = {setIsFilterSelected}
-                label               = "Filter by League name"
-                placeholder         = "Enter League name"
+                label               = "Filter by Player name"
+                placeholder         = "Enter Player name"
             />
         </>
     );
 };
 
-export default TournamentFilters;
+export default PlayerFilters;

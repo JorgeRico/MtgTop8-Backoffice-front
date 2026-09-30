@@ -2,12 +2,14 @@ import InputForm from '@/components/Forms/InputForm';
 import { useId } from 'react';
 
 interface TableProps {
+    label               : string;
+    placeholder         : string;
     selectedName        : string | null;
     setSelectedName     : Function;
     setIsFilterSelected : Function;
 }
 
-const NameFilterComponent = ({ selectedName, setSelectedName, setIsFilterSelected }: TableProps) => {
+const NameFilterComponent = ({ label, placeholder, selectedName, setSelectedName, setIsFilterSelected }: TableProps) => {
     const idName = useId();
             
     const onSubmitName = (event: any) => {
@@ -26,8 +28,8 @@ const NameFilterComponent = ({ selectedName, setSelectedName, setIsFilterSelecte
                         <InputForm
                             disabled       = {false}
                             name           = {idName}
-                            label          = "Filter by League name"
-                            placeholder    = "Enter League name"
+                            label          = {label}
+                            placeholder    = {placeholder}
                             selectedOption = {selectedName}
                         />
                     </div>
