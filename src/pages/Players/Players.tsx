@@ -104,7 +104,7 @@ const Players = () => {
                         selectedYear        = {selectedYear}
                         selectedName        = {selectedName}
                         setSelectedName     = {setSelectedName}
-                    />  
+                    />
 
                     <TableComponent
                         header       = {headerItem} 

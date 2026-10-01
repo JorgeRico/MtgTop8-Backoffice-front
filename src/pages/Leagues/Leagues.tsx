@@ -1,12 +1,13 @@
 import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useEffect } from 'react';
 import { endpoints } from '@/types/api-endpoints';
-import { fetchInstance, addUrlPaginationParams } from '@/hooks/useApiCalls.tsx';
+import { fetchInstance, addUrlPaginationParams, addUrlParam } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import TableComponent from '@/components/Tables/TableComponent';
 import { useAuthStore } from '@/store/auth';
+import Filters from '@/pages/Players/Filters';
 
 const Tournaments = () => {
     const [ leagues, setLeagues ]      = useState<any[] | null>(null);
@@ -18,12 +19,32 @@ const Tournaments = () => {
     const { get, defaultHeaders }      = fetchInstance;
     const { toast }                    = commonFunctions;
     const { authToken }                = useAuthStore();
+    const [ isFilterSelected, setIsFilterSelected ] = useState<boolean>(false);
+    const [ selectedName, setSelectedName ]         = useState<string | null>('');
+    const [ selectedYear, setSelectedYear ]         = useState<number | null>(null);
 
     const apiCall = async (page: number) => {
         setIsLoading(true);
+        setIsFilterSelected(false);
 
         try {
-            await get(addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.leagues, page ?? 1, limit), {headers: defaultHeaders(authToken)})
+            let url = "";
+            // list
+            if (selectedYear == null && selectedName == '') {
+                url = addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.leagues, page ?? 1, limit);
+            }
+            
+            // filter name
+            if (selectedYear != null && selectedName == '') {
+                url = addUrlParam(import.meta.env.VITE_API_URL+routing.leagues, 'year', String(selectedYear));
+            }
+
+            // filter year
+            if (selectedYear == null && selectedName != '') {
+                url = addUrlParam(import.meta.env.VITE_API_URL+routing.leagues, 'name', String(selectedName));
+            }
+
+            await get(url, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataLeague = (data || []).map((item: any) => ({
                     id      : item.id,
@@ -36,6 +57,9 @@ const Tournaments = () => {
 
                 setLeagues(dataLeague);
                 setIsLoading(false);
+
+                setSelectedYear(null);
+                setSelectedName('');
             })
         } catch (error) {
             toast('error', 'Failed to load leagues');
@@ -48,14 +72,22 @@ const Tournaments = () => {
     }
 
     const onChangePage = (currentPage: number) => {
+        setIsFilterSelected(false);
         apiCall(currentPage);
         getNumITems();
     }
 
     useEffect(() => {
+        setIsFilterSelected(false);
         apiCall(currentPage);
         getNumITems();
     }, []);
+
+    useEffect(() => {
+        if (isFilterSelected) {
+            apiCall(currentPage);
+        }
+    }, [isFilterSelected]);
 
     return (
         <>
@@ -65,6 +97,15 @@ const Tournaments = () => {
                         endpoint={endpoints.leagues}
                         text="Add new League">
                     </CreateButton>
+
+                    <Filters 
+                        setIsFilterSelected = {setIsFilterSelected}
+                        setSelectedYear     = {setSelectedYear}
+                        selectedYear        = {selectedYear}
+                        selectedName        = {selectedName}
+                        setSelectedName     = {setSelectedName}
+                    />
+
                     <TableComponent
                         header       = {headerItem} 
                         data         = {leagues ? leagues : []}
