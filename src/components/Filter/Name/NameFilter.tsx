@@ -1,24 +1,39 @@
 import InputForm from '@/components/Forms/InputForm';
-import { useId } from 'react';
+import { useEffect, useId } from 'react';
+import { addUrlParam } from '@/hooks/useApiCalls.tsx';
+import { useState } from 'react';
 
 interface TableProps {
-    label               : string;
-    placeholder         : string;
-    selectedName        : string | null;
-    setSelectedName     : Function;
-    setIsFilterSelected : Function;
+    label             : string;
+    placeholder       : string;
+    apiCall           : Function;
+    endpoint          : string;
+    isNameSelected    : boolean;
+    setIsNameSelected : Function;
 }
 
-const NameFilterComponent = ({ label, placeholder, selectedName, setSelectedName, setIsFilterSelected }: TableProps) => {
-    const idName = useId();
+const NameFilterComponent = ({ endpoint, apiCall, label, placeholder, isNameSelected, setIsNameSelected }: TableProps) => {
+    const [ selectedName, setSelectedName ] = useState<string | null>('');
+    const idName                            = useId();
             
     const onSubmitName = (event: any) => {
         event.preventDefault();
-        const formDataValues = new FormData(event.target)
 
-        setSelectedName(formDataValues.get(idName));
-        setIsFilterSelected(true);
+        const formDataValues = new FormData(event.target)
+        const name           = String(formDataValues.get(idName));
+        const url            = addUrlParam(endpoint, 'name', name);
+
+        setSelectedName(name);
+        setIsNameSelected(true);
+        
+        apiCall(url);
     };
+
+    useEffect(() => {
+        if (isNameSelected === false) {
+            setSelectedName('');
+        }
+    }, [isNameSelected]);
 
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-3 shadow-default dark:border-strokedark dark:bg-boxdark">

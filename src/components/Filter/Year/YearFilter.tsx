@@ -1,14 +1,18 @@
 import Dropdown from '@/components/Dropdowns/Dropdown/Number';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { addUrlParam } from '@/hooks/useApiCalls.tsx';
 
 interface TableProps {
-    selectedYear    : number | null;
-    setSelectedYear : Function;
-    setIsFilterSelected : Function;
+    apiCall           : Function;
+    endpoint          : string;
+    isYearSelected    : boolean;
+    setIsYearSelected : Function;
 }
 
-const YearFilterComponent = ({ selectedYear, setSelectedYear, setIsFilterSelected }: TableProps) => {
-    const currentYear = new Date().getFullYear();
+const YearFilterComponent = ({ apiCall, endpoint, isYearSelected, setIsYearSelected }: TableProps) => {
+    const [ selectedYear, setSelectedYear ] = useState<number | null>(null);
+    const currentYear                       = new Date().getFullYear();
+
     const years = Array.from(
         { length: currentYear - 2016 + 1 },
         (_, i) => {
@@ -20,24 +24,32 @@ const YearFilterComponent = ({ selectedYear, setSelectedYear, setIsFilterSelecte
             };
         }
     );
-
-    const [ isSelectedYear, setIsSelectedYear ] = useState<boolean>(false);
     
-        const onChangeYearSubmit = (event: any) => {
-            setSelectedYear(parseInt(event));
-            setIsSelectedYear(true);
-            setIsFilterSelected(true);
+    const onChangeYearSubmit = (event: any) => {
+        const year = parseInt(event)
+        const url = addUrlParam(endpoint, 'year', year.toString());
+
+        setSelectedYear(year);
+        setIsYearSelected(true);
+        
+        apiCall(url);
+    }
+
+    useEffect(() => {
+        if (isYearSelected === false) {
+            setSelectedYear(null);
         }
+    }, [isYearSelected]);
 
     return (
-        <div className="rounded-sm border border-stroke bg-white px-5 pt-3 shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div className="mb-5 rounded-sm border border-stroke bg-white px-5 pt-3 shadow-default dark:border-strokedark dark:bg-boxdark">
             <Dropdown 
                 disabled         = {false}
                 options          = {years ?? []}
                 label            = "filter by year"
                 name             = "idYear"
                 selectedOption   = {selectedYear}
-                isOptionSelected = {isSelectedYear}
+                isOptionSelected = {isYearSelected}
                 onChangeSubmit   = {onChangeYearSubmit}
                 padBottom        = {false}>
             </Dropdown>

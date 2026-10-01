@@ -1,13 +1,13 @@
 import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useEffect } from 'react';
 import { endpoints } from '@/types/api-endpoints';
-import { fetchInstance, addUrlPaginationParams, addUrlParam } from '@/hooks/useApiCalls.tsx';
+import { fetchInstance, addUrlPaginationParams } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import TableComponent from '@/components/Tables/TableComponent';
 import { useAuthStore } from '@/store/auth';
-import Filters from '@/pages/Players/Filters';
+import Filters from '@/components/Filter/Filters';
 
 const Players = () => {
     const [ players, setPlayers ]                   = useState<any[] | null>(null);
@@ -19,32 +19,13 @@ const Players = () => {
     const { get, defaultHeaders }                   = fetchInstance;
     const { toast }                                 = commonFunctions;
     const { authToken }                             = useAuthStore();
-    const [ isFilterSelected, setIsFilterSelected ] = useState<boolean>(false);
-    const [ selectedName, setSelectedName ]         = useState<string | null>('');
-    const [ selectedYear, setSelectedYear ]         = useState<number | null>(null);
+    const [ selectedClearFilters, setClearFilters ] = useState<boolean>(false);
+    const [ showPagination, setShowPagination ]     = useState<boolean>(true);
 
-    const apiCall = async (page: number) => {
+    const apiCall = async (url: string) => {
         setIsLoading(true);
-        setIsFilterSelected(false);
-
+        
         try {
-            let url = "";
-            
-            // list
-            if (selectedYear == null && selectedName == '') {
-                url = addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.players, page, limit);
-            }
-            
-            // filter name
-            if (selectedYear != null && selectedName == '') {
-                url = addUrlParam(import.meta.env.VITE_API_URL+routing.players, 'year', String(selectedYear));
-            }
-
-            // filter year
-            if (selectedYear == null && selectedName != '') {
-                url = addUrlParam(import.meta.env.VITE_API_URL+routing.players, 'name', String(selectedName));
-            }
-            
             await get(url, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataPlayer = (data || []).map((item: any) => ({
@@ -57,9 +38,6 @@ const Players = () => {
 
                 setPlayers(dataPlayer);
                 setIsLoading(false);
-
-                setSelectedYear(null);
-                setSelectedName('');
             })
         } catch (error) {
             toast('error', 'Failed to load players');
@@ -72,22 +50,24 @@ const Players = () => {
     }
 
     const onChangePage = (currentPage: number) => {
-        setIsFilterSelected(false);
-        apiCall(currentPage);
+        let url = addUrlPaginationParams(import.meta.env.VITE_API_URL + routing.players, currentPage, limit);
+        apiCall(url);
         getNumITems();
     }
 
     useEffect(() => {
-        setIsFilterSelected(false);
-        apiCall(currentPage);
+        let url = addUrlPaginationParams(import.meta.env.VITE_API_URL + routing.players, currentPage, limit);
+        apiCall(url);
         getNumITems();
     }, []);
 
     useEffect(() => {
-        if (isFilterSelected) {
-            apiCall(currentPage);
+        if (selectedClearFilters === true) {
+            let url = addUrlPaginationParams(import.meta.env.VITE_API_URL + routing.players, 1, limit);
+            apiCall(url);
+            getNumITems();
         }
-    }, [isFilterSelected]);
+    }, [selectedClearFilters]);
 
     return (
         <>
@@ -97,24 +77,27 @@ const Players = () => {
                         endpoint={endpoints.players}
                         text="Add new Player">
                     </CreateButton>
-                    
-                    <Filters 
-                        setIsFilterSelected = {setIsFilterSelected}
-                        setSelectedYear     = {setSelectedYear}
-                        selectedYear        = {selectedYear}
-                        selectedName        = {selectedName}
-                        setSelectedName     = {setSelectedName}
-                    />
 
                     <TableComponent
-                        header       = {headerItem} 
-                        data         = {players ? players : []}
-                        name         = "Players"
-                        endpoint     = {endpoints.players}
-                        onChangePage = {onChangePage}
-                        isLoading    = {isLoading}
-                        limit        = {limit}
-                        totalItems   = {totalItems}
+                        header         = {headerItem} 
+                        data           = {players ? players : []}
+                        name           = "Players"
+                        endpoint       = {endpoints.players}
+                        onChangePage   = {onChangePage}
+                        isLoading      = {isLoading}
+                        limit          = {limit}
+                        totalItems     = {totalItems}
+                        showPagination = {showPagination}
+                        filters      = {
+                            <Filters 
+                                apiCall           = {apiCall}
+                                setClearFilters   = {setClearFilters}
+                                endpoint          = {import.meta.env.VITE_API_URL + routing.players}
+                                nameLabel         = "Filter by Player name"
+                                namePlaceholder   = "Enter Player name"
+                                setShowPagination = {setShowPagination}
+                            />
+                        }
                     ></TableComponent>
                 </div>
             </DefaultLayout>

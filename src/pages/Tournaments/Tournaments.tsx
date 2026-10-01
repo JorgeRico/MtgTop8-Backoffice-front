@@ -1,13 +1,13 @@
 import DefaultLayout from '@/layout/DefaultLayout';
 import { useState, useEffect } from 'react';
 import { endpoints } from '@/types/api-endpoints';
-import { fetchInstance, addUrlPaginationParams, addUrlParam } from '@/hooks/useApiCalls.tsx';
+import { fetchInstance, addUrlPaginationParams } from '@/hooks/useApiCalls.tsx';
 import { routing } from '@/types/web-routing';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 import { commonFunctions } from '@/hooks/useCommonFunctions.tsx';
 import TableComponent from '@/components/Tables/TableComponent';
 import { useAuthStore } from '@/store/auth';
-import Filters from '@/pages/Tournaments/Filters';
+import Filters from '@/components/Filter/Filters';
 
 const Tournaments = () => {
     const [ tournaments, setTournaments ]           = useState<any[] | null>(null);
@@ -19,31 +19,13 @@ const Tournaments = () => {
     const { get, defaultHeaders }                   = fetchInstance;
     const { toast }                                 = commonFunctions;
     const { authToken }                             = useAuthStore();
-    const [ isFilterSelected, setIsFilterSelected ] = useState<boolean>(false);
-    const [ selectedName, setSelectedName ]         = useState<string | null>('');
-    const [ selectedYear, setSelectedYear ]         = useState<number | null>(null);
+    const [ selectedClearFilters, setClearFilters ] = useState<boolean>(false);
+    const [ showPagination, setShowPagination ]     = useState<boolean>(true);
 
-    const apiCall = async (page: number) => {
+    const apiCall = async (url: string) => {
         setIsLoading(true);
-        setIsFilterSelected(false);
+        
         try {
-            let url = "";
-
-            // list
-            if (selectedYear == null && selectedName == '') {
-                url = addUrlPaginationParams(import.meta.env.VITE_API_URL+routing.tournaments, page, limit);
-            }
-            
-            // filter name
-            if (selectedYear != null && selectedName == '') {
-                url = addUrlParam(import.meta.env.VITE_API_URL+routing.tournaments, 'year', String(selectedYear));
-            }
-
-            // filter year
-            if (selectedYear == null && selectedName != '') {
-                url = addUrlParam(import.meta.env.VITE_API_URL+routing.tournaments, 'name', String(selectedName));
-            }
-
             await get(url, {headers: defaultHeaders(authToken)})
             .then(data => {
                 const dataTournament = (data || []).map((item: any) => ({
@@ -55,8 +37,6 @@ const Tournaments = () => {
 
                 setTournaments(dataTournament);
                 setIsLoading(false);
-                setSelectedYear(null);
-                setSelectedName('');
             })
         } catch (error) {
             toast('error', 'Failed to load tournaments');
@@ -69,20 +49,24 @@ const Tournaments = () => {
     }
 
     const onChangePage = (currentPage: number) => {
-        apiCall(currentPage);
+        let url = addUrlPaginationParams(import.meta.env.VITE_API_URL + routing.tournaments, currentPage, limit);
+        apiCall(url);
         getNumITems();
     }
 
     useEffect(() => {
-        apiCall(currentPage);
+        let url = addUrlPaginationParams(import.meta.env.VITE_API_URL + routing.tournaments, currentPage, limit);
+        apiCall(url);
         getNumITems();
     }, []);
 
     useEffect(() => {
-        if (isFilterSelected) {
-            apiCall(currentPage);
+        if (selectedClearFilters === true) {
+            let url = addUrlPaginationParams(import.meta.env.VITE_API_URL + routing.tournaments, 1, limit);
+            apiCall(url);
+            getNumITems();
         }
-    }, [isFilterSelected]);
+    }, [selectedClearFilters]);
 
     return (
         <>
@@ -93,14 +77,6 @@ const Tournaments = () => {
                         text="Add new Tournament">
                     </CreateButton>
 
-                    <Filters 
-                        setIsFilterSelected = {setIsFilterSelected}
-                        setSelectedYear     = {setSelectedYear}
-                        selectedYear        = {selectedYear}
-                        selectedName        = {selectedName}
-                        setSelectedName     = {setSelectedName}
-                    />
-
                     <TableComponent
                         header       = {headerItem} 
                         data         = {tournaments ? tournaments : []}
@@ -110,6 +86,17 @@ const Tournaments = () => {
                         isLoading    = {isLoading}
                         limit        = {limit}
                         totalItems   = {totalItems}
+                        showPagination = {showPagination}
+                        filters      = {
+                            <Filters 
+                                apiCall           = {apiCall}
+                                setClearFilters   = {setClearFilters}
+                                endpoint          = {import.meta.env.VITE_API_URL + routing.tournaments}
+                                nameLabel         = "Filter by Tournament name"
+                                namePlaceholder   = "Enter Tournament name"
+                                setShowPagination = {setShowPagination}
+                            />
+                        }
                     ></TableComponent>
                 </div>
             </DefaultLayout>
