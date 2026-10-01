@@ -22,12 +22,17 @@ const SignIn = () => {
 
         if (email && password) {
             
-            let token = await firebaseLogin(email, password);   
+            let token = await firebaseLogin(email, password);
             if (token != null) {
                 createAuthToken(token)
                 login()
                 navigate(routing.dashboard);
-            }           
+            } else {
+                // alert('Invalid email or password');
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 2000);
+            }
         }
     }
     
