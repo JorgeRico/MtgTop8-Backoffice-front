@@ -11,7 +11,7 @@ import Filters from '@/components/Filter/Filters';
 
 const Leagues = () => {
     const [ leagues, setLeagues ]                   = useState<any[] | null>(null);
-    const [ headerItem ]                            = useState<string[]>([ 'id', 'name', 'isLegacy', 'year', 'current', 'active' ]);
+    const [ headerItem ]                            = useState<string[]>([ 'id', 'name', 'Format', 'year', 'current', 'active' ]);
     const [ currentPage ]                           = useState<number>(1);
     const [ limit ]                                 = useState<number>(2500);
     const [ isLoading, setIsLoading ]               = useState<boolean>(false);

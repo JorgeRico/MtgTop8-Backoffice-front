@@ -61,6 +61,87 @@ const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: Tabl
         }
     }
 
+    const renderHeader = () => {
+        return (
+            <thead>
+                <tr className="bg-gray-2 text-left dark:bg-meta-4" key={uuidv4()}>
+                    {header.map((item) => (
+                        (item == 'id') ? (
+                            <th key={uuidv4()} className="py-4 px-4 font-medium text-black dark:text-white">
+                                {item}
+                            </th>
+                        ) : (
+                            <th key={uuidv4()} className="min-w-55 py-4 px-4 font-medium text-black dark:text-white">
+                                {item}
+                            </th>
+                        )
+                    ))}
+                    <th className="py-4 px-4 font-medium text-black dark:text-white">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+        )
+    }
+
+    const renderBody = () => {
+        return (
+            dataItems.map((item) => (
+                <tr key={uuidv4()} id={`slideSource-${item.id}`} className="slideSource">
+                    {Object.entries(item).map(([key, value]) => (
+                        <td key={uuidv4()} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                            <p className={`text-black dark:text-white ${key}`}>
+                                {value}
+                            </p>
+                        </td>
+                    ))}
+                
+                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <div className="flex items-center space-x-3.5" >
+                            <div className="loading hidden" id={`loading-item-${item.id}`}>
+                                <LoaderSmall></LoaderSmall>
+                            </div>
+                            <button id={`edit-item-${item.id}`} className="hover:text-primary editItem cursor-pointer" onClick={(e) => editSubmit(e, item.id)}>
+                                <EditIcon></EditIcon>
+                            </button>
+                            <button id={`delete-item-${item.id}`} className="hover:text-primary deleteItem cursor-pointer" onClick={(e) => deleteSubmit(e, item.id)}>
+                                <TrashIcon></TrashIcon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                )
+            )
+        )
+    }
+    const renderData = () => {
+        return (
+            <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+                <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
+                    {name}
+                </h4>
+                <div className="max-w-full overflow-x-auto">
+                    <table className="w-full table-auto">
+                        {renderHeader()}
+                        <tbody>
+                            {renderBody()}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        )
+    }
+
+    const renderNoData = () => {
+        return (
+            <div className="rounded-sm border border-stroke bg-white px-5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+                <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
+                    No values found for {name}, please add new {name} or change filters
+                </h4>
+            </div>
+        )
+    }
+
     useEffect(() => {
         setDataItems(data);
     }, [data]);
@@ -68,60 +149,13 @@ const Table = ({ header, name, data, endpoint, isLoading, changeNumItems }: Tabl
     return (
         <>
             {!isLoading ? (
-                <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-                    <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
-                        {name}
-                    </h4>
-                    <div className="max-w-full overflow-x-auto">
-                        <table className="w-full table-auto">
-                            <thead>
-                                <tr className="bg-gray-2 text-left dark:bg-meta-4" key={uuidv4()}>
-                                    {header.map((item) => (
-                                        (item == 'id') ? (
-                                            <th key={uuidv4()} className="py-4 px-4 font-medium text-black dark:text-white">
-                                                {item}
-                                            </th>
-                                        ) : (
-                                            <th key={uuidv4()} className="min-w-55 py-4 px-4 font-medium text-black dark:text-white">
-                                                {item}
-                                            </th>
-                                        )
-                                    ))}
-                                    <th className="py-4 px-4 font-medium text-black dark:text-white">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {dataItems.map((item) => (
-                                    <tr key={uuidv4()} id={`slideSource-${item.id}`} className="slideSource">
-                                        {Object.entries(item).map(([key, value]) => (
-                                            <td key={uuidv4()} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                                <p className={`text-black dark:text-white ${key}`}>
-                                                    {value}
-                                                </p>
-                                            </td>
-                                        ))}
-                                    
-                                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <div className="flex items-center space-x-3.5" >
-                                                <div className="loading hidden" id={`loading-item-${item.id}`}>
-                                                    <LoaderSmall></LoaderSmall>
-                                                </div>
-                                                <button id={`edit-item-${item.id}`} className="hover:text-primary editItem cursor-pointer" onClick={(e) => editSubmit(e, item.id)}>
-                                                    <EditIcon></EditIcon>
-                                                </button>
-                                                <button id={`delete-item-${item.id}`} className="hover:text-primary deleteItem cursor-pointer" onClick={(e) => deleteSubmit(e, item.id)}>
-                                                    <TrashIcon></TrashIcon>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <>
+                    {dataItems.length === 0 ? (
+                        renderNoData()
+                    ) : (
+                        renderData()
+                    )}
+                </>
             ) : (
                 <Loader></Loader>
             )}
