@@ -80,16 +80,16 @@ const Leagues = () => {
                     </CreateButton>
 
                     <TableComponent
-                        header       = {headerItem} 
-                        data         = {leagues ? leagues : []}
-                        name         = "Leagues"
-                        endpoint     = {endpoints.leagues}
-                        onChangePage = {onChangePage}
-                        isLoading    = {isLoading}
-                        limit        = {limit}
-                        totalItems   = {totalItems}
+                        header         = {headerItem} 
+                        data           = {leagues ? leagues : []}
+                        name           = "Leagues"
+                        endpoint       = {endpoints.leagues}
+                        onChangePage   = {onChangePage}
+                        isLoading      = {isLoading}
+                        limit          = {limit}
+                        totalItems     = {totalItems}
                         showPagination = {showPagination}
-                        filters      = {
+                        filters        = {
                             <Filters 
                                 apiCall           = {apiCall}
                                 setClearFilters   = {setClearFilters}

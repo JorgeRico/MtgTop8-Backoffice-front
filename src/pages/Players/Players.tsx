@@ -88,7 +88,7 @@ const Players = () => {
                         limit          = {limit}
                         totalItems     = {totalItems}
                         showPagination = {showPagination}
-                        filters      = {
+                        filters        = {
                             <Filters 
                                 apiCall           = {apiCall}
                                 setClearFilters   = {setClearFilters}

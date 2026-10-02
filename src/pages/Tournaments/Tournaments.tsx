@@ -78,16 +78,16 @@ const Tournaments = () => {
                     </CreateButton>
 
                     <TableComponent
-                        header       = {headerItem} 
-                        data         = {tournaments ? tournaments : []}
-                        name         = "Tournaments"
-                        endpoint     = {endpoints.tournaments}
-                        onChangePage = {onChangePage}
-                        isLoading    = {isLoading}
-                        limit        = {limit}
-                        totalItems   = {totalItems}
+                        header         = {headerItem} 
+                        data           = {tournaments ? tournaments : []}
+                        name           = "Tournaments"
+                        endpoint       = {endpoints.tournaments}
+                        onChangePage   = {onChangePage}
+                        isLoading      = {isLoading}
+                        limit          = {limit}
+                        totalItems     = {totalItems}
                         showPagination = {showPagination}
-                        filters      = {
+                        filters        = {
                             <Filters 
                                 apiCall           = {apiCall}
                                 setClearFilters   = {setClearFilters}

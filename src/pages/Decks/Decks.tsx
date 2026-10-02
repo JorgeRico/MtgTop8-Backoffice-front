@@ -6,7 +6,7 @@ import { fetchInstance, addUrlPaginationParams } from '@/hooks/useApiCalls.tsx';
 import CreateButton from '@/components/MtgComponent/CreateButton';
 import TableComponent from '@/components/Tables/TableComponent';
 import { useAuthStore } from '@/store/auth';
-import FilterName from '@/components/Filter/FilterName';
+import FilterDeck from '@/components/Filter/FilterDeck';
 import { commonFunctions } from '@/hooks/useCommonFunctions';
 
 const Decks = () => {
@@ -32,7 +32,7 @@ const Decks = () => {
                     id       : item.id,
                     name     : item.name,
                     player   : item.player,
-                    league   : item.league
+                    league   : item.parsed_date + ' - ' + item.league
                 }));
 
                 setDecks(dataDeck);
@@ -76,6 +76,7 @@ const Decks = () => {
                         endpoint={endpoints.decks}
                         text="Add new Deck">
                     </CreateButton>
+
                     <TableComponent
                         header         = {headerItem} 
                         data           = {decks ? decks : []}
@@ -86,8 +87,8 @@ const Decks = () => {
                         limit          = {limit}
                         totalItems     = {totalItems}
                         showPagination = {showPagination}
-                        filters      = {
-                            <FilterName 
+                        filters        = {
+                            <FilterDeck 
                                 apiCall           = {apiCall}
                                 setClearFilters   = {setClearFilters}
                                 endpoint          = {import.meta.env.VITE_API_URL + routing.decks}

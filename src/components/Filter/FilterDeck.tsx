@@ -1,5 +1,5 @@
 import NameFilter from '@/components/Filter/Name/NameFilter';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PlayerFilter from '@/components/Filter/Player/PlayerFilter';
 
 interface TableProps {
@@ -11,7 +11,7 @@ interface TableProps {
     setShowPagination : Function;
 }
 
-const Filters = ({ apiCall, setClearFilters, endpoint, nameLabel, namePlaceholder, setShowPagination }: TableProps ) => {
+const FilterDeck = ({ apiCall, setClearFilters, endpoint, nameLabel, namePlaceholder, setShowPagination }: TableProps ) => {
     const [ isFilterVisible, setIsFilterVisible ]   = useState<boolean>(false);
     const [ isPlayerSelected, setIsPlayerSelected ] = useState<boolean>(false);
     const [ isNameSelected, setIsNameSelected ]     = useState<boolean>(false);
@@ -25,6 +25,19 @@ const Filters = ({ apiCall, setClearFilters, endpoint, nameLabel, namePlaceholde
         setClearFilters(true);
         setShowPagination(true);
     }
+
+    useEffect(() => {
+        if (isPlayerSelected === true) {
+            setIsNameSelected(false);
+            setShowPagination(false);
+        }
+        if (isNameSelected === true) {
+            setIsPlayerSelected(false);
+            setShowPagination(false);
+        }
+        
+    }, [isPlayerSelected, isNameSelected]);
+
 
     return (
         <>
@@ -64,4 +77,4 @@ const Filters = ({ apiCall, setClearFilters, endpoint, nameLabel, namePlaceholde
     );
 };
 
-export default Filters;
+export default FilterDeck;
